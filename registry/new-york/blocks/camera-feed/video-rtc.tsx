@@ -1,198 +1,120 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 
-export type VideoRTCMode = "webrtc" | "mse" | "hls" | "mp4" | "mjpeg" | "none";
+export type WebRTCMode = "webrtc" | "none";
 
-export interface UseVideoRTCOptions {
-    wsSrc: string; // REQUIRED: WebSocket signaling URL
-    proxy?: string; // OPTIONAL: proxy server URL (ws://localhost:8080/proxy)
-    mode?: string; // "webrtc,mse,hls,mp4,mjpeg"
-    media?: string; // "video,audio"
-    forceFallback?: boolean; // skip WebRTC and go straight to fallback
-    onModeChange?: (mode: VideoRTCMode) => void;
+export interface UseWebRTCVideoOptions {
+    /**
+     * WebSocket URL for go2rtc stream  (e.g. ws://localhost:5555/websocketVideo)
+     */
+    wsSrc: string;
+    /**
+     * Optional Proxy server to forward websocket requests over (e.g. ws://localhost:5555/proxy)
+     */
+    proxy?: string;
+    media?: string; // "video,audio" or "video" or "audio"
+    /**
+     *  Delay before retrying request (ms, default 5000)
+     */
+    retryDelay?: number;
+    /**
+     * Time to wait before timing out connection request (ms, default 10000, -1 disables)
+     */
+    connectionTimeout?: number;
+    /**
+     * Number of tries to re-attempt connection (default 5, -1 = infinite)
+     */
+    maxRetryAttempts?: number;
+    onModeChange?: (mode: WebRTCMode) => void;
     onError?: (err: Error) => void;
+
+    // Inline <video> props
+    video?: React.VideoHTMLAttributes<HTMLVideoElement>;
 }
 
-export interface UseVideoRTCResult {
-    src: string | null;
-    srcObject: MediaStream | null;
-    connectionMode: VideoRTCMode;
+export interface UseWebRTCVideoResult {
+    videoProps: React.DetailedHTMLProps<
+        React.VideoHTMLAttributes<HTMLVideoElement>,
+        HTMLVideoElement
+    > &
+        React.RefAttributes<HTMLVideoElement>;
+    connectionMode: WebRTCMode;
     error: Error | null;
+    retryCount: number;
 }
 
-const DEFAULT_PC_CONFIG: RTCConfiguration = {
+const DEFAULT_PEERCONNECTION_CONFIG: RTCConfiguration = {
     bundlePolicy: "max-bundle",
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-    // sdpSemantics: "unified-plan",
 };
 
-export function useVideoRTC({
+export function useWebRTCVideo({
     wsSrc,
     proxy,
-    mode = "webrtc,mse,hls,mp4,mjpeg",
     media = "video,audio",
-    forceFallback = false,
+    retryDelay = 5000,
+    connectionTimeout = 10000,
+    maxRetryAttempts = 5,
     onModeChange,
     onError,
-}: UseVideoRTCOptions): UseVideoRTCResult {
-    const [src, setSrc] = useState<string | null>(null);
-    const [srcObject, setSrcObject] = useState<MediaStream | null>(null);
-    const [connectionMode, setConnectionMode] = useState<VideoRTCMode>("none");
+    video = {},
+}: UseWebRTCVideoOptions): UseWebRTCVideoResult {
+    const [connectionMode, setConnectionMode] = useState<WebRTCMode>("none");
     const [error, setError] = useState<Error | null>(null);
-
-    const streamRef = useRef<MediaStream | null>(null);
-    streamRef.current = srcObject;
-
-    const attachRef = useCallback((el: HTMLVideoElement | null) => {
-        if (el && streamRef.current) {
-            el.srcObject = streamRef.current;
-        }
-    }, []);
+    const [retryCount, setRetryCount] = useState(0);
 
     const wsRef = useRef<WebSocket | null>(null);
-    const pcRef = useRef<RTCPeerConnection | null>(null);
+    const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+    const videoElementRef = useRef<HTMLVideoElement | null>(null);
+    const retryTimer = useRef<number | null>(null);
+    const timeoutTimer = useRef<number | null>(null);
 
-    const updateMode = (m: VideoRTCMode) => {
+    const updateMode = (m: WebRTCMode) => {
         setConnectionMode(m);
         onModeChange?.(m);
     };
 
     const fail = (err: Error) => {
-        console.error("[useVideoRTC] error:", err);
+        console.error("[useWebRTCVideo] error:", err);
         setError(err);
         onError?.(err);
     };
 
-    // --- Utility ---
-    const codecs = (isSupported: (type: string) => boolean) => {
-        const CODECS = [
-            "avc1.640029",
-            "avc1.64002A",
-            "avc1.640033",
-            "hvc1.1.6.L153.B0",
-            "mp4a.40.2",
-            "mp4a.40.5",
-            "flac",
-            "opus",
-        ];
-        return CODECS.filter((codec) =>
-            isSupported(`video/mp4; codecs="${codec}"`)
-        ).join();
-    };
-
-    const createOffer = async (pc: RTCPeerConnection) => {
-        try {
-            if (media.includes("microphone")) {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    audio: true,
-                });
-                stream.getTracks().forEach((track) => {
-                    pc.addTransceiver(track, { direction: "sendonly" });
-                });
-            }
-        } catch (e) {
-            console.warn(e);
+    const cleanup = () => {
+        if (retryTimer.current) {
+            clearTimeout(retryTimer.current);
+            retryTimer.current = null;
         }
-        for (const kind of ["video", "audio"]) {
-            if (media.includes(kind)) {
-                pc.addTransceiver(kind, { direction: "recvonly" });
-            }
+        if (timeoutTimer.current) {
+            clearTimeout(timeoutTimer.current);
+            timeoutTimer.current = null;
         }
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        return offer;
-    };
-
-    const btoaBytes = (bytes: Uint8Array) => {
-        let binary = "";
-        for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode(bytes[i]);
+        if (wsRef.current) {
+            wsRef.current.close();
+            wsRef.current = null;
         }
-        return window.btoa(binary);
+        if (peerConnectionRef.current) {
+            peerConnectionRef.current.close();
+            peerConnectionRef.current = null;
+        }
     };
 
-    // --- Negotiation Handlers ---
-    const handleWebRTC = (ws: WebSocket, onFail: () => void) => {
-        updateMode("webrtc");
-        const pc = new RTCPeerConnection(DEFAULT_PC_CONFIG);
-        pcRef.current = pc;
-
-        pc.ontrack = (ev) => {
-            setSrcObject(new MediaStream(ev.streams[0].getTracks()));
-        };
-
-        pc.onconnectionstatechange = () => {
-            if (
-                pc.connectionState === "failed" ||
-                pc.connectionState === "disconnected"
-            ) {
-                pc.close();
-                pcRef.current = null;
-                onFail();
-            }
-        };
-
-        ws.onmessage = (ev) => {
-            const msg = JSON.parse(ev.data);
-            if (msg.type === "webrtc/answer") {
-                pc.setRemoteDescription({
-                    type: "answer",
-                    sdp: msg.value,
-                }).catch(fail);
-            } else if (msg.type === "webrtc/candidate") {
-                pc.addIceCandidate({ candidate: msg.value, sdpMid: "0" }).catch(
-                    fail
-                );
-            }
-        };
-
-        createOffer(pc).then((offer) => {
-            ws.send(JSON.stringify({ type: "webrtc/offer", value: offer.sdp }));
-        });
+    const scheduleRetry = () => {
+        if (maxRetryAttempts !== -1 && retryCount >= maxRetryAttempts) {
+            console.warn(
+                "[useWebRTCVideo] Max retry attempts reached, stopping."
+            );
+            return;
+        }
+        if (retryDelay > 0) {
+            retryTimer.current = window.setTimeout(() => {
+                setRetryCount((c) => c + 1);
+                connect();
+            }, retryDelay);
+        }
     };
 
-    const handleHLS = (ws: WebSocket) => {
-        updateMode("hls");
-        ws.send(JSON.stringify({ type: "hls" }));
-        ws.onmessage = (ev) => {
-            const msg = JSON.parse(ev.data);
-            if (msg.type === "hls") {
-                setSrc(
-                    "data:application/vnd.apple.mpegurl;base64," +
-                        btoa(msg.value)
-                );
-            }
-        };
-    };
-
-    const handleMP4 = (ws: WebSocket) => {
-        updateMode("mp4");
-        ws.send(JSON.stringify({ type: "mp4" }));
-        ws.onmessage = (ev) => {
-            if (ev.data instanceof ArrayBuffer) {
-                setSrc(
-                    "data:video/mp4;base64," +
-                        btoaBytes(new Uint8Array(ev.data))
-                );
-            }
-        };
-    };
-
-    const handleMJPEG = (ws: WebSocket) => {
-        updateMode("mjpeg");
-        ws.send(JSON.stringify({ type: "mjpeg" }));
-        ws.onmessage = (ev) => {
-            if (ev.data instanceof ArrayBuffer) {
-                setSrc(
-                    "data:image/jpeg;base64," +
-                        btoaBytes(new Uint8Array(ev.data))
-                );
-            }
-        };
-    };
-
-    // --- Lifecycle ---
-    useEffect(() => {
-        if (!wsSrc) return;
+    const connect = useCallback(() => {
+        cleanup(); // ensure clean state
 
         let wsUrl = wsSrc;
         if (proxy) {
@@ -204,44 +126,140 @@ export function useVideoRTC({
         wsRef.current = ws;
 
         ws.addEventListener("open", () => {
-            console.log("[useVideoRTC] WebSocket open");
+            console.log("[useWebRTCVideo] WebSocket open");
+            updateMode("webrtc");
 
-            const tryFallback = () => {
-                if (mode.includes("hls")) {
-                    handleHLS(ws);
-                } else if (mode.includes("mp4")) {
-                    handleMP4(ws);
-                } else if (mode.includes("mjpeg")) {
-                    handleMJPEG(ws);
-                } else {
-                    updateMode("none");
+            const peerConnection = new RTCPeerConnection(
+                DEFAULT_PEERCONNECTION_CONFIG
+            );
+            peerConnectionRef.current = peerConnection;
+
+            // Always add transceivers before creating offer
+            if (media.includes("video")) {
+                peerConnection.addTransceiver("video", {
+                    direction: "recvonly",
+                });
+            }
+            if (media.includes("audio")) {
+                peerConnection.addTransceiver("audio", {
+                    direction: "recvonly",
+                });
+            }
+
+            peerConnection.ontrack = (ev) => {
+                if (videoElementRef.current) {
+                    videoElementRef.current.srcObject = new MediaStream(
+                        ev.streams[0].getTracks()
+                    );
+                }
+                // ✅ clear connection timeout once we get tracks
+                if (timeoutTimer.current) {
+                    clearTimeout(timeoutTimer.current);
+                    timeoutTimer.current = null;
                 }
             };
 
-            if (
-                !forceFallback &&
-                mode.includes("webrtc") &&
-                "RTCPeerConnection" in window
-            ) {
-                handleWebRTC(ws, tryFallback);
-            } else {
-                tryFallback();
+            peerConnection.onconnectionstatechange = () => {
+                if (
+                    peerConnection.connectionState === "failed" ||
+                    peerConnection.connectionState === "disconnected" ||
+                    peerConnection.connectionState === "closed"
+                ) {
+                    console.warn(
+                        "[useWebRTCVideo] connection failed, retrying..."
+                    );
+                    cleanup();
+                    scheduleRetry();
+                }
+            };
+
+            ws.onmessage = (ev) => {
+                const msg = JSON.parse(ev.data);
+                if (msg.type === "webrtc/answer") {
+                    peerConnection
+                        .setRemoteDescription({
+                            type: "answer",
+                            sdp: msg.value,
+                        })
+                        .catch(fail);
+                } else if (msg.type === "webrtc/candidate") {
+                    peerConnection
+                        .addIceCandidate({
+                            candidate: msg.value,
+                            sdpMid: "0",
+                        })
+                        .catch(fail);
+                }
+            };
+
+            peerConnection
+                .createOffer()
+                .then((offer) => {
+                    return peerConnection
+                        .setLocalDescription(offer)
+                        .then(() => offer);
+                })
+                .then((offer) => {
+                    ws.send(
+                        JSON.stringify({
+                            type: "webrtc/offer",
+                            value: offer.sdp,
+                        })
+                    );
+                })
+                .catch(fail);
+
+            // ✅ start connection timeout if enabled
+            if (connectionTimeout > 0) {
+                timeoutTimer.current = window.setTimeout(() => {
+                    console.warn(
+                        "[useWebRTCVideo] connection timeout, retrying..."
+                    );
+                    cleanup();
+                    scheduleRetry();
+                }, connectionTimeout);
             }
         });
 
-        ws.addEventListener("error", (e) => {
+        ws.addEventListener("close", () => {
+            console.warn("[useWebRTCVideo] WebSocket closed, retrying...");
+            cleanup();
+            scheduleRetry();
+        });
+
+        ws.addEventListener("error", () => {
             fail(new Error("WebSocket error"));
+            cleanup();
+            scheduleRetry();
         });
+    }, [
+        wsSrc,
+        proxy,
+        media,
+        retryDelay,
+        connectionTimeout,
+        maxRetryAttempts,
+        cleanup,
+    ]);
 
+    useEffect(() => {
+        setRetryCount(0);
+        connect();
         return () => {
-            ws.close();
-            wsRef.current = null;
-            if (pcRef.current) {
-                pcRef.current.close();
-                pcRef.current = null;
-            }
+            cleanup();
         };
-    }, [wsSrc, proxy, mode, forceFallback]);
+    }, [connect, cleanup]);
 
-    return { src, srcObject, connectionMode, error };
+    return {
+        connectionMode,
+        error,
+        retryCount,
+        videoProps: {
+            ref: videoElementRef,
+            autoPlay: true,
+            playsInline: true,
+            controls: true,
+            ...video, // inline overrides
+        },
+    };
 }
