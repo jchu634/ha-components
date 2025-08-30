@@ -7,14 +7,19 @@ import {
     MediaMuteButton,
 } from "media-chrome/react";
 import { useWebRTCVideo } from "./video-rtc";
+import type { EntityId } from "@/types/entity-types";
 
 type AspectRatio = "1/1" | "4/3" | "16/9";
 
 export interface CameraFeedProps {
     /**
-     * WebSocket URL for go2rtc stream  (e.g. ws://localhost:5555/websocketVideo)
+     * HomeAssistant Entity Name, used to generate Websocket URL for go2rtc stream
      */
-    wsURL: string;
+    entity: EntityId;
+    /**
+     * Optional: Explicit WebSocket override URL (e.g. ws://localhost:5555/websocketVideo)
+     */
+    wsURL?: string;
     /**
      * Optional: Proxy server to forward websocket requests over (e.g. ws://localhost:5555/proxy)
      * (Default: None)
@@ -34,13 +39,14 @@ export interface CameraFeedProps {
 }
 
 export function Camera({
+    entity,
     wsURL,
     proxyURL,
     disableControls = false,
     aspectRatio = "16/9",
 }: CameraFeedProps) {
     const camera = useWebRTCVideo({
-        wsSrc: wsURL,
+        wsSrc: wsURL || `ws://homeassistant.local:11984/api/ws?src=${entity}`,
         ...(proxyURL ? { proxy: proxyURL } : {}),
         retryDelay: 5000, // retry every 5s
         maxRetryAttempts: 10,

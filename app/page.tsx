@@ -19,18 +19,17 @@ export default function Home() {
                         <h2 className="text-sm text-muted-foreground sm:pl-3">
                             A Simple Camera Component
                         </h2>
-                        <OpenInV0Button name="hello-world" className="w-fit" />
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
                         <Camera
-                            wsURL="ws://homeassistant.local:11984/api/ws?src=camera.g4_doorbell_high"
+                            entity="camera.g4_doorbell_high"
                             proxyURL="ws://localhost:8080/proxy"
                             aspectRatio="4/3"
                         />
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
                         <Camera
-                            wsURL="ws://homeassistant.local:11984/api/ws?src=camera.g3_dome_high_resolution_channel_3"
+                            entity="camera.g3_dome_high_resolution_channel_3"
                             proxyURL="ws://localhost:8080/proxy"
                         />
                     </div>
