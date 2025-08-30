@@ -10,15 +10,16 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=lo
 config = dotenv_values(".env")
 websocket = websockets
 
-async def fetchEntitiesWebsocket():    
+
+async def fetchEntitiesWebsocket():
     url = f"ws://{config["HA_URL"]}/api/websocket"
     async with websockets.connect(url) as remote:
-        logging.info(await remote.recv()) # Auth Request
+        logging.info(await remote.recv())  # Auth Request
         auth_msg = {
-                "type": "auth", 
-                "access_token": config["AUTH_TOKEN"]
-                } 
-        
+            "type": "auth",
+            "access_token": config["AUTH_TOKEN"]
+        }
+
         await remote.send(json.dumps(auth_msg))
         ack_msg = await remote.recv()
         logging.info(ack_msg)
@@ -55,8 +56,6 @@ export interface HAEntity {{
 }}
 """
 
-            
-
             with open("entity-types.ts", "w") as f:
                 f.write(ts_content)
 
@@ -64,7 +63,6 @@ export interface HAEntity {{
         else:
             logging.error("Failed to fetch entities")
 
-        
 
 if __name__ == "__main__":
     asyncio.run(fetchEntitiesWebsocket())
