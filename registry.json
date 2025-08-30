@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "HA-Components",
-  "homepage": "https://acme.com",
+  "homepage": "https://REMEMBER TO CHANGE ME.com",
   "items": [
     {
       "name": "camera",
@@ -10,9 +10,6 @@
       "description": "A Camera Component",
       "dependencies": [
         "media-chrome"
-      ],
-      "registryDependencies": [
-        "aspect-ratio"
       ],
       "files": [
         {

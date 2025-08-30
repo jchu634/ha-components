@@ -2,7 +2,7 @@
 import * as React from "react";
 import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { HelloWorld } from "@/registry/new-york/blocks/hello-world/hello-world";
-import { CameraFeed } from "@/registry/new-york/blocks/camera-feed/camera-feed";
+import { Camera } from "@/components/ha-ui/camera";
 
 export default function Home() {
     return (
@@ -35,7 +35,17 @@ export default function Home() {
                         <OpenInV0Button name="hello-world" className="w-fit" />
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
-                        <CameraFeed />
+                        <Camera
+                            wsURL="ws://homeassistant.local:11984/api/ws?src=camera.g4_doorbell_high"
+                            proxyURL="ws://localhost:8080/proxy"
+                            aspectRatio="4/3"
+                        />
+                    </div>
+                    <div className="flex items-center justify-center min-h-[400px] relative">
+                        <Camera
+                            wsURL="ws://homeassistant.local:11984/api/ws?src=camera.g3_dome_high_resolution_channel_3"
+                            proxyURL="ws://localhost:8080/proxy"
+                        />
                     </div>
                 </div>
             </main>
