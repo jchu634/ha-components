@@ -1,1 +1,0 @@
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjODQ0ZDM4Y2M1N2Q0OGQyYTNmMzA1NTFkYmJmMDdmNSIsImlhdCI6MTc1MTY5MjU1NSwiZXhwIjoyMDY3MDUyNTU1fQ.HWFQt9j_GPmVVQHJdK_zNF1V7MEw673aViucRzj12OI" -H "Content-Type: application/json" -o image.jpg   "http://192.168.1.142:8123/api/camera_proxy/camera.g4_doorbell_high"
