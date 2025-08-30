@@ -56,7 +56,7 @@ export interface HAEntity {{
 }}
 """
 
-            with open("entity-types.ts", "w") as f:
+            with open("./types/entity-types.ts", "w") as f:
                 f.write(ts_content)
 
             logging.info("Generated entity-types.ts")
