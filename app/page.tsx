@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { HelloWorld } from "@/registry/new-york/blocks/hello-world/hello-world";
@@ -29,7 +30,7 @@ export default function Home() {
                 <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm text-muted-foreground sm:pl-3">
-                            A simple hello world component
+                            A Camera Feed Component
                         </h2>
                         <OpenInV0Button name="hello-world" className="w-fit" />
                     </div>
