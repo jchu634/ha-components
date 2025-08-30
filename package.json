@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "generate:entities": "tsx scripts/generate_entities.ts",
     "registry:build": "node ~/code/shadcn/ui/packages/shadcn/dist/index.js build"
   },
   "dependencies": {
@@ -30,10 +31,14 @@
     "@types/node": "^20",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
+    "@types/ws": "^8.18.1",
+    "dotenv": "^17.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.20.5",
+    "typescript": "^5",
+    "ws": "^8.18.3"
   },
   "pnpm": {
     "overrides": {
