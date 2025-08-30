@@ -42,3 +42,6 @@ next-env.d.ts
 
 #### Python Dev ####
 __pycache__
+
+*.env
+data.json
