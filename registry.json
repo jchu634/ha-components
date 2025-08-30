@@ -1,31 +1,43 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "acme",
+  "name": "HA-Components",
   "homepage": "https://acme.com",
   "items": [
+    {
+      "name": "camera",
+      "type": "registry:component",
+      "title": "A simple Camera component",
+      "description": "A Camera Component",
+      "dependencies": [
+        "media-chrome"
+      ],
+      "registryDependencies": [
+        "aspect-ratio"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/camera.tsx",
+          "type": "registry:component",
+          "target": "components/ha-ui/camera.tsx"
+        },
+        {
+          "path": "components/ha-ui/video-rtc.tsx",
+          "type": "registry:component",
+          "target": "components/ha-ui/video-rtc.tsx"
+        }
+      ]
+    },
     {
       "name": "hello-world",
       "type": "registry:component",
       "title": "Hello World",
       "description": "A simple hello world component",
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "registry/new-york/blocks/hello-world/hello-world.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "example-form",
-      "type": "registry:component",
-      "title": "Example Form",
-      "description": "A contact form with Zod validation.",
-      "dependencies": ["zod"],
-      "registryDependencies": ["button", "input", "label", "textarea", "card"],
-      "files": [
-        {
-          "path": "registry/new-york/blocks/example-form/example-form.tsx",
           "type": "registry:component"
         }
       ]
@@ -35,7 +47,9 @@
       "type": "registry:component",
       "title": "Complex Component",
       "description": "A complex component showing hooks, libs and components.",
-      "registryDependencies": ["card"],
+      "registryDependencies": [
+        "card"
+      ],
       "files": [
         {
           "path": "registry/new-york/blocks/complex-component/page.tsx",
