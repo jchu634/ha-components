@@ -46,7 +46,9 @@ export function Camera({
     aspectRatio = "16/9",
 }: CameraFeedProps) {
     const camera = useWebRTCVideo({
-        wsSrc: wsURL || `ws://homeassistant.local:11984/api/ws?src=${entity}`,
+        wsSrc:
+            wsURL ||
+            `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
         ...(proxyURL ? { proxy: proxyURL } : {}),
         retryDelay: 5000, // retry every 5s
         maxRetryAttempts: 10,
