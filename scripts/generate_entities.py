@@ -12,7 +12,7 @@ websocket = websockets
 
 
 async def fetchEntitiesWebsocket():
-    url = f"ws://{config["HA_URL"]}/api/websocket"
+    url = f"ws://{config["NEXT_PUBLIC_HA_URL"]}:{config["NEXT_PUBLIC_HA_PORT"]}/api/websocket"
     async with websockets.connect(url) as remote:
         logging.info(await remote.recv())  # Auth Request
         auth_msg = {
@@ -32,6 +32,9 @@ async def fetchEntitiesWebsocket():
         logging.info("Entities received")
 
         if entities.get("type") == "result" and entities.get("success"):
+
+            with open("./data.json", "w") as f:
+                f.write(json.dumps(entities))
             filtered = [
                 {
                     "entity_id": e["entity_id"],

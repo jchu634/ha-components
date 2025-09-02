@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const HA_URL = process.env.HA_URL;
+const HA_URL = process.env.NEXT_PUBLIC_HA_URL;
+const HA_PORT = process.env.NEXT_PUBLIC_HA_PORT;
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
 
 if (!HA_URL || !AUTH_TOKEN) {
@@ -15,7 +16,7 @@ if (!HA_URL || !AUTH_TOKEN) {
 
 async function fetchEntities(): Promise<any[]> {
     return new Promise((resolve, reject) => {
-        const ws = new WebSocket(`ws://${HA_URL}/api/websocket`);
+        const ws = new WebSocket(`ws://${HA_URL}:${HA_PORT}/api/websocket`);
 
         ws.on("open", () => {
             console.log("Connected to Home Assistant WebSocket");
