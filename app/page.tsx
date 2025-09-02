@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
-import { Camera } from "@/components/ha-ui/camera";
+// import { Camera } from "@/components/ha-ui/camera";
+import { Light } from "@/components/ha-ui/light";
+import { TriggerButton } from "@/components/ha-ui/trigger-button";
 
 export default function Home() {
     return (
@@ -13,7 +15,7 @@ export default function Home() {
                     A custom registry for distributing code using shadcn.
                 </p>
             </header>
-            <main className="flex flex-col flex-1 gap-8">
+            {/* <main className="flex flex-col flex-1 gap-8">
                 <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm text-muted-foreground sm:pl-3">
@@ -31,6 +33,33 @@ export default function Home() {
                         <Camera
                             entity="camera.g3_dome_high_resolution_channel_3"
                             proxyURL="ws://localhost:8080/proxy"
+                        />
+                    </div>
+                </div>
+            </main> */}
+            <main className="flex flex-col flex-1 gap-8">
+                <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-sm text-muted-foreground sm:pl-3">
+                            A Simple Camera Component
+                        </h2>
+                    </div>
+                    <div className="flex items-center justify-center min-h-[400px] relative">
+                        <Light entity="camera.g4_doorbell_high" />
+                    </div>
+                </div>
+            </main>
+            <main className="flex flex-col flex-1 gap-8">
+                <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-sm text-muted-foreground sm:pl-3">
+                            A Simple Button Component that triggers an service
+                        </h2>
+                    </div>
+                    <div className="flex items-center justify-center min-h-[400px] relative">
+                        <TriggerButton
+                            entity="automation.test_toggle_lights"
+                            token={process.env.NEXT_PUBLIC_DEBUG_TOKEN ?? ""}
                         />
                     </div>
                 </div>
