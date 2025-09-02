@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
+import { createMDX } from "fumadocs-mdx/next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    /* config options here */
+    crossOrigin: "anonymous",
 };
 
-export default nextConfig;
+const withMDX = createMDX();
+export default withMDX(nextConfig);
