@@ -6,7 +6,7 @@ import {
     MediaPlayButton,
     MediaMuteButton,
 } from "media-chrome/react";
-import { useWebRTCVideo } from "./video-rtc";
+import { useWebRTCVideo } from "@/lib/video-rtc";
 import type { EntityId } from "@/types/entity-types";
 
 type AspectRatio = "1/1" | "4/3" | "16/9";

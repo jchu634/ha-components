@@ -4,6 +4,7 @@ import { createMDX } from "fumadocs-mdx/next";
 const nextConfig: NextConfig = {
     /* config options here */
     crossOrigin: "anonymous",
+    reactStrictMode: true,
 };
 
 const withMDX = createMDX();
