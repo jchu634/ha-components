@@ -100,8 +100,10 @@ export function useWebRTCVideo({
 
     const scheduleRetry = () => {
         if (maxRetryAttempts !== -1 && retryCount >= maxRetryAttempts) {
-            console.warn(
-                "[useWebRTCVideo] Max retry attempts reached, stopping."
+            fail(
+                new Error(
+                    "[useWebRTCVideo] Max retry attempts reached, stopping."
+                )
             );
             return;
         }
@@ -228,7 +230,7 @@ export function useWebRTCVideo({
         });
 
         ws.addEventListener("error", () => {
-            fail(new Error("WebSocket error"));
+            console.warn("Websocket Error");
             cleanup();
             scheduleRetry();
         });
