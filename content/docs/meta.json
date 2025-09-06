@@ -1,0 +1,12 @@
+    {
+        "root": true,
+        "pages": [
+            "---Introduction---",
+            "index",
+            "...(root)",
+            "---Setup---",
+            "...installation",
+            "---Auth---",
+            "...auth"
+        ]
+    }

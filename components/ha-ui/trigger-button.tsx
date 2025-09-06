@@ -9,17 +9,12 @@ export interface TriggerButtonProps {
      * HomeAssistant Entity Name
      */
     entity: EntityId;
-    /**
-     * Homeassistant Auth Token
-     */
-    token: string;
     description?: string;
     domain?: string;
     service?: string;
 }
 export function TriggerButton({
     entity,
-    token,
     description,
     domain = "automation",
     service = "trigger",

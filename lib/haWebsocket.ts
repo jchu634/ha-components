@@ -1,6 +1,6 @@
 import {
     refreshAccessToken,
-    getAccessToken,
+    // getAccessToken,
     clearTokens,
     login,
 } from "./haAuth";
