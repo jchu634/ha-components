@@ -1,12 +1,15 @@
-import { source } from "@/lib/source";
-import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import { baseOptions } from "@/lib/layout.shared";
-import type { PageProps, LayoutProps } from "fumadocs-core";
+import "@/app/global.css";
+import { HomeAssistantProvider } from "@/app/providers/HomeAssistantProvider";
+import { Inter } from "next/font/google";
 
-export default function Layout({ children }: LayoutProps<"/docs">) {
+const inter = Inter({
+    subsets: ["latin"],
+});
+
+export default function Layout({ children }: LayoutProps<"/">) {
     return (
-        <DocsLayout tree={source.pageTree} {...baseOptions()}>
-            {children}
-        </DocsLayout>
+        <div className="flex flex-col min-h-screen">
+            <HomeAssistantProvider>{children}</HomeAssistantProvider>
+        </div>
     );
 }

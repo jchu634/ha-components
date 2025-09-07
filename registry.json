@@ -15,12 +15,14 @@
         {
           "path": "components/ha-ui/camera.tsx",
           "type": "registry:component",
-          "target": "components/ha-ui/camera.tsx"
+          "target": "registry:component"
         },
         {
           "path": "components/ha-ui/video-rtc.tsx",
-          "type": "registry:component",
-          "target": "components/ha-ui/video-rtc.tsx"
+          "type": "registry:lib"
+        }
+      ]
+    },
         }
       ]
     },
