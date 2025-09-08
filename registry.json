@@ -4,8 +4,24 @@
   "homepage": "https://REMEMBER TO CHANGE ME.com",
   "items": [
     {
+      "name": "type-generator",
+      "type": "registry:item",
+      "title": "Type Generator",
+      "description": "Script to generate types",
+      "devDependencies": [
+        "tsx"
+      ],
+      "files": [
+        {
+          "path": "scripts/generate_entities.ts",
+          "type": "registry:file",
+          "target": "~/scripts/generate_entities"
+        }
+      ]
+    },
+    {
       "name": "camera",
-      "type": "registry:component",
+      "type": "registry:block",
       "title": "A simple Camera component",
       "description": "A Camera Component",
       "dependencies": [
@@ -23,6 +39,35 @@
         }
       ]
     },
+    {
+      "name": "ha-auth",
+      "type": "registry:item",
+      "title": "Files and components needed for Auth",
+      "description": "A complex component showing hooks, libs and components.",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/blocks/complex-component/page.tsx",
+          "type": "registry:page",
+          "target": "app/pokemon/page.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/complex-component/components/pokemon-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/new-york/blocks/complex-component/components/pokemon-image.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/new-york/blocks/complex-component/lib/pokemon.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/new-york/blocks/complex-component/hooks/use-pokemon.ts",
+          "type": "registry:hook"
         }
       ]
     },
