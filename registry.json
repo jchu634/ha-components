@@ -4,10 +4,57 @@
   "homepage": "https://REMEMBER TO CHANGE ME.com",
   "items": [
     {
+      "name": "type-generator",
+      "type": "registry:item",
+      "title": "Type Generator",
+      "description": "Script to generate types",
+      "devDependencies": [
+        "tsx"
+      ],
+      "files": [
+        {
+          "path": "scripts/generate_entities.ts",
+          "type": "registry:file",
+          "target": "~/scripts/generate_entities"
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "type": "registry:block",
+      "title": "Auth Files and Components",
+      "description": "A complex component used to setup Auth.",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/auth/page.tsx",
+          "type": "registry:page",
+          "target": "app/auth/callback/page.tsx"
+        },
+        {
+          "path": "app/providers/HomeAssistantProvider.tsx",
+          "target": "app/providers/HomeAssistantProvider.tsx",
+          "type": "registry:item"
+        },
+        {
+          "path": "lib/haAuth.ts",
+          "target": "lib/haAuth.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/haWebsocket.ts",
+          "target": "lib/haWebsocket.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "camera",
-      "type": "registry:component",
-      "title": "A simple Camera component",
-      "description": "A Camera Component",
+      "type": "registry:block",
+      "title": "Simple Camera Component",
+      "description": "A WebRTC Camera component for go2RTC",
       "dependencies": [
         "media-chrome"
       ],
@@ -23,68 +70,18 @@
         }
       ]
     },
-        }
-      ]
-    },
     {
-      "name": "hello-world",
+      "name": "trigger-button",
       "type": "registry:component",
-      "title": "Hello World",
-      "description": "A simple hello world component",
+      "title": "Simple Trigger Button Component",
+      "description": "Button that with an attached Entity trigger",
       "registryDependencies": [
-        "button"
+        "button",
+        "@ha-components/auth"
       ],
       "files": [
         {
-          "path": "registry/new-york/blocks/hello-world/hello-world.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "complex-component",
-      "type": "registry:component",
-      "title": "Complex Component",
-      "description": "A complex component showing hooks, libs and components.",
-      "registryDependencies": [
-        "card"
-      ],
-      "files": [
-        {
-          "path": "registry/new-york/blocks/complex-component/page.tsx",
-          "type": "registry:page",
-          "target": "app/pokemon/page.tsx"
-        },
-        {
-          "path": "registry/new-york/blocks/complex-component/components/pokemon-card.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/new-york/blocks/complex-component/components/pokemon-image.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/new-york/blocks/complex-component/lib/pokemon.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/new-york/blocks/complex-component/hooks/use-pokemon.ts",
-          "type": "registry:hook"
-        }
-      ]
-    },
-    {
-      "name": "example-with-css",
-      "type": "registry:component",
-      "title": "Example with CSS",
-      "description": "A login form with a CSS file.",
-      "files": [
-        {
-          "path": "registry/new-york/blocks/example-with-css/example-card.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/new-york/blocks/example-with-css/example-card.css",
+          "path": "components/ha-ui/trigger-button.tsx",
           "type": "registry:component"
         }
       ]

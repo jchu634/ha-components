@@ -1,7 +1,6 @@
 "use client";
 import type { EntityId } from "@/types/entity-types";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { haWebSocket } from "@/lib/haWebsocket";
 
 export interface TriggerButtonProps {
