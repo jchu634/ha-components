@@ -5,6 +5,7 @@ import {
     MediaVolumeRange,
     MediaPlayButton,
     MediaMuteButton,
+    MediaFullscreenButton,
 } from "media-chrome/react";
 import { useWebRTCVideo } from "@/lib/video-rtc";
 import type { EntityId } from "@/types/entity-types";
@@ -76,6 +77,7 @@ export function Camera({
                     <div className="text-white">
                         <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
                         <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
+                        <MediaFullscreenButton className="bg-black px-2 hover:bg-slate-800 h-full"></MediaFullscreenButton>
                     </div>
                 </MediaControlBar>
             )}
