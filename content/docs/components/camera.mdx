@@ -1,0 +1,100 @@
+---
+title: Camera Component
+description: A customisable securuty camera video component.
+---
+
+import CameraPreview from "./camera-preview.tsx"
+
+<Tabs items={['Preview Video', 'Example Code']}>
+  <Tab value="Preview Video">    
+    <CameraPreview />
+  </Tab>
+  <Tab value="Example Code">
+    ```tsx lineNumbers
+      <Camera
+          entity="camera.homeassistant_camera_video_entity"
+          aspectRatio="4/3"
+      />
+    ```
+  </Tab>
+</Tabs>
+
+<Callout type="warn">
+  Preview video is mocked with a fixed source.
+  Refer to the code for an more representative example.
+</Callout>
+
+## About
+This component provides a customisable video player using [media-chrome](https://www.media-chrome.org/)\
+It handles negotiation from a [Go2RTC](https://github.com/AlexxIT/go2rtc) backend.
+
+## Setup
+### Installation
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">    
+    TODO COMPLETE ME
+  </Tab>
+  <Tab value="Manual">
+    TODO COMPLETE ME
+  </Tab>
+</Tabs>
+
+### Enable Home Assistant Go2RTC API
+<Callout type="warn">
+  Go2RTC does not have authentication by default\
+  This will expose port 11984 without any authentication\
+  Use for internal networks only, use with a proxy is strongly recommended for any remote access.
+</Callout>
+
+To enable HA's Go2RTC API, add this to `configuration.yaml` as detailed [here](https://www.home-assistant.io/integrations/go2rtc/#debug_ui)
+```yaml
+go2rtc:
+  debug_ui: true
+```
+Soft Restart HA to load its new config.
+If it worked, the Go2RTC UI should now be accessible at port 11984 [(Quick Link)](http://homeassistant.local:11984/)
+
+
+
+## API (Props)
+### `entity`
+e.g. `camera.reolink_doorbell_high`
+- A HA Video entity name 
+- If wsURL is set, this property is ignored
+
+### `disableControls` (Optional)
+- Disables media controls, use if you want the video to play headlessly.
+- Set to false by default
+
+### `aspectRatio` (Optional)
+- Sets the Video Player aspect ratio (1/1, 16/9, 4/3)
+- Defaults to 16/9
+
+<Accordions type="single">
+  <Accordion title="Advanced">
+  ### `wsURL` (Optional)
+  e.g. `"ws://192.168.100.100:9999/proxy"`
+  - An websocket URL used to override the default HA Go2RTC server url
+  - If used, set `entity` to a placeholder value
+
+  ### `proxyURL` (Optional)
+  <Callout >
+    Intended for use in development
+  </Callout>
+  - e.g. `"ws://localhost:8080/proxy"`
+  - If set the component will utilise a proxy server for the websocket connection
+  - Instructions on how to set up a proxy server is provided in the common errors section [here](#http11-403-forbidden-or-ns_error_websocket_connection_refused).
+  </Accordion>
+</Accordions>
+
+## Common Errors
+### `HTTP/1.1 403 Forbidden` or `NS_ERROR_WEBSOCKET_CONNECTION_REFUSED`
+Home Assistant's Go2RTC instance may reject the connection outright if the origin-header is wrong.\
+To bypass this, use a proxy server to strip the origin-headers.\
+A simple Python script to setup a proxy server for development is provided.
+TODO FINISH PROXY SERVER INSTRUCTIONS
+
+
+
+
+  
