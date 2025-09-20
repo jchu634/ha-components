@@ -1,8 +1,7 @@
 [project]
 name = "api-debug"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
+description = "HA-Components development + debug python env"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.116.1",

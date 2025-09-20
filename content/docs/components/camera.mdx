@@ -21,7 +21,6 @@ import CameraPreview from "./camera-preview.tsx"
 
 <Callout type="warn">
   Preview video is mocked with a fixed source.
-  Refer to the code for an more representative example.
 </Callout>
 
 ## About
@@ -83,16 +82,33 @@ e.g. `camera.reolink_doorbell_high`
   </Callout>
   - e.g. `"ws://localhost:8080/proxy"`
   - If set the component will utilise a proxy server for the websocket connection
-  - Instructions on how to set up a proxy server is provided in the common errors section [here](#http11-403-forbidden-or-ns_error_websocket_connection_refused).
+  
+  A simple Python proxy server for development is provided [here](https://github.com/jchu634/ha-components/blob/main/scripts/proxy_server.py).\
+  To run it:
+  1. Install the dependencies
+      - Either using uv given the [pyproject.toml](https://github.com/jchu634/ha-components/blob/main/pyproject.toml)
+      - or you can install the dependencies manually:
+      ```ini
+        fastapi>=0.116.1  
+        uvicorn>=0.35.0
+        websockets>=15.0.1
+      ```
+  2. Then run the script using
+      ``` bash
+        # Run via UV
+        uv run uvicorn proxy_server:app --host 0.0.0.0 --port 8080
+
+        # Run via python
+        python -m uvicorn proxy_server:app --host 0.0.0.0 --port 8080
+      ```
   </Accordion>
 </Accordions>
 
 ## Common Errors
 ### `HTTP/1.1 403 Forbidden` or `NS_ERROR_WEBSOCKET_CONNECTION_REFUSED`
 Home Assistant's Go2RTC instance may reject the connection outright if the origin-header is wrong.\
-To bypass this, use a proxy server to strip the origin-headers.\
-A simple Python script to setup a proxy server for development is provided.
-TODO FINISH PROXY SERVER INSTRUCTIONS
+To bypass this, utilise a proxy server via `proxyURL` to strip the origin-headers.\
+Instructions for a simple python proxy-server are available in the Advanced API documentation under `proxyURL`
 
 
 
