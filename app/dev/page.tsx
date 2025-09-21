@@ -57,7 +57,12 @@ export default function Home() {
                         </h2>
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
-                        <TriggerButton entity="automation.test_toggle_lights" />
+                        <TriggerButton
+                            entity="automation.test_toggle_lights"
+                            description="test"
+                        >
+                            test
+                        </TriggerButton>
                     </div>
                 </div>
             </main>
