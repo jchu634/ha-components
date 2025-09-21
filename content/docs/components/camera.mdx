@@ -5,12 +5,13 @@ description: A customisable securuty camera video component.
 
 import CameraPreview from "./camera-preview.tsx"
 
-<Tabs items={['Preview Video', 'Example Code']}>
-  <Tab value="Preview Video">    
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">    
     <CameraPreview />
   </Tab>
-  <Tab value="Example Code">
+  <Tab value="Code">
     ```tsx lineNumbers
+      import { Camera } from "@/components/ha-ui/camera";
       <Camera
           entity="camera.homeassistant_camera_video_entity"
           aspectRatio="4/3"

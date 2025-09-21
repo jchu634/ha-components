@@ -57,10 +57,7 @@ export default function Home() {
                         </h2>
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
-                        <TriggerButton
-                            entity="automation.test_toggle_lights"
-                            token={process.env.NEXT_PUBLIC_DEBUG_TOKEN ?? ""}
-                        />
+                        <TriggerButton entity="automation.test_toggle_lights" />
                     </div>
                 </div>
             </main>

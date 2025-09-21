@@ -1,0 +1,84 @@
+---
+title: Trigger Button
+description: A button trigger for a HA domain service.
+---
+
+import TriggerButtonPreview from "./trigger-button-preview.tsx"
+import { Link } from "next/link"
+import { Button } from "@/components/ui/button";
+import {ExternalLink} from "lucide-react";
+
+
+<Button
+    className="outline"
+    size="sm"
+    variant="secondary"
+>
+    [API](https://ui.shadcn.com/docs/components/button)
+    <ExternalLink />
+</Button>
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">    
+    <TriggerButtonPreview />
+  </Tab>
+  <Tab value="Code">
+    ```tsx lineNumbers
+      import { TriggerButton } from "@/components/ha-ui/trigger-button";
+      <trigger-button
+        entity="domain.service"  
+        description="Button that Triggers Stuff"
+      >
+        Button that Triggers Stuff
+      </trigger-button>
+    ```
+  </Tab>
+</Tabs>
+
+## About
+This component is a modified ShadCN button mounts a onClick which triggers a HA service (e.g. automations).\
+This is primarily intended for manually activating automations, but can trigger any HA service if the Domain and Service are specified.
+
+
+## Setup
+### Installation
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">    
+    TODO COMPLETE ME
+  </Tab>
+  <Tab value="Manual">
+    TODO COMPLETE ME
+  </Tab>
+</Tabs>
+
+## Example Usage
+```tsx lineNumbers
+    import { TriggerButton } from "@/components/ha-ui/trigger-button";
+    <trigger-button
+    entity="automations.open_curtains"  
+    >
+    Button that Triggers Stuff
+    </trigger-button>
+```
+
+## API (Props)
+<Callout >
+    This only documents props added for triggering HA Services\
+    For Button Styling Documentation look [here](https://ui.shadcn.com/docs/components/button)
+
+</Callout>
+### `entity`
+e.g. `camera.reolink_doorbell_high`
+- A HA Video entity name
+
+### `description` (Optional)
+- Adds a title to the button
+
+### `domain` (Optional)
+- The Domain that the entity belongs to.
+- Defaults to `automation`
+- For more information on domains, see [here](https://www.home-assistant.io/docs/configuration/entities_domains/#domains)
+
+## `service` (Optional)
+- The that the entity will be triggered with.
+- Defaults to `trigger`
