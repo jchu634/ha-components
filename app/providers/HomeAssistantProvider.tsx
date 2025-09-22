@@ -4,13 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { haWebSocket } from "@/lib/haWebsocket";
 import { getAccessToken, login } from "@/lib/haAuth";
 
-export function HomeAssistantProvider({
-    children,
-    useProxy = false,
-}: {
-    children: ReactNode;
-    useProxy?: boolean;
-}) {
+export function HomeAssistantProvider({ children, useProxy = false }: { children: ReactNode; useProxy?: boolean }) {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
