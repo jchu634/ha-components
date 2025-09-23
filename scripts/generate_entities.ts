@@ -76,6 +76,8 @@ export interface HAEntity {
 }
 `;
 
+    // TODO FETCH DOMAINS AND SERVICES
+
     const outPath = path.join(process.cwd(), "types/entity-types.ts");
     fs.writeFileSync(outPath, tsContent, "utf-8");
     console.log(`✅ Generated ${outPath}`);

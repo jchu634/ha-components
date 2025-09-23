@@ -11,10 +11,11 @@ export interface LightProps {
 }
 
 export function Light({ entity }: LightProps) {
+    const [state, setState] = useState("off");
     return (
-        <div>
-            <Button>
-                <Slider defaultValue={[33]} max={100} step={1} />
+        <div className="space-y-4">
+            <Button onClick={() => haWebSocket.callService("light", "toggle", { entity_id: entity })}>
+                Toggle Light ({state})
             </Button>
         </div>
     );
