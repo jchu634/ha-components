@@ -7,7 +7,7 @@ type TriggerButtonProps = React.ComponentProps<typeof Button> & {
     /**
      * HomeAssistant Entity Name
      */
-    entity: string;
+    entity: EntityId;
     description?: string;
     domain?: string;
     service?: string;
