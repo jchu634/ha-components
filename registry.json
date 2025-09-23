@@ -85,6 +85,26 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "light",
+      "type": "registry:component",
+      "title": "Simple Light Control Component",
+      "description": "A component which allows full control of a light",
+      "dependencies": [
+        "react-colorful"
+      ],
+      "registryDependencies": [
+        "slider",
+        "button",
+        "@ha-components/auth"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/trigger-button.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }
