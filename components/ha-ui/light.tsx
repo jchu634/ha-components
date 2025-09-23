@@ -3,14 +3,18 @@ import type { EntityId } from "@/types/entity-types";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { haWebSocket } from "@/lib/haWebsocket";
 import { RgbColorPicker } from "react-colorful"; // npm install react-colorful
+import { PowerIcon } from "lucide-react";
 
 export interface LightProps {
     /**
      * HomeAssistant Entity Name
      */
     entity: EntityId;
+    hideControls?: Boolean;
+    overrideSupportColorRGB?: boolean;
 }
 
 function throttle<F extends (...args: any[]) => void>(fn: F, limit: number) {
@@ -56,7 +60,7 @@ function kelvinToRGB(kelvin: number): [number, number, number] {
     ];
 }
 
-export function Light({ entity }: LightProps) {
+export function Light({ entity, hideControls = true, overrideSupportColorRGB = false }: LightProps) {
     const [brightness, setBrightness] = useState(128);
     const [colorTempK, setColorTempK] = useState<number | null>(null);
     const [rgbColor, setRgbColor] = useState<[number, number, number] | null>(null);
@@ -120,13 +124,17 @@ export function Light({ entity }: LightProps) {
             if (data) {
                 const { attributes } = data;
                 setState(data.state);
-                if (attributes?.brightness !== undefined) {
+                if (attributes?.brightness !== undefined && attributes?.brightness !== null) {
                     setBrightness(attributes.brightness);
                 }
-                if (attributes?.color_temp_kelvin !== undefined) {
+                if (attributes?.color_temp_kelvin && attributes?.color_temp_kelvin !== null) {
                     setColorTempK(attributes.color_temp_kelvin);
                 }
-                if (attributes?.rgb_color !== undefined && activeMode !== "color_temp") {
+                if (
+                    attributes?.rgb_color !== undefined &&
+                    attributes?.rgb_color !== null &&
+                    activeMode !== "color_temp"
+                ) {
                     setRgbColor(attributes.rgb_color);
                 }
                 if (attributes?.color_mode) {
@@ -157,7 +165,7 @@ export function Light({ entity }: LightProps) {
             const { attributes } = newState;
 
             // Brightness confirm with tolerance
-            if (attributes?.brightness !== undefined) {
+            if (attributes?.brightness !== undefined && attributes?.brightness !== null) {
                 if (pendingBrightness.current !== null) {
                     if (Math.abs(attributes.brightness - pendingBrightness.current) <= 2) {
                         setBrightness(attributes.brightness);
@@ -171,7 +179,7 @@ export function Light({ entity }: LightProps) {
             }
 
             // Color Temp confirm with tolerance
-            if (attributes?.color_temp_kelvin !== undefined) {
+            if (attributes?.color_temp_kelvin !== undefined && attributes?.color_temp_kelvin !== null) {
                 if (pendingTemp.current !== null) {
                     if (Math.abs(attributes.color_temp_kelvin - pendingTemp.current) <= 50) {
                         setColorTempK(attributes.color_temp_kelvin);
@@ -185,7 +193,11 @@ export function Light({ entity }: LightProps) {
             }
 
             // RGB confirm with tolerance
-            if (attributes?.rgb_color !== undefined) {
+            if (
+                attributes?.rgb_color !== undefined &&
+                attributes?.rgb_color !== null &&
+                attributes.rgb_color.length === 3
+            ) {
                 const [r, g, b] = attributes.rgb_color;
                 if (pendingRgb.current !== null) {
                     const [pr, pg, pb] = pendingRgb.current;
@@ -207,7 +219,7 @@ export function Light({ entity }: LightProps) {
 
     return (
         <div
-            className="space-y-4"
+            className="flex space-x-4"
             style={
                 {
                     "--min-rgb": `rgb(${minRGB.join(",")})`,
@@ -220,51 +232,187 @@ export function Light({ entity }: LightProps) {
                 max={255}
                 step={5}
                 size={30}
+                className="w-[400px]"
                 orientation="vertical"
                 onValueChange={(value) => {
                     setBrightness(value[0]); // Update UI in real-time
                     throttledSetBrightness(value[0]); // Throttle updates to prevent desync issues
                 }}
             />
-            {supportsColorTemp && (
-                <div>
-                    <Slider
-                        value={[colorTempK ?? minTemp]}
-                        min={minTemp}
-                        max={maxTemp}
-                        step={50}
-                        size={30}
-                        rangeClassName="bg-gradient-to-r from-[var(--min-rgb)] to-[var(--max-rgb)]"
-                        onValueChange={(val) => {
-                            setColorTempK(val[0]);
-                            throttledColorTemp(val[0]);
-                            setActiveMode("color_temp"); // force mode switch UI side
-                        }}
-                    />
-                </div>
-            )}
+            {hideControls ? (
+                <Accordion type="single" collapsible orientation="horizontal" className="h-100%">
+                    <AccordionItem value="item-1" orientation="horizontal" className="h-full">
+                        <div className="flex flex-col h-full justify-between">
+                            <AccordionTrigger orientation="horizontal"></AccordionTrigger>
+                            <Button
+                                size="icon"
+                                onClick={() => {
+                                    haWebSocket.callService("light", "toggle", { entity_id: entity });
+                                    if (state === "off") {
+                                        // preselect a mode when turning on
+                                        if (supportsColorTemp) {
+                                            setActiveMode("color_temp");
+                                        } else if (supportsColor) {
+                                            setActiveMode("rgb");
+                                        }
+                                    }
+                                }}
+                            >
+                                <PowerIcon />
+                            </Button>
+                        </div>
 
-            {supportsColor && rgbColor && (
-                <div>
-                    {/* <p>Colour {activeMode !== "color_temp" ? "(active)" : ""}</p> */}
-                    <RgbColorPicker
-                        color={{
-                            r: rgbColor[0],
-                            g: rgbColor[1],
-                            b: rgbColor[2],
-                        }}
-                        onChange={(c) => {
-                            const rgb: [number, number, number] = [c.r, c.g, c.b];
-                            setRgbColor(rgb);
-                            throttledRgb(rgb);
-                            setActiveMode("rgb"); // force mode switch UI side
-                        }}
-                    />
+                        <AccordionContent orientation="horizontal" className="py-0">
+                            <div className="flex space-x-4">
+                                {supportsColorTemp && (
+                                    <Slider
+                                        value={[colorTempK ?? minTemp]}
+                                        min={minTemp}
+                                        max={maxTemp}
+                                        step={50}
+                                        size={30}
+                                        orientation="vertical"
+                                        rangeClassName="bg-gradient-to-t from-[var(--min-rgb)] to-[var(--max-rgb)]"
+                                        onValueChange={(val) => {
+                                            setColorTempK(val[0]);
+                                            throttledColorTemp(val[0]);
+                                            setActiveMode("color_temp"); // force mode switch UI side
+                                        }}
+                                        className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                                    />
+                                )}
+                                <div className="space-y-4 ">
+                                    {overrideSupportColorRGB && !rgbColor && (
+                                        <div className="h-[calc(100%-3.25rem)]">
+                                            <RgbColorPicker
+                                                style={{ height: "100%" }}
+                                                className="opacity-40 pointer-events-none"
+                                            />
+                                        </div>
+                                    )}
+                                    {supportsColor && rgbColor && (
+                                        <div className="h-[calc(100%-3.25rem)]">
+                                            <RgbColorPicker
+                                                color={{
+                                                    r: rgbColor[0],
+                                                    g: rgbColor[1],
+                                                    b: rgbColor[2],
+                                                }}
+                                                onChange={(c) => {
+                                                    const rgb: [number, number, number] = [c.r, c.g, c.b];
+                                                    setRgbColor(rgb);
+                                                    throttledRgb(rgb);
+                                                    setActiveMode("rgb"); // force mode switch UI side
+                                                }}
+                                                style={{ height: "100%" }}
+                                                className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="w-full flex justify-end">
+                                        {supportsColor &&
+                                            (rgbColor || (overrideSupportColorRGB && !rgbColor)) &&
+                                            supportsColorTemp && (
+                                                <Button
+                                                    onClick={() =>
+                                                        setActiveMode(
+                                                            activeMode === "color_temp" ? "rgb" : "color_temp"
+                                                        )
+                                                    }
+                                                    className={
+                                                        overrideSupportColorRGB && !rgbColor
+                                                            ? "opacity-40 pointer-events-none"
+                                                            : ""
+                                                    }
+                                                >
+                                                    Switch to {activeMode == "color_temp" ? "RGB" : "Temperature"}
+                                                </Button>
+                                            )}
+                                    </div>
+                                </div>
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            ) : (
+                <div className="flex space-x-4">
+                    {supportsColorTemp && (
+                        <Slider
+                            value={[colorTempK ?? minTemp]}
+                            min={minTemp}
+                            max={maxTemp}
+                            step={50}
+                            size={30}
+                            orientation="vertical"
+                            rangeClassName="bg-gradient-to-t from-[var(--min-rgb)] to-[var(--max-rgb)]"
+                            onValueChange={(val) => {
+                                setColorTempK(val[0]);
+                                throttledColorTemp(val[0]);
+                                setActiveMode("color_temp"); // force mode switch UI side
+                            }}
+                            className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                        />
+                    )}
+                    <div className="space-y-4 flex flex-col justify-end">
+                        {overrideSupportColorRGB && !rgbColor && (
+                            <div className="h-[calc(100%-3.25rem)]">
+                                <RgbColorPicker style={{ height: "100%" }} className="opacity-40 pointer-events-none" />
+                            </div>
+                        )}
+                        {supportsColor && rgbColor && (
+                            <div className="h-[calc(100%-3.25rem)]">
+                                <RgbColorPicker
+                                    color={{
+                                        r: rgbColor[0],
+                                        g: rgbColor[1],
+                                        b: rgbColor[2],
+                                    }}
+                                    onChange={(c) => {
+                                        const rgb: [number, number, number] = [c.r, c.g, c.b];
+                                        setRgbColor(rgb);
+                                        throttledRgb(rgb);
+                                        setActiveMode("rgb"); // force mode switch UI side
+                                    }}
+                                    style={{ height: "100%" }}
+                                    className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                                />
+                            </div>
+                        )}
+                        <div className="w-full flex justify-between">
+                            <Button
+                                size="icon"
+                                onClick={() => {
+                                    haWebSocket.callService("light", "toggle", { entity_id: entity });
+                                    if (state === "off") {
+                                        // preselect a mode when turning on
+                                        if (supportsColorTemp) {
+                                            setActiveMode("color_temp");
+                                        } else if (supportsColor) {
+                                            setActiveMode("rgb");
+                                        }
+                                    }
+                                }}
+                            >
+                                <PowerIcon />
+                            </Button>
+                            {supportsColor &&
+                                (rgbColor || (overrideSupportColorRGB && !rgbColor)) &&
+                                supportsColorTemp && (
+                                    <Button
+                                        onClick={() =>
+                                            setActiveMode(activeMode === "color_temp" ? "rgb" : "color_temp")
+                                        }
+                                        className={
+                                            overrideSupportColorRGB && !rgbColor ? "opacity-40 pointer-events-none" : ""
+                                        }
+                                    >
+                                        Switch to {activeMode == "color_temp" ? "RGB" : "Temp"}
+                                    </Button>
+                                )}
+                        </div>
+                    </div>
                 </div>
             )}
-            <Button onClick={() => haWebSocket.callService("light", "toggle", { entity_id: entity })}>
-                Toggle Light ({state})
-            </Button>
         </div>
     );
 }

@@ -37,7 +37,7 @@ export default function Home() {
                         <h2 className="text-sm text-muted-foreground sm:pl-3">A Simple Light Component</h2>
                     </div>
                     <div className="flex items-center justify-center min-h-[400px] relative">
-                        <Light entity="light.dining_group_1" />
+                        <Light entity="light.dining_group_1" hideControls={true} overrideSupportColorRGB={true} />
                     </div>
                 </div>
             </main>
