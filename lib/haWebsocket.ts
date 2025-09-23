@@ -5,12 +5,13 @@ class HAWebSocket {
     private msgId = 1;
     private refreshTimer: number | null = null;
 
+    private stateListeners: Map<string, ((state: any) => void)[]> = new Map();
+
     async connect(baseUrl: string, token: string, useProxy: boolean = false): Promise<void> {
         return new Promise((resolve, reject) => {
             const HA_HOST = process.env.NEXT_PUBLIC_HA_URL;
             const HA_PORT = process.env.NEXT_PUBLIC_HA_PORT;
             const haWsUrl = `ws://${HA_HOST}:${HA_PORT}/api/websocket`;
-
             const fullUrl = useProxy ? `${baseUrl}/ha` : haWsUrl;
 
             console.log("[HA WS] Connecting:", fullUrl);
@@ -25,6 +26,7 @@ class HAWebSocket {
                     this.ws?.send(JSON.stringify({ type: "auth", access_token: token }));
                 } else if (msg.type === "auth_ok") {
                     console.log("[HA WS] Authenticated");
+                    this.subscribeEvents("state_changed");
                     this.scheduleRefresh(baseUrl, useProxy);
                     resolve();
                 } else if (msg.type === "auth_invalid") {
@@ -41,6 +43,9 @@ class HAWebSocket {
                         login();
                         reject(err);
                     }
+                } else if (msg.type === "event" && msg.event?.event_type === "state_changed") {
+                    const entityId = msg.event.data.entity_id;
+                    this.notifyStateListeners(entityId, msg.event.data.new_state);
                 }
             };
 
@@ -87,6 +92,17 @@ class HAWebSocket {
         }, refreshIn);
     }
 
+    private subscribeEvents(eventType: string) {
+        const id = ++this.msgId;
+        this.ws?.send(
+            JSON.stringify({
+                id,
+                type: "subscribe_events",
+                event_type: eventType,
+            })
+        );
+    }
+
     private clearRefreshTimer() {
         if (this.refreshTimer) window.clearTimeout(this.refreshTimer);
         this.refreshTimer = null;
@@ -94,6 +110,51 @@ class HAWebSocket {
 
     private clearTimers() {
         this.clearRefreshTimer();
+    }
+
+    getState(entityId: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const id = ++this.msgId;
+
+            const handleMessage = (event: MessageEvent) => {
+                const msg = JSON.parse(event.data);
+                if (msg.id === id && msg.type === "result") {
+                    this.ws?.removeEventListener("message", handleMessage);
+                    if (msg.success && Array.isArray(msg.result)) {
+                        const entity = msg.result.find((e: any) => e.entity_id === entityId);
+                        resolve(entity);
+                    } else {
+                        resolve(null);
+                    }
+                }
+            };
+
+            this.ws?.addEventListener("message", handleMessage);
+
+            this.ws?.send(
+                JSON.stringify({
+                    id,
+                    type: "get_states",
+                })
+            );
+        });
+    }
+
+    addStateListener(entityId: string, cb: (newState: any) => void) {
+        const listeners = this.stateListeners.get(entityId) || [];
+        listeners.push(cb);
+        this.stateListeners.set(entityId, listeners);
+    }
+
+    removeStateListener(entityId: string, cb: (newState: any) => void) {
+        let listeners = this.stateListeners.get(entityId) || [];
+        listeners = listeners.filter((fn) => fn !== cb);
+        this.stateListeners.set(entityId, listeners);
+    }
+
+    private notifyStateListeners(entityId: string, newState: any) {
+        const listeners = this.stateListeners.get(entityId);
+        if (listeners) listeners.forEach((fn) => fn(newState));
     }
 
     callService(domain: string, service: string, serviceData: any) {
