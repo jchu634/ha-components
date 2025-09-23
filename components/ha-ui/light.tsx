@@ -118,7 +118,6 @@ export function Light({ entity }: LightProps) {
         // Load Initial State
         haWebSocket.getState(entity).then((data) => {
             if (data) {
-                console.log(data);
                 const { attributes } = data;
                 setState(data.state);
                 if (attributes?.brightness !== undefined) {
