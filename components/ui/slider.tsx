@@ -7,9 +7,19 @@ import { cn } from "@/lib/utils";
 
 interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
     size?: number | string;
+    rangeClassName?: string;
 }
 
-function Slider({ className, defaultValue, value, size = 100, min = 0, max = 100, ...props }: SliderProps) {
+function Slider({
+    className,
+    defaultValue,
+    value,
+    size = 100,
+    min = 0,
+    max = 100,
+    rangeClassName,
+    ...props
+}: SliderProps) {
     const _values = React.useMemo(
         () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
         [value, defaultValue, min, max]
@@ -38,7 +48,9 @@ function Slider({ className, defaultValue, value, size = 100, min = 0, max = 100
                 <SliderPrimitive.Range
                     data-slot="slider-range"
                     className={cn(
-                        "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+                        "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
+                        // allow caller to override / extend range styling (eg. gradient for color temp)
+                        rangeClassName
                     )}
                 />
             </SliderPrimitive.Track>

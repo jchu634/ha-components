@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { haWebSocket } from "@/lib/haWebsocket";
+import { RgbColorPicker } from "react-colorful"; // npm install react-colorful
 
 export interface LightProps {
     /**
@@ -32,12 +33,51 @@ function throttle<F extends (...args: any[]) => void>(fn: F, limit: number) {
     };
 }
 
+// Approximate conversion Kelvin → RGB
+// Valid for ~1000K - 40000K
+function kelvinToRGB(kelvin: number): [number, number, number] {
+    let temperature = kelvin / 100;
+    let red, green, blue;
+
+    if (temperature <= 66) {
+        red = 255;
+        green = 99.4708025861 * Math.log(temperature) - 161.1195681661;
+        blue = temperature <= 19 ? 0 : 138.5177312231 * Math.log(temperature - 10) - 305.0447927307;
+    } else {
+        red = 329.698727446 * Math.pow(temperature - 60, -0.1332047592);
+        green = 288.1221695283 * Math.pow(temperature - 60, -0.0755148492);
+        blue = 255;
+    }
+
+    return [
+        Math.min(255, Math.max(0, Math.round(red))),
+        Math.min(255, Math.max(0, Math.round(green))),
+        Math.min(255, Math.max(0, Math.round(blue))),
+    ];
+}
+
 export function Light({ entity }: LightProps) {
     const [brightness, setBrightness] = useState(128);
-    const [state, setState] = useState("off");
-    const pendingBrightness = useRef<number | null>(null);
+    const [colorTempK, setColorTempK] = useState<number | null>(null);
+    const [rgbColor, setRgbColor] = useState<[number, number, number] | null>(null);
 
-    // Throttled service call
+    const [state, setState] = useState("off");
+    const [activeMode, setActiveMode] = useState<string | null>(null);
+
+    const [supportsColor, setSupportsColor] = useState(false);
+    const [supportsColorTemp, setSupportsColorTemp] = useState(false);
+    const [minTemp, setMinTemp] = useState(2000);
+    const [maxTemp, setMaxTemp] = useState(6500);
+
+    const pendingBrightness = useRef<number | null>(null);
+    const pendingTemp = useRef<number | null>(null);
+    const pendingRgb = useRef<[number, number, number] | null>(null);
+
+    const minRGB = kelvinToRGB(minTemp);
+    const maxRGB = kelvinToRGB(maxTemp);
+
+    // Throttled API Calls
+
     const throttledSetBrightness = useMemo(
         () =>
             throttle((value: number) => {
@@ -50,35 +90,114 @@ export function Light({ entity }: LightProps) {
         [entity]
     );
 
+    const throttledColorTemp = useMemo(
+        () =>
+            throttle((kelvin: number) => {
+                pendingTemp.current = kelvin;
+                haWebSocket.callService("light", "turn_on", {
+                    entity_id: entity,
+                    color_temp_kelvin: kelvin,
+                });
+            }, 200),
+        [entity]
+    );
+
+    const throttledRgb = useMemo(
+        () =>
+            throttle((rgb: [number, number, number]) => {
+                pendingRgb.current = rgb;
+                haWebSocket.callService("light", "turn_on", {
+                    entity_id: entity,
+                    rgb_color: rgb,
+                });
+            }, 200),
+        [entity]
+    );
+
     useEffect(() => {
         // Load Initial State
         haWebSocket.getState(entity).then((data) => {
             if (data) {
+                console.log(data);
+                const { attributes } = data;
                 setState(data.state);
-                if (data.attributes?.brightness !== undefined) {
-                    setBrightness(data.attributes.brightness);
+                if (attributes?.brightness !== undefined) {
+                    setBrightness(attributes.brightness);
+                }
+                if (attributes?.color_temp_kelvin !== undefined) {
+                    setColorTempK(attributes.color_temp_kelvin);
+                }
+                if (attributes?.rgb_color !== undefined && activeMode !== "color_temp") {
+                    setRgbColor(attributes.rgb_color);
+                }
+                if (attributes?.color_mode) {
+                    setActiveMode(attributes.color_mode);
+                }
+
+                // Detect supported Color Features
+                const modes: string[] = attributes?.supported_color_modes || [];
+                if (modes.includes("color_temp")) {
+                    setSupportsColorTemp(true);
+                    setMinTemp(attributes.min_color_temp_kelvin || 2000);
+                    setMaxTemp(attributes.max_color_temp_kelvin || 6500);
+                }
+                if (
+                    modes.includes("hs") ||
+                    modes.includes("rgb") ||
+                    modes.includes("rgbw") ||
+                    modes.includes("rgbww") ||
+                    modes.includes("xy")
+                ) {
+                    setSupportsColor(true);
                 }
             }
         });
         // Subscribe to state updates
         const handler = (newState: any) => {
             setState(newState.state);
+            const { attributes } = newState;
 
-            const wsBrightness = newState.attributes?.brightness;
-            if (wsBrightness !== undefined) {
-                // If we’re waiting for HA to confirm a change
+            // Brightness confirm with tolerance
+            if (attributes?.brightness !== undefined) {
                 if (pendingBrightness.current !== null) {
-                    if (wsBrightness === pendingBrightness.current) {
-                        // Matched: HA confirmed, clear lock and update slider
-                        setBrightness(wsBrightness);
+                    if (Math.abs(attributes.brightness - pendingBrightness.current) <= 2) {
+                        setBrightness(attributes.brightness);
                         pendingBrightness.current = null;
                     } else {
-                        // Ignore intermediate mismatched updates (rollback case)
+                        return; // rollback -> ignore
+                    }
+                } else {
+                    setBrightness(attributes.brightness);
+                }
+            }
+
+            // Color Temp confirm with tolerance
+            if (attributes?.color_temp_kelvin !== undefined) {
+                if (pendingTemp.current !== null) {
+                    if (Math.abs(attributes.color_temp_kelvin - pendingTemp.current) <= 50) {
+                        setColorTempK(attributes.color_temp_kelvin);
+                        pendingTemp.current = null;
+                    } else {
                         return;
                     }
                 } else {
-                    // Normal case: accept HA brightness
-                    setBrightness(wsBrightness);
+                    setColorTempK(attributes.color_temp_kelvin);
+                }
+            }
+
+            // RGB confirm with tolerance
+            if (attributes?.rgb_color !== undefined) {
+                const [r, g, b] = attributes.rgb_color;
+                if (pendingRgb.current !== null) {
+                    const [pr, pg, pb] = pendingRgb.current;
+                    if (Math.abs(r - pr) <= 2 && Math.abs(g - pg) <= 2 && Math.abs(b - pb) <= 2) {
+                        setRgbColor([r, g, b]);
+                        pendingRgb.current = null;
+                    } else {
+                        return;
+                    }
+                } else {
+                    setRgbColor([r, g, b]);
                 }
             }
         };
@@ -88,7 +207,15 @@ export function Light({ entity }: LightProps) {
     }, [entity]);
 
     return (
-        <div className="space-y-4">
+        <div
+            className="space-y-4"
+            style={
+                {
+                    "--min-rgb": `rgb(${minRGB.join(",")})`,
+                    "--max-rgb": `rgb(${maxRGB.join(",")})`,
+                } as React.CSSProperties
+            }
+        >
             <Slider
                 value={[brightness]}
                 max={255}
@@ -100,6 +227,42 @@ export function Light({ entity }: LightProps) {
                     throttledSetBrightness(value[0]); // Throttle updates to prevent desync issues
                 }}
             />
+            {supportsColorTemp && (
+                <div>
+                    <Slider
+                        value={[colorTempK ?? minTemp]}
+                        min={minTemp}
+                        max={maxTemp}
+                        step={50}
+                        size={30}
+                        rangeClassName="bg-gradient-to-r from-[var(--min-rgb)] to-[var(--max-rgb)]"
+                        onValueChange={(val) => {
+                            setColorTempK(val[0]);
+                            throttledColorTemp(val[0]);
+                            setActiveMode("color_temp"); // force mode switch UI side
+                        }}
+                    />
+                </div>
+            )}
+
+            {supportsColor && rgbColor && (
+                <div>
+                    {/* <p>Colour {activeMode !== "color_temp" ? "(active)" : ""}</p> */}
+                    <RgbColorPicker
+                        color={{
+                            r: rgbColor[0],
+                            g: rgbColor[1],
+                            b: rgbColor[2],
+                        }}
+                        onChange={(c) => {
+                            const rgb: [number, number, number] = [c.r, c.g, c.b];
+                            setRgbColor(rgb);
+                            throttledRgb(rgb);
+                            setActiveMode("rgb"); // force mode switch UI side
+                        }}
+                    />
+                </div>
+            )}
             <Button onClick={() => haWebSocket.callService("light", "toggle", { entity_id: entity })}>
                 Toggle Light ({state})
             </Button>
