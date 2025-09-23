@@ -43,6 +43,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -110,6 +112,22 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@keyframes accordion-right {
+  from { width: 0; }
+  to { width: var(--radix-accordion-content-width); }
+}
+@keyframes accordion-left {
+  from { width: var(--radix-accordion-content-width); }
+  to { width: 0; }
+}
+
+.animate-accordion-right {
+  animation: accordion-right 0.2s ease-out forwards;
+}
+.animate-accordion-left {
+  animation: accordion-left 0.2s ease-out forwards;
 }
 
 @layer base {

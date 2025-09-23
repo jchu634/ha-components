@@ -42,7 +42,9 @@ function Slider({
             <SliderPrimitive.Track
                 data-slot="slider-track"
                 className={cn(
-                    "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-[var(--slider-width)] data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[var(--slider-width)]"
+                    "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-[var(--slider-width)] data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[var(--slider-width)]",
+                    // allow caller to override / extend range styling (eg. gradient for color temp)
+                    rangeClassName
                 )}
             >
                 <SliderPrimitive.Range
