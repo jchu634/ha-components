@@ -3,6 +3,7 @@
         "pages": [
             "---Introduction---",
             "index",
+            "[Showcase](/showcase)",
             "...(root)",
             "---Setup---",
             "...installation",
