@@ -5,8 +5,8 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { RgbColorPicker } from "react-colorful";
-import { PowerIcon, SettingsIcon, ThermometerIcon, PaintbrushVerticalIcon } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { PowerIcon, SettingsIcon, ThermometerIcon, PaintbrushVerticalIcon, XIcon } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "@/components/ui/popover";
 
 import type { EntityId } from "@/types/entity-types";
 import { haWebSocket } from "@/lib/haWebsocket";
@@ -299,7 +299,9 @@ function HiddenAccordionVariant(props: LightVariantProps) {
                                             setActiveMode(activeMode === "color_temp" ? "rgb" : "color_temp")
                                         }
                                         className={
-                                            overrideSupportColorRGB && !rgbColor ? "opacity-40 pointer-events-none" : ""
+                                            overrideSupportColorRGB && !rgbColor
+                                                ? "opacity-40 pointer-events-none w-full"
+                                                : "w-full"
                                         }
                                     >
                                         Switch to {activeMode == "color_temp" ? "RGB" : "Temperature"}
@@ -338,17 +340,29 @@ function PopupVariant(props: LightVariantProps) {
 
     return (
         <div className="h-100% flex-col flex justify-between">
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
                     <Button size="icon" variant="secondary">
                         <SettingsIcon className="size-6" />
                     </Button>
-                </DialogTrigger>
+                </PopoverTrigger>
 
-                <DialogContent className="w-fit">
-                    <DialogTitle>Light Controls</DialogTitle>
+                <PopoverContent
+                    className="w-fit translate-y-[-40%] pt-0 pr-0"
+                    align="center"
+                    side="bottom"
+                    sideOffset={0}
+                >
+                    <div className="flex justify-between items-center py-2 pr-1">
+                        <h3>Light Controls</h3>
+                        <PopoverClose asChild>
+                            <Button size="icon" variant="ghost" className="group">
+                                <XIcon className="size-4 transition-transform duration-200 group-hover:scale-125" />
+                            </Button>
+                        </PopoverClose>
+                    </div>
                     <div
-                        className="safe-to-interact flex space-x-4"
+                        className="safe-to-interact flex space-x-4 pr-4"
                         style={
                             {
                                 "--min-rgb": `rgb(${minRGB.join(",")})`,
@@ -420,8 +434,8 @@ function PopupVariant(props: LightVariantProps) {
                             </div>
                         </div>
                     </div>
-                </DialogContent>
-            </Dialog>
+                </PopoverContent>
+            </Popover>
             <Button
                 size="icon"
                 onClick={() => {
@@ -469,24 +483,35 @@ function SeperatePopupVariant(props: LightVariantProps) {
     return (
         <div className="h-100% flex-col flex justify-between">
             {supportsColorTemp && (
-                <Dialog
+                <Popover
                     open={openColourTemp}
                     onOpenChange={(open) => {
                         setOpenColourTemp(open);
                         setActiveMode("color_temp");
                     }}
                 >
-                    <DialogTrigger asChild>
+                    <PopoverTrigger asChild>
                         <Button size="icon" variant="secondary">
                             <ThermometerIcon className="size-6" />
                         </Button>
-                    </DialogTrigger>
+                    </PopoverTrigger>
 
-                    <DialogContent className="w-fit">
-                        <DialogTitle>Colour Temp</DialogTitle>
+                    <PopoverContent
+                        className="w-fit translate-y-[-40%] pt-1 px-1"
+                        align="center"
+                        side="bottom"
+                        sideOffset={0}
+                    >
+                        <div className="flex justify-end w-full">
+                            <PopoverClose asChild>
+                                <Button size="icon" variant="ghost" className="group">
+                                    <XIcon className="size-4 transition-transform duration-200 group-hover:scale-125" />
+                                </Button>
+                            </PopoverClose>
+                        </div>
 
                         <div
-                            className="safe-to-interact"
+                            className="safe-to-interact px-13 pb-3"
                             style={
                                 {
                                     "--min-rgb": `rgb(${minRGB.join(",")})`,
@@ -509,33 +534,44 @@ function SeperatePopupVariant(props: LightVariantProps) {
                                 className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
                             />
                         </div>
-                    </DialogContent>
-                </Dialog>
+                    </PopoverContent>
+                </Popover>
             )}
 
             {supportsColor && (rgbColor || overrideSupportColorRGB) && (
-                <Dialog
+                <Popover
                     open={openColourRGB}
                     onOpenChange={(open) => {
                         setOpenColourRGB(open);
                         setActiveMode("rgb");
                     }}
                 >
-                    <DialogTrigger asChild>
+                    <PopoverTrigger asChild>
                         <Button size="icon" variant="secondary">
                             <PaintbrushVerticalIcon className="size-6" />
                         </Button>
-                    </DialogTrigger>
+                    </PopoverTrigger>
 
-                    <DialogContent className="w-fit">
-                        <DialogTitle>RGB Colour</DialogTitle>
+                    <PopoverContent
+                        className="w-fit translate-y-[-50%] pt-1 px-1"
+                        align="center"
+                        side="bottom"
+                        sideOffset={0}
+                    >
+                        <div className="flex justify-end w-full">
+                            <PopoverClose asChild>
+                                <Button size="icon" variant="ghost" className="group">
+                                    <XIcon className="size-4 transition-transform duration-200 group-hover:scale-125" />
+                                </Button>
+                            </PopoverClose>
+                        </div>
                         {overrideSupportColorRGB && !rgbColor && (
                             <div className="safe-to-interact">
                                 <RgbColorPicker style={{ height: "100%" }} className="opacity-40 pointer-events-none" />
                             </div>
                         )}
                         {supportsColor && rgbColor && (
-                            <div className="h-48">
+                            <div className="h-48 px-7 pb-4">
                                 <RgbColorPicker
                                     color={{
                                         r: rgbColor[0],
@@ -552,8 +588,8 @@ function SeperatePopupVariant(props: LightVariantProps) {
                                 />
                             </div>
                         )}
-                    </DialogContent>
-                </Dialog>
+                    </PopoverContent>
+                </Popover>
             )}
             <Button
                 size="icon"
