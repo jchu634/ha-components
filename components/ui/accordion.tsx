@@ -59,16 +59,15 @@ function AccordionTrigger({
             <AccordionPrimitive.Trigger
                 data-orientation={orientation}
                 className={cn(
-                    "focus-visible:border-ring focus-visible:ring-ring/50 flex items-center gap-2 rounded-md text-sm font-medium outline-none transition-all hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50",
-                    orientation === "horizontal"
-                        ? "px-2 py-2 flex-row outline-4 outline-amber-100"
-                        : "w-full justify-between py-4",
+                    "focus-visible:border-ring focus-visible:ring-ring/50 flex items-center gap-2 rounded-md text-sm font-medium outline-none transition-all hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50  bg-secondary",
+                    orientation === "horizontal" ? "px-2 py-2 flex-row outline-4" : "w-full justify-between py-4",
                     iconRotation,
                     className
                 )}
                 {...props}
             >
                 {children}
+
                 <ChevronRightIcon className="text-muted-foreground size-4 shrink-0 transition-transform duration-200" />
             </AccordionPrimitive.Trigger>
         </AccordionPrimitive.Header>
