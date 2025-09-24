@@ -1,6 +1,7 @@
 "use client";
 import CameraPreview from "@/components/docs/camera-preview";
 import TriggerButtonPreview from "@/components/docs/trigger-button-preview";
+import { LightPreview } from "@/components/docs/light-preview";
 
 export default function Home() {
     return (
@@ -10,7 +11,7 @@ export default function Home() {
                 <p className="text-muted-foreground">All variants and elements</p>
             </header>
             <div className="flex space-x-8">
-                <div className="w-100">
+                <div className="w-100 min-w-[100]">
                     <h3 className="text-xl font-bold tracking-tight">Camera Component</h3>
                     <CameraPreview />
                 </div>
@@ -29,7 +30,12 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="flex space-x-8"></div>
+            <div className="flex space-x-8">
+                <LightPreview />
+                <LightPreview variant="Accordion" />
+                <LightPreview variant="Popup" />
+                <LightPreview variant="SeperatePopups" />
+            </div>
         </div>
     );
 }
