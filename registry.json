@@ -98,6 +98,7 @@
       "registryDependencies": [
         "slider",
         "button",
+        "dialog",
         "@ha-components/auth"
       ],
       "files": [
