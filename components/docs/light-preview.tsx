@@ -31,29 +31,6 @@ interface LightVariantProps {
     setRgbColor: (rgb: [number, number, number]) => void;
 }
 
-// Approximate conversion Kelvin → RGB
-// Valid for ~1000K - 40000K
-function kelvinToRGB(kelvin: number): [number, number, number] {
-    let temperature = kelvin / 100;
-    let red, green, blue;
-
-    if (temperature <= 66) {
-        red = 255;
-        green = 99.4708025861 * Math.log(temperature) - 161.1195681661;
-        blue = temperature <= 19 ? 0 : 138.5177312231 * Math.log(temperature - 10) - 305.0447927307;
-    } else {
-        red = 329.698727446 * Math.pow(temperature - 60, -0.1332047592);
-        green = 288.1221695283 * Math.pow(temperature - 60, -0.0755148492);
-        blue = 255;
-    }
-
-    return [
-        Math.min(255, Math.max(0, Math.round(red))),
-        Math.min(255, Math.max(0, Math.round(green))),
-        Math.min(255, Math.max(0, Math.round(blue))),
-    ];
-}
-
 // ---------- Variant Components ----------
 function DefaultVariant(props: LightVariantProps) {
     const { colorTempK, setColorTempK, setActiveMode, activeMode, rgbColor, setRgbColor } = props;
@@ -407,7 +384,7 @@ function SeperatePopupVariant(props: LightVariantProps) {
     );
 }
 
-export function LightPreview({ variant = "Default" }: LightProps) {
+export default function LightPreview({ variant = "Default" }: LightProps) {
     const [brightness, setBrightness] = useState(128);
     const [colorTempK, setColorTempK] = useState<number | null>(null);
     const [rgbColor, setRgbColor] = useState<[number, number, number] | null>(null);
