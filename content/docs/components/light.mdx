@@ -1,0 +1,75 @@
+---
+title: Light
+description: A Light control component.
+---
+
+import LightPreview from "@/components/docs/light-preview";
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">    
+    <LightPreview />
+  </Tab>
+  <Tab value="Code">
+    ```tsx lineNumbers
+        import { Light } from "@/components/ha-ui/light";
+        <Light 
+            entity="light.HA_light_entity"            
+        />
+    ```
+  </Tab>
+</Tabs>
+
+## About
+This component provides several customisable Light control components, with a colour picker built using [react-colorful](https://omgovich.github.io/react-colorful/)
+
+## Setup
+### Installation
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">    
+    TODO COMPLETE ME
+  </Tab>
+  <Tab value="Manual">
+    TODO COMPLETE ME
+  </Tab>
+</Tabs>
+
+## Variants
+
+<div className="flex space-x-4">
+    <Card className="w-95">
+        ### Accordion
+        <LightPreview variant="Accordion"/>
+    </Card>
+    <Card className="w-50">
+        ### Popup
+        <LightPreview variant="Popup"/>
+    </Card>
+    <Card className="w-50">
+        ### SeperatePopups
+        <LightPreview variant="SeperatePopups"/>
+    </Card>
+</div>
+
+## API (Props)
+### `entity`
+e.g. `light.HA_light_entity`
+- A HA Light entity name 
+
+### `variant` (Optional)
+- Changes the look of the light component [(Preview here)](#variants)
+
+### `overrideSupportColorRGB` (Optional)
+- Always shows RGB Colour picker.
+<Callout type="error">
+    This will not make a non-RGB light support RGB, This is a workaround for this [issue](#on-first-load-rgb-colour-picker-will-not-show-when-bulb-is-off)
+</Callout>
+
+## Common Issues
+### On first load, RGB Colour Picker will not show when bulb is off
+When communicating capabilities, when a bulb is off, Home Assistant will not communicate if a light can support colour.\
+If you know that light supports colour, you can pass the prop `overrideSupportColorRGB={true}`.\
+This will force the UI to show the RGB colour picker, which prevents the sudden appearence of the RGB colour picker when the light is turned on.
+
+
+
+  
