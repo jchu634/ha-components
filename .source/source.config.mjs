@@ -11,10 +11,6 @@ var docs = defineDocs({
 var source_config_default = defineConfig({
   mdxOptions: {
     // MDX options
-  },
-  project: {
-    link: "https://github.com/your-org/your-repo"
-    // Shows next to dark/light toggle
   }
 });
 export {

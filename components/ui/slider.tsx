@@ -50,7 +50,10 @@ function Slider({
                 <SliderPrimitive.Range
                     data-slot="slider-range"
                     className={cn(
-                        "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
+                        "absolute bg-primary",
+                        // horizontally
+
+                        "data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
                         // allow caller to override / extend range styling (eg. gradient for color temp)
                         rangeClassName
                     )}
@@ -60,8 +63,19 @@ function Slider({
                 <SliderPrimitive.Thumb
                     data-slot="slider-thumb"
                     key={index}
-                    className="border-primary bg-background ring-ring/50 block size-[var(--slider-width)] shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
-                />
+                    className={cn(
+                        "block shrink-0 bg-indigo-950 shadow-sm",
+                        "ring-ring/50 transition-[color,box-shadow]",
+                        "hover:ring-2 focus-visible:ring-2 focus-visible:outline-hidden",
+                        "disabled:pointer-events-none disabled:opacity-50",
+
+                        // Horizontal slider → vertical line (thin width, tall height)
+                        "data-[orientation=horizontal]:w-[6px] data-[orientation=horizontal]:h-[calc(var(--slider-width)/2)] data-[orientation=horizontal]:-translate-y-1/2",
+
+                        // Vertical slider → horizontal line (thin height, wide width)
+                        "data-[orientation=vertical]:h-[6px] data-[orientation=vertical]:w-[calc(var(--slider-width)/1.5)] data-[orientation=vertical]:-translate-x-50% data-[orientation=vertical]:translate-y-50% outline-1 outline-white rounded"
+                    )}
+                ></SliderPrimitive.Thumb>
             ))}
         </SliderPrimitive.Root>
     );
