@@ -15,6 +15,7 @@ export default function CameraPreview() {
                 tabIndex={-1} // This is added for hydration as this is automatically injected
                 className="aspect-video"
                 src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                autoPlay={true}
             />
             <MediaControlBar className="flex w-full justify-between px-4 bg-black">
                 <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
