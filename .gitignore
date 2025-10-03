@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Fumdadocs
+.source
+
 #### Python Dev ####
 __pycache__
 
