@@ -29,9 +29,9 @@
       ],
       "files": [
         {
-          "path": "components/ha-ui/auth/page.tsx",
+          "path": "components/ha-ui/auth/authCallback.tsx",
           "type": "registry:page",
-          "target": "app/auth/callback/page.tsx"
+          "target": "components/ha-ui/auth/authCallback.tsx"
         },
         {
           "path": "app/providers/HomeAssistantProvider.tsx",
