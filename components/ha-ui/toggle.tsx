@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { haWebSocket } from "@/lib/haWebsocket";
 
-type ToggleButtonProps = React.ComponentProps<typeof Button> & {
+type ToggleProps = React.ComponentProps<typeof Button> & {
     /**
      * HomeAssistant Entity Name
      */
@@ -16,13 +16,13 @@ type ToggleButtonProps = React.ComponentProps<typeof Button> & {
     service?: string;
 };
 
-export function ToggleButton({
+export function Toggle({
     entity,
     domain,
     service = "toggle",
     children,
     ...props // Button Props
-}: ToggleButtonProps) {
+}: ToggleProps) {
     const [monitoredState, setMonitoredState] = useState(false);
 
     useEffect(() => {

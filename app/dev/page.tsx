@@ -3,7 +3,7 @@ import * as React from "react";
 import { Camera } from "@/components/ha-ui/camera";
 import { Light } from "@/components/ha-ui/light";
 import { TriggerButton } from "@/components/ha-ui/trigger-button";
-import { ToggleButton } from "@/components/ha-ui/toggle-button";
+import { Toggle } from "@/components/ha-ui/toggle";
 import { Card } from "@/components/ui/card";
 
 export default function Home() {
@@ -77,7 +77,7 @@ export default function Home() {
                         <Card className="size-40 flex p-4">
                             <p>Toggle Switch</p>
 
-                            <ToggleButton entity="light.dining_lights" domain="light" description="test"></ToggleButton>
+                            <Toggle entity="light.dining_lights" domain="light" description="test"></ToggleButton>
                         </Card>
                     </div>
                 </div>
