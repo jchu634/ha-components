@@ -3,6 +3,8 @@ import * as React from "react";
 import { Camera } from "@/components/ha-ui/camera";
 import { Light } from "@/components/ha-ui/light";
 import { TriggerButton } from "@/components/ha-ui/trigger-button";
+import { ToggleButton } from "@/components/ha-ui/toggle-button";
+import { Card } from "@/components/ui/card";
 
 export default function Home() {
     return (
@@ -61,6 +63,22 @@ export default function Home() {
                         <TriggerButton entity="automation.test_toggle_lights" description="test">
                             test
                         </TriggerButton>
+                    </div>
+                </div>
+            </main>
+            <main className="flex flex-col flex-1 gap-8">
+                <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[450px] relative">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-sm text-muted-foreground sm:pl-3">
+                            A Simple Button Component that triggers an service
+                        </h2>
+                    </div>
+                    <div className="flex items-center justify-center min-h-[400px] relative">
+                        <Card className="size-40 flex p-4">
+                            <p>Toggle Switch</p>
+
+                            <ToggleButton entity="light.dining_lights" domain="light" description="test"></ToggleButton>
+                        </Card>
                     </div>
                 </div>
             </main>
