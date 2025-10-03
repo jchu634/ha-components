@@ -52,24 +52,15 @@ Additionally, if you have not set your `NEXT_PUBLIC_HA_REDIRECT_URI` env variabl
 ```jsx
 "use client";
 
-import { useEffect } from "react";
-import { exchangeCodeForToken } from "@/lib/haAuth";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import AuthCallback from "@/components/ha-ui/auth/authCallback";
 
-export default function AuthCallback() {
-  const router = useRouter();
-  const params = useSearchParams();
-
-  useEffect(() => {
-    const code = params.get("code");
-    if (code) {
-      exchangeCodeForToken(code).then(() => {
-        router.push("/"); // Set path to be redirected to
-      });
-    }
-  }, [params, router]);
-
-  return <p>Completing login...</p>;
+export default function Page() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <AuthCallback />
+        </Suspense>
+    );
 }
 ```
 
