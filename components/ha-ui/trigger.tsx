@@ -3,7 +3,7 @@ import type { EntityId } from "@/types/entity-types";
 import { Button } from "@/components/ui/button";
 import { haWebSocket } from "@/lib/haWebsocket";
 
-type TriggerButtonProps = React.ComponentProps<typeof Button> & {
+type TriggerProps = React.ComponentProps<typeof Button> & {
     /**
      * HomeAssistant Entity Name
      */
@@ -13,14 +13,14 @@ type TriggerButtonProps = React.ComponentProps<typeof Button> & {
     service?: string;
 };
 
-export function TriggerButton({
+export function Trigger({
     entity,
     description,
     domain = "automation",
     service = "trigger",
     children,
     ...props // Button Props
-}: TriggerButtonProps) {
+}: TriggerProps) {
     return (
         <Button
             onClick={() =>
