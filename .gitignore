@@ -43,9 +43,17 @@ next-env.d.ts
 # Fumdadocs
 .source
 
+# OpenNext
+.open-next
+
+# Dev Pages
+/app/home/dev/
+/app/auth/callback/
+
 #### Python Dev ####
 __pycache__
 
 *.env
 data.json
 .venv
+
