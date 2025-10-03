@@ -1,6 +1,6 @@
 "use client";
 import CameraPreview from "@/components/docs/camera-preview";
-import TriggerButtonPreview from "@/components/docs/trigger-button-preview";
+import TriggerPreview from "@/components/docs/trigger-preview";
 import LightPreview from "@/components/docs/light-preview";
 
 export default function Home() {
@@ -21,14 +21,14 @@ export default function Home() {
                     <h3 className="text-xl font-bold tracking-tight">Trigger Buttons Component</h3>
                     <span className="block border w-100% my-2 border-foreground mb-4" />
                     <div className="flex space-x-4">
-                        <TriggerButtonPreview />
-                        <TriggerButtonPreview variant="destructive" />
-                        <TriggerButtonPreview variant="outline" />
+                        <TriggerPreview />
+                        <TriggerPreview variant="destructive" />
+                        <TriggerPreview variant="outline" />
                     </div>
                     <div className="flex space-x-4">
-                        <TriggerButtonPreview variant="secondary" />
-                        <TriggerButtonPreview variant="ghost" />
-                        <TriggerButtonPreview variant="link" />
+                        <TriggerPreview variant="secondary" />
+                        <TriggerPreview variant="ghost" />
+                        <TriggerPreview variant="link" />
                     </div>
                 </div>
             </div>
