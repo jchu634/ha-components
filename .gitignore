@@ -47,7 +47,7 @@ next-env.d.ts
 .open-next
 
 # Dev Pages
-/app/home/dev/
+/app/dev/
 /app/auth/callback/
 
 #### Python Dev ####
