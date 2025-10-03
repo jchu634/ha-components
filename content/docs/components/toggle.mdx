@@ -1,0 +1,60 @@
+---
+title: Toggle
+description: A toggle for a HA domain service.
+apiLink: https://ui.shadcn.com/docs/components/switch
+---
+
+import TogglePreview from "@/components/docs/toggle-preview.tsx"
+import { Link } from "next/link"
+import { Button } from "@/components/ui/button";
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">    
+    <TogglePreview />
+  </Tab>
+  <Tab value="Code">
+    ```tsx lineNumbers
+      import { Toggle } from "@/components/ha-ui/toggle";
+      <Toggle
+        entity="entityName"  
+        domain="light"
+      />
+      
+    ```
+  </Tab>
+</Tabs>
+
+## About
+This component is a modified ShadCN switch which triggers a HA service (e.g. automations).\
+This is primarily intended for toggling HA entities.\
+Use this instead of [trigger](/docs/components/trigger-button) if you want to be able to see the current state of an entity.
+
+
+## Setup
+### Installation
+<Tabs items={['CLI', 'Manual']}>
+  <Tab value="CLI">    
+    TODO COMPLETE ME
+  </Tab>
+  <Tab value="Manual">
+    TODO COMPLETE ME
+  </Tab>
+</Tabs>
+
+## API (Props)
+<Callout >
+    This only documents props added for triggering HA Services\
+    For Switch Styling Documentation look [here](https://ui.shadcn.com/docs/components/switch)
+
+</Callout>
+### `entity`
+e.g. `automation.open_curtains`
+- A HA entity name
+
+### `domain`
+- The Domain that the entity belongs to, e.g. "light"
+- For more information on domains, see [here](https://www.home-assistant.io/docs/configuration/entities_domains/#domains)
+
+## `service` (Optional)
+- The service that the entity will be triggered with.
+- Defaults to `toggle`

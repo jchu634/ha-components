@@ -11,7 +11,6 @@ type ToggleProps = React.ComponentProps<typeof Button> & {
      * HomeAssistant Entity Name
      */
     entity: EntityId;
-    description?: string;
     domain: string;
     service?: string;
 };

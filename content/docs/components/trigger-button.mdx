@@ -29,7 +29,8 @@ import {ExternalLink} from "lucide-react";
 
 ## About
 This component is a modified ShadCN button mounts a onClick which triggers a HA service (e.g. automations).\
-This is primarily intended for manually activating automations, but can trigger any HA service if the Domain and Service are specified.
+This is intended for manually activating automations, but can trigger any HA service if the Domain and Service are specified.
+If you want to be able to see the current state of an entity, use [toggle](/docs/components/toggle) instead.
 
 
 ## Setup
@@ -72,5 +73,5 @@ e.g. `automation.open_curtains`
 - For more information on domains, see [here](https://www.home-assistant.io/docs/configuration/entities_domains/#domains)
 
 ## `service` (Optional)
-- The that the entity will be triggered with.
+- The service that the entity will be triggered with.
 - Defaults to `trigger`
