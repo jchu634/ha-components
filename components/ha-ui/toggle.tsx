@@ -19,7 +19,6 @@ export function Toggle({
     entity,
     domain,
     service = "toggle",
-    children,
     ...props // Button Props
 }: ToggleProps) {
     const [monitoredState, setMonitoredState] = useState(false);
@@ -43,17 +42,13 @@ export function Toggle({
     return (
         <Switch
             checked={monitoredState}
-            onCheckedChange={(state) => {
+            onCheckedChange={() =>
                 haWebSocket.callService(domain, service, {
                     entity_id: entity,
-                });
-                haWebSocket.getState(entity).then((data) => {
-                    if (data) {
-                        console.log(data);
-                    }
-                });
-            }}
+                })
+            }
             style={{ ["--switch-width" as any]: "6rem", ["--switch-height" as any]: "2rem" }}
+            {...props}
         ></Switch>
     );
 }
