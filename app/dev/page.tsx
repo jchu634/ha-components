@@ -77,7 +77,7 @@ export default function Home() {
                         <Card className="size-40 flex p-4">
                             <p>Toggle Switch</p>
 
-                            <Toggle entity="light.dining_lights" domain="light" description="test"></Toggle>
+                            <Toggle entity="light.dining_lights" domain="light" />
                         </Card>
                     </div>
                 </div>

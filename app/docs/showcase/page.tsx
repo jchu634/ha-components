@@ -2,6 +2,7 @@
 import CameraPreview from "@/components/docs/camera-preview";
 import TriggerPreview from "@/components/docs/trigger-preview";
 import LightPreview from "@/components/docs/light-preview";
+import TogglePreview from "@/components/docs/toggle-preview";
 
 export default function Home() {
     return (
@@ -30,11 +31,15 @@ export default function Home() {
                         <TriggerPreview variant="ghost" />
                         <TriggerPreview variant="link" />
                     </div>
+                    <h3 className="text-xl font-bold tracking-tight pt-8">Toggle Component</h3>
+                    <span className="block border w-100% my-2 border-foreground mb-4" />
+
+                    <TogglePreview />
                 </div>
             </div>
 
             <div className="space-y-4 w-fit">
-                <h3 className="text-xl font-bold tracking-tight">Trigger Buttons Component</h3>
+                <h3 className="text-xl font-bold tracking-tight">Light Control Component</h3>
                 <span className="block border w-100% my-2 border-foreground mb-4" />
 
                 <div className="flex space-x-8">

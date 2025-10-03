@@ -4,7 +4,7 @@ import { lexend, funnel } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import CameraPreview from "@/components/docs/camera-preview";
-import TogglePreview from "@/components/docs/trigger-button-preview";
+import TogglePreview from "@/components/docs/trigger-preview";
 
 export default function Home() {
     return (
