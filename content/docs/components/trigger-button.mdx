@@ -15,13 +15,14 @@ import {ExternalLink} from "lucide-react";
   </Tab>
   <Tab value="Code">
     ```tsx lineNumbers
-      import { TriggerButton } from "@/components/ha-ui/trigger-button";
-      <trigger-button
+      import { Trigger } from "@/components/ha-ui/trigger";
+      <Trigger
         entity="domain.service"  
         description="Button that Triggers Stuff"
       >
         Button that Triggers Stuff
-      </trigger-button>
+      </Trigger>
+      
     ```
   </Tab>
 </Tabs>
@@ -44,12 +45,12 @@ This is primarily intended for manually activating automations, but can trigger 
 
 ## Example Usage
 ```tsx lineNumbers
-    import { TriggerButton } from "@/components/ha-ui/trigger-button";
-    <trigger-button
+    import { Trigger } from "@/components/ha-ui/trigger";
+    <Trigger
       entity="automations.open_curtains"  
     >
     Button that Triggers Stuff
-    </trigger-button>
+    </Trigger>
 ```
 
 ## API (Props)
