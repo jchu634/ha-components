@@ -122,6 +122,34 @@
       ]
     },
     {
+      "name": "proxy",
+      "type": "registry:block",
+      "title": "Python Websocket Proxy Server",
+      "description": "Development websocket server for camera component",
+      "files": [
+        {
+          "path": "proxy/.python-version",
+          "type": "registry:file"
+        },
+        {
+          "path": "proxy/proxy_server.py",
+          "type": "registry:lib"
+        },
+        {
+          "path": "proxy/pyproject.toml",
+          "type": "registry:lib"
+        },
+        {
+          "path": "proxy/uv.lock",
+          "type": "registry:file"
+        },
+        {
+          "path": "proxy/README.md",
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "dependencies": [
