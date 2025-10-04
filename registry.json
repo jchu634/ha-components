@@ -177,7 +177,7 @@
     },
     {
       "name": "switch",
-      "type": "registry:component",
+      "type": "registry:ui",
       "dependencies": [
         "@radix-ui/react-switch"
       ],
