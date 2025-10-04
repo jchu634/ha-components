@@ -151,7 +151,7 @@
     },
     {
       "name": "popover",
-      "type": "registry:component",
+      "type": "registry:ui",
       "dependencies": [
         "@radix-ui/react-popover"
       ],
@@ -164,7 +164,7 @@
     },
     {
       "name": "slider",
-      "type": "registry:component",
+      "type": "registry:ui",
       "dependencies": [
         "@radix-ui/react-slider"
       ],
