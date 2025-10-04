@@ -1,12 +1,33 @@
 ---
-title: Setting Up Auth
+title: Auth
 description: Setting up Auth for HA API access.
 ---
 
 ## Intro
-This Auth setup is written around the default Home Assitant OAuth flow.
+This Auth setup is written around the default Home Assistant OAuth flow.
 
-TODO: Add shadcn reg install instructs
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+</Tabs>
 
 ## Step 1: Environment Variables
 Set the Environment variables to match your home assistant config
@@ -67,3 +88,4 @@ export default function Page() {
 ## Conclusion
 If this is set up properly, then all components which require Auth will connect automatically to the global websocket.
 
+If you came here from the installation instructions and want to go to the next step: [click here](/docs/installation/installation#step-4-setup-type-generation)
