@@ -129,7 +129,8 @@
       "files": [
         {
           "path": "proxy/.python-version",
-          "type": "registry:file"
+          "type": "registry:file",
+          "target": "proxy/.python-version"
         },
         {
           "path": "proxy/proxy_server.py",
@@ -141,11 +142,13 @@
         },
         {
           "path": "proxy/uv.lock",
-          "type": "registry:file"
+          "type": "registry:file",
+          "target": "proxy/uv.lock"
         },
         {
           "path": "proxy/README.md",
-          "type": "registry:file"
+          "type": "registry:file",
+          "target": "proxy/README.md"
         }
       ]
     },
