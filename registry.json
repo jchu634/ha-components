@@ -24,9 +24,6 @@
       "type": "registry:block",
       "title": "Auth Files and Components",
       "description": "A complex component used to setup Auth.",
-      "registryDependencies": [
-        "card"
-      ],
       "files": [
         {
           "path": "components/ha-ui/auth/authCallback.tsx",
