@@ -89,7 +89,7 @@
       "title": "Simple Toggle Switch Component",
       "description": "Switch with an attached Entity trigger",
       "registryDependencies": [
-        "switch",
+        "@ha-components/switch",
         "@ha-components/auth"
       ],
       "files": [
@@ -109,14 +109,53 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "slider",
         "button",
-        "dialog",
+        "@ha-components/slider",
+        "@ha-components/popover",
         "@ha-components/auth"
       ],
       "files": [
         {
           "path": "components/ha-ui/light.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:component",
+      "dependencies": [
+        "@radix-ui/react-popover"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/ui/popover.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:component",
+      "dependencies": [
+        "@radix-ui/react-slider"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/ui/slider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:component",
+      "dependencies": [
+        "@radix-ui/react-switch"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/ui/switch.tsx",
           "type": "registry:component"
         }
       ]
