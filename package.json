@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "shadcn build && next build",
     "dev": "next dev --turbo",
     "start": "next start",
     "generate:entities": "tsx scripts/generate_entities.ts",
-    "registry:build": "node ~/code/shadcn/ui/packages/shadcn/dist/index.js build",
+    "registry:build": "shadcn build",
     "postinstall": "fumadocs-mdx",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy": "shadcn build && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "react": "^19.1.1",
     "react-colorful": "^5.6.1",
     "react-dom": "^19.1.1",
+    "shadcn": "^2.9.3-canary.0",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

@@ -65,7 +65,7 @@
           "target": "registry:component"
         },
         {
-          "path": "components/ha-ui/video-rtc.tsx",
+          "path": "lib/video-rtc.tsx",
           "type": "registry:lib"
         }
       ]
@@ -119,7 +119,7 @@
       ],
       "files": [
         {
-          "path": "components/ha-ui/trigger-button.tsx",
+          "path": "components/ha-ui/light.tsx",
           "type": "registry:component"
         }
       ]
