@@ -21,7 +21,7 @@ export function HomeAssistantProvider({ children, useProxy = false }: { children
                         ? process.env.NEXT_PUBLIC_PROXY_URL!
                         : `${process.env.NEXT_PUBLIC_HA_URL}:${process.env.NEXT_PUBLIC_HA_PORT}`,
                     token!,
-                    useProxy
+                    useProxy,
                 );
                 setReady(true);
             } catch (err) {

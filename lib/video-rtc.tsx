@@ -32,10 +32,7 @@ export interface UseWebRTCVideoOptions {
 }
 
 export interface UseWebRTCVideoResult {
-    videoProps: React.DetailedHTMLProps<
-        React.VideoHTMLAttributes<HTMLVideoElement>,
-        HTMLVideoElement
-    > &
+    videoProps: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement> &
         React.RefAttributes<HTMLVideoElement>;
     connectionMode: WebRTCMode;
     error: Error | null;
@@ -100,11 +97,7 @@ export function useWebRTCVideo({
 
     const scheduleRetry = () => {
         if (maxRetryAttempts !== -1 && retryCount >= maxRetryAttempts) {
-            fail(
-                new Error(
-                    "[useWebRTCVideo] Max retry attempts reached, stopping."
-                )
-            );
+            fail(new Error("[useWebRTCVideo] Max retry attempts reached, stopping."));
             return;
         }
         if (retryDelay > 0) {
@@ -131,9 +124,7 @@ export function useWebRTCVideo({
             console.log("[useWebRTCVideo] WebSocket open");
             updateMode("webrtc");
 
-            const peerConnection = new RTCPeerConnection(
-                DEFAULT_PEERCONNECTION_CONFIG
-            );
+            const peerConnection = new RTCPeerConnection(DEFAULT_PEERCONNECTION_CONFIG);
             peerConnectionRef.current = peerConnection;
 
             // Always add transceivers before creating offer
@@ -150,9 +141,7 @@ export function useWebRTCVideo({
 
             peerConnection.ontrack = (ev) => {
                 if (videoElementRef.current) {
-                    videoElementRef.current.srcObject = new MediaStream(
-                        ev.streams[0].getTracks()
-                    );
+                    videoElementRef.current.srcObject = new MediaStream(ev.streams[0].getTracks());
                 }
                 // ✅ clear connection timeout once we get tracks
                 if (timeoutTimer.current) {
@@ -167,9 +156,7 @@ export function useWebRTCVideo({
                     peerConnection.connectionState === "disconnected" ||
                     peerConnection.connectionState === "closed"
                 ) {
-                    console.warn(
-                        "[useWebRTCVideo] connection failed, retrying..."
-                    );
+                    console.warn("[useWebRTCVideo] connection failed, retrying...");
                     cleanup();
                     scheduleRetry();
                 }
@@ -197,16 +184,14 @@ export function useWebRTCVideo({
             peerConnection
                 .createOffer()
                 .then((offer) => {
-                    return peerConnection
-                        .setLocalDescription(offer)
-                        .then(() => offer);
+                    return peerConnection.setLocalDescription(offer).then(() => offer);
                 })
                 .then((offer) => {
                     ws.send(
                         JSON.stringify({
                             type: "webrtc/offer",
                             value: offer.sdp,
-                        })
+                        }),
                     );
                 })
                 .catch(fail);
@@ -214,9 +199,7 @@ export function useWebRTCVideo({
             // ✅ start connection timeout if enabled
             if (connectionTimeout > 0) {
                 timeoutTimer.current = window.setTimeout(() => {
-                    console.warn(
-                        "[useWebRTCVideo] connection timeout, retrying..."
-                    );
+                    console.warn("[useWebRTCVideo] connection timeout, retrying...");
                     cleanup();
                     scheduleRetry();
                 }, connectionTimeout);
@@ -234,15 +217,7 @@ export function useWebRTCVideo({
             cleanup();
             scheduleRetry();
         });
-    }, [
-        wsSrc,
-        proxy,
-        media,
-        retryDelay,
-        connectionTimeout,
-        maxRetryAttempts,
-        cleanup,
-    ]);
+    }, [wsSrc, proxy, media, retryDelay, connectionTimeout, maxRetryAttempts, cleanup]);
 
     useEffect(() => {
         setRetryCount(0);

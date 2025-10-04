@@ -20,8 +20,8 @@ async function fetchEntities(): Promise<any[]> {
         AUTH_TOKEN != null && AUTH_TOKEN !== ""
             ? AUTH_TOKEN
             : NEXT_AUTH_TOKEN != null && NEXT_AUTH_TOKEN !== ""
-            ? NEXT_AUTH_TOKEN
-            : undefined;
+              ? NEXT_AUTH_TOKEN
+              : undefined;
     return new Promise((resolve, reject) => {
         const ws = new WebSocket(`ws://${HA_URL}:${HA_PORT}/api/websocket`);
 
@@ -39,7 +39,7 @@ async function fetchEntities(): Promise<any[]> {
                     JSON.stringify({
                         type: "auth",
                         access_token: TOKEN,
-                    })
+                    }),
                 );
             } else if (msg.type === "auth_ok") {
                 authed = true;

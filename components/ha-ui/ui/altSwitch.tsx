@@ -11,34 +11,34 @@ function AltSwitch() {
             {monitoredState == true ? (
                 <div className="flex">
                     {/* Right Clicked */}
-                    <div className="h-21 w-40 border-white border-2  flex items-center">
-                        <p className="text-center w-full">Left Switch</p>
+                    <div className="flex h-21 w-40 items-center border-2 border-white">
+                        <p className="w-full text-center">Left Switch</p>
                     </div>
 
                     <div
-                        className="border-black bg-white dark:border-white dark:bg-black border-y-2 border-r-2 flex"
+                        className="flex border-y-2 border-r-2 border-black bg-white dark:border-white dark:bg-black"
                         onClick={() => setMonitoredState(false)}
                     >
-                        <div className="h-20 w-30 border-x-1 border-y-2 bg-white border-black dark:border-white dark:bg-black -skew-y-[23deg] translate-y-[-25.5px] flex items-center">
-                            <p className="text-center w-full">Right Switch</p>
+                        <div className="flex h-20 w-30 translate-y-[-25.5px] -skew-y-[23deg] items-center border-x-1 border-y-2 border-black bg-white dark:border-white dark:bg-black">
+                            <p className="w-full text-center">Right Switch</p>
                         </div>
-                        <div className="h-20 w-15 border-l-1 border-y-2 bg-white border-black dark:border-white dark:bg-black skew-y-[40.32deg] translate-y-[-26px] "></div>
+                        <div className="h-20 w-15 translate-y-[-26px] skew-y-[40.32deg] border-y-2 border-l-1 border-black bg-white dark:border-white dark:bg-black"></div>
                     </div>
                 </div>
             ) : (
                 <div className="flex">
                     {/* Left Clicked */}
                     <div
-                        className="border-black bg-white dark:border-white dark:bg-black border-y-2 border-l-2 flex"
+                        className="flex border-y-2 border-l-2 border-black bg-white dark:border-white dark:bg-black"
                         onClick={() => setMonitoredState(true)}
                     >
-                        <div className="h-20 w-15 border-x-1 border-y-2 bg-white border-black dark:border-white dark:bg-black -skew-y-[40.32deg] translate-y-[-26px]"></div>
-                        <div className="h-20 w-30 border-r-1 border-y-2 bg-white border-black dark:border-white dark:bg-black skew-y-[23deg] translate-y-[-25.5px] flex items-center">
-                            <p className="text-center w-full">Left Switch</p>
+                        <div className="h-20 w-15 translate-y-[-26px] -skew-y-[40.32deg] border-x-1 border-y-2 border-black bg-white dark:border-white dark:bg-black"></div>
+                        <div className="flex h-20 w-30 translate-y-[-25.5px] skew-y-[23deg] items-center border-y-2 border-r-1 border-black bg-white dark:border-white dark:bg-black">
+                            <p className="w-full text-center">Left Switch</p>
                         </div>
                     </div>
-                    <div className="h-21 w-40 border-white border-2  flex items-center">
-                        <p className="text-center w-full">Right Switch</p>
+                    <div className="flex h-21 w-40 items-center border-2 border-white">
+                        <p className="w-full text-center">Right Switch</p>
                     </div>
                 </div>
             )}

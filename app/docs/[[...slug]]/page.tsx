@@ -20,7 +20,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
             <div className="flex items-center space-x-4">
                 <DocsTitle>{page.data.title} </DocsTitle>
                 {page.data.apiLink && (
-                    <Button className="outline w-20" size="sm" variant="secondary" asChild>
+                    <Button className="w-20 outline" size="sm" variant="secondary" asChild>
                         <Link href={page.data.apiLink} rel="noreferrer noopener" target="_blank">
                             API
                             <ExternalLink />

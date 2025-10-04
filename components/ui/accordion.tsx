@@ -35,9 +35,9 @@ function AccordionItem({
             data-orientation={orientation}
             className={cn(
                 orientation === "horizontal"
-                    ? "flex flex-row items-start border-b-0 border-r last:border-r-0"
+                    ? "flex flex-row items-start border-r border-b-0 last:border-r-0"
                     : "flex flex-col border-b last:border-b-0",
-                className
+                className,
             )}
             {...props}
         />
@@ -59,10 +59,10 @@ function AccordionTrigger({
             <AccordionPrimitive.Trigger
                 data-orientation={orientation}
                 className={cn(
-                    "focus-visible:border-ring focus-visible:ring-ring/50 flex items-center gap-2 rounded-md text-sm font-medium outline-none transition-all hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50  bg-secondary",
-                    orientation === "horizontal" ? "px-2 py-2 flex-row outline-4" : "w-full justify-between py-4",
+                    "focus-visible:border-ring focus-visible:ring-ring/50 bg-secondary flex items-center gap-2 rounded-md text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50",
+                    orientation === "horizontal" ? "flex-row px-2 py-2 outline-4" : "w-full justify-between py-4",
                     iconRotation,
-                    className
+                    className,
                 )}
                 {...props}
             >
@@ -90,7 +90,7 @@ function AccordionContent({
                 orientation === "vertical" &&
                     "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
                 orientation === "horizontal" &&
-                    "data-[state=closed]:animate-accordion-left data-[state=open]:animate-accordion-right"
+                    "data-[state=closed]:animate-accordion-left data-[state=open]:animate-accordion-right",
             )}
             {...props}
         >

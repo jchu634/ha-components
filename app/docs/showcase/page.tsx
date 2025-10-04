@@ -6,49 +6,49 @@ import TogglePreview from "@/components/docs/toggle-preview";
 
 export default function Home() {
     return (
-        <div className="w-full p-8 mx-auto flex flex-col min-h-svh  gap-8">
+        <div className="mx-auto flex min-h-svh w-full flex-col gap-8 p-8">
             <header className="flex flex-col gap-1">
                 <h1 className="text-3xl font-bold tracking-tight">Showcase</h1>
                 <p className="text-muted-foreground">All variants and elements</p>
             </header>
-            <div className="lg:flex space-x-8">
+            <div className="space-x-8 lg:flex">
                 <div className="w-100 min-w-[100]">
                     <h3 className="text-xl font-bold tracking-tight">Camera Component</h3>
-                    <span className="block border w-100% my-2 border-foreground mb-4" />
+                    <span className="w-100% border-foreground my-2 mb-4 block border" />
                     <CameraPreview />
                 </div>
-                <span className="lg:border h-100% mx-2 border-foreground" />
+                <span className="h-100% border-foreground mx-2 lg:border" />
                 <div className="flex flex-col space-y-4">
                     <h3 className="text-xl font-bold tracking-tight">Trigger Buttons Component</h3>
-                    <span className="block border w-100% my-2 border-foreground mb-4" />
-                    <div className="flex 2xl:space-x-4 space-y-4 flex-col 2xl:flex-row w-fit">
+                    <span className="w-100% border-foreground my-2 mb-4 block border" />
+                    <div className="flex w-fit flex-col space-y-4 2xl:flex-row 2xl:space-x-4">
                         <TriggerPreview />
                         <TriggerPreview variant="destructive" />
                         <TriggerPreview variant="outline" />
                     </div>
-                    <div className="flex 2xl:space-x-4 space-y-4 flex-col 2xl:flex-row w-fit">
+                    <div className="flex w-fit flex-col space-y-4 2xl:flex-row 2xl:space-x-4">
                         <TriggerPreview variant="secondary" />
                         <TriggerPreview variant="ghost" />
                         <TriggerPreview variant="link" />
                     </div>
-                    <h3 className="text-xl font-bold tracking-tight pt-8">Toggle Component</h3>
-                    <span className="block border w-100% my-2 border-foreground mb-4" />
+                    <h3 className="pt-8 text-xl font-bold tracking-tight">Toggle Component</h3>
+                    <span className="w-100% border-foreground my-2 mb-4 block border" />
 
                     <TogglePreview />
                 </div>
             </div>
 
-            <div className="space-y-4 w-fit">
+            <div className="w-fit space-y-4">
                 <h3 className="text-xl font-bold tracking-tight">Light Control Component</h3>
-                <span className="block border w-100% my-2 border-foreground mb-4" />
+                <span className="w-100% border-foreground my-2 mb-4 block border" />
 
-                <div className="lg:flex space-x-8">
+                <div className="space-x-8 lg:flex">
                     <LightPreview />
-                    <span className="lg:border h-100% mx-2 border-foreground" />
+                    <span className="h-100% border-foreground mx-2 lg:border" />
                     <LightPreview variant="Accordion" />
-                    <span className="lg:border h-100% mx-2 border-foreground" />
+                    <span className="h-100% border-foreground mx-2 lg:border" />
                     <LightPreview variant="Popup" />
-                    <span className="lg:border h-100% mx-2 border-foreground" />
+                    <span className="h-100% border-foreground mx-2 lg:border" />
                     <LightPreview variant="SeperatePopups" />
                 </div>
             </div>

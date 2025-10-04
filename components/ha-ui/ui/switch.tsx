@@ -20,15 +20,15 @@ function Switch({ className, style, ...props }: React.ComponentProps<typeof Swit
             style={mergedStyle}
             data-slot="switch"
             className={cn(
-                "peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex w-(--switch-width) h-(--switch-height) shrink-0 items-center rounded-full border-(length:--switch-padding) border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
-                className
+                "peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-(--switch-height) w-(--switch-width) shrink-0 items-center rounded-full border-(length:--switch-padding) border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+                className,
             )}
             {...props}
         >
             <SwitchPrimitive.Thumb
                 data-slot="switch-thumb"
                 className={cn(
-                    "data-[state=unchecked]:bg-indigo-950 data-[state=checked]:bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-(--switch-thumb-size) rounded-full ring-0 transition-transform data-[state=unchecked]:translate-x-0 data-[state=checked]:translate-x-(--switch-thumb-travel) rtl:data-[state=checked]:-translate-x-(--switch-thumb-travel)"
+                    "data-[state=checked]:bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-(--switch-thumb-size) rounded-full ring-0 transition-transform data-[state=checked]:translate-x-(--switch-thumb-travel) data-[state=unchecked]:translate-x-0 data-[state=unchecked]:bg-indigo-950 rtl:data-[state=checked]:-translate-x-(--switch-thumb-travel)",
                 )}
             />
         </SwitchPrimitive.Root>

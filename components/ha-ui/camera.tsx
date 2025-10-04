@@ -39,17 +39,9 @@ export interface CameraFeedProps {
     aspectRatio?: AspectRatio;
 }
 
-export function Camera({
-    entity,
-    wsURL,
-    proxyURL,
-    disableControls = false,
-    aspectRatio = "16/9",
-}: CameraFeedProps) {
+export function Camera({ entity, wsURL, proxyURL, disableControls = false, aspectRatio = "16/9" }: CameraFeedProps) {
     const camera = useWebRTCVideo({
-        wsSrc:
-            wsURL ||
-            `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
+        wsSrc: wsURL || `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
         ...(proxyURL ? { proxy: proxyURL } : {}),
         retryDelay: 5000, // retry every 5s
         maxRetryAttempts: 10,
@@ -64,20 +56,16 @@ export function Camera({
 
     return (
         <MediaController className="h-full">
-            <video
-                slot="media"
-                {...camera.videoProps}
-                className={aspectRatioMap[aspectRatio]}
-            />
+            <video slot="media" {...camera.videoProps} className={aspectRatioMap[aspectRatio]} />
 
             {!disableControls && (
-                <MediaControlBar className="flex w-full justify-between px-4 bg-black">
+                <MediaControlBar className="flex w-full justify-between bg-black px-4">
                     <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
 
                     <div className="text-white">
                         <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
                         <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
-                        <MediaFullscreenButton className="bg-black px-2 hover:bg-slate-800 h-full"></MediaFullscreenButton>
+                        <MediaFullscreenButton className="h-full bg-black px-2 hover:bg-slate-800"></MediaFullscreenButton>
                     </div>
                 </MediaControlBar>
             )}

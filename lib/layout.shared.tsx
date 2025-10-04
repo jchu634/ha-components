@@ -13,7 +13,7 @@ export function baseOptions(): BaseLayoutProps {
         nav: {
             title: (
                 <>
-                    <Logo className="size-10  rounded-full" />
+                    <Logo className="size-10 rounded-full" />
                     HA Components
                 </>
             ),
