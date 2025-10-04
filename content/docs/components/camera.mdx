@@ -68,7 +68,7 @@ To enable HA's Go2RTC API, add this to `configuration.yaml` as detailed [here](h
 go2rtc:
   debug_ui: true
 ```
-Soft Restart HA to load its new config.
+Soft Restart HA to load its new config.\
 If it worked, the Go2RTC UI should now be accessible at port 11984 [(Quick Link)](http://homeassistant.local:11984/)
 
 
@@ -101,7 +101,34 @@ e.g. `camera.reolink_doorbell_high`
   - e.g. `"ws://localhost:8080/proxy"`
   - If set the component will utilise a proxy server for the websocket connection
   
-  A simple Python proxy server for development is provided [here](https://github.com/jchu634/ha-components/blob/main/scripts/proxy_server.py).\
+  A simple Python proxy server for development is provided.
+  ### Installation
+  <Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
+    <Tab value="npm">    
+      ```bash
+      npx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+      ```
+    </Tab>
+    <Tab value="pnpm">
+      ```bash
+      pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+      ```
+    </Tab>
+    <Tab value="yarn">
+      ```bash
+      yarn shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+      ```
+    </Tab>
+    <Tab value="bun">
+      ```bash
+      bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+      ```
+    </Tab>
+    <Tab value="Manual">
+        TODO COMPLETE ME
+    </Tab>
+  </Tabs>
+
   To run it:
   1. Install the dependencies
       - Either using uv given the [pyproject.toml](https://github.com/jchu634/ha-components/blob/main/pyproject.toml)

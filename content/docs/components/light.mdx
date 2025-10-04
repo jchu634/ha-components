@@ -20,7 +20,7 @@ import LightPreview from "@/components/docs/light-preview";
 </Tabs>
 
 ## About
-This component provides several customisable Light control components, with a colour picker built using [react-colorful](https://omgovich.github.io/react-colorful/)
+This component provides several customisable Light control components, with a colour picker built using [react-colorful](https://omgovich.github.io/react-colorful/).
 
 ## Setup
 ### Installation
@@ -52,7 +52,7 @@ This component provides several customisable Light control components, with a co
 
 ## Variants
 
-<div className="flex space-x-4">
+<div className="md:flex space-x-4 space-y-4 md:space-y-0">
     <Card className="w-95">
         ### Accordion
         <LightPreview variant="Accordion"/>
@@ -73,12 +73,14 @@ e.g. `light.HA_light_entity`
 - A HA Light entity name 
 
 ### `variant` (Optional)
-- Changes the look of the light component [(Preview here)](#variants)
+- Changes the look of the light component
+- Options: [`Accordion`, `Popup`, `SeperatePopups`]
 
 ### `overrideSupportColorRGB` (Optional)
 - Always shows RGB Colour picker.
 <Callout type="error">
-    This will not make a non-RGB light support RGB, This is a workaround for this [issue](#on-first-load-rgb-colour-picker-will-not-show-when-bulb-is-off)
+    This will not make a non-RGB light support RGB,\
+    This is a workaround for [this.](#on-first-load-rgb-colour-picker-will-not-show-when-bulb-is-off)
 </Callout>
 
 ## Common Issues

@@ -4,15 +4,15 @@ description: Creating your own components.
 ---
 
 ## About
-Most HA Components is functionally built around the `haWebsocket` lib, which provides a provider shared websocket adapter to interact with HA via the websocket api.\
+Most components in HA-Components are functionally built around the `haWebsocket` lib, which provides a shared websocket adapter to interact with HA via the websocket api.\
 This doc acts as documentation if you want to use its capabilities to build your own components.
 
 ## Pre-Requisites
 To utilise these APIs, you must have [Auth](docs/installation/auth) set-up.
 
-Additionally, `haWebSocket` must be imported.\
+Additionally, import `haWebSocket`.
 ```jsx
-import { haWebSocket } from "@/lib/haWebsocket";=
+import { haWebSocket } from "@/lib/haWebsocket";
 ```
 
 ## API
@@ -104,7 +104,7 @@ use `getState`
 
 ## Exception: Camera
 The camera component does not utilise `haWebSocket` nor does it require Auth.\
-This is because it doesn't touch the HA apis at all, it directly accesses the HA internally hostedGo2RTC server.\
+This is because it doesn't touch the HA apis at all, it directly accesses the HA internally hosted Go2RTC server.\
 If you want to write your own camera component, you will need to use the `video-rtc` lib instead.
 <Tabs items={['Generic', 'Example']}>
   <Tab value="Generic">    

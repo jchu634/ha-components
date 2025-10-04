@@ -31,22 +31,24 @@ This Auth setup is written around the default Home Assistant OAuth flow.
 
 ## Step 1: Environment Variables
 Set the Environment variables to match your home assistant config
-```
+```dotenv
 # Example Home Assistant host + port
 NEXT_PUBLIC_HA_URL=homeassistant.local
 NEXT_PUBLIC_HA_PORT=8123
 ```
+
 Then set your local testing environmental paths
 - Point `NEXT_PUBLIC_HA_CLIENT_ID` to your host 
 - Point `NEXT_PUBLIC_HA_REDIRECT_URI` to your callback path (This will be setup in a later step)
-```
+
+```dotenv
 # Example OAuth2 client info
 NEXT_PUBLIC_HA_CLIENT_ID=http://localhost:3000
 NEXT_PUBLIC_HA_REDIRECT_URI=http://localhost:3000/auth/callback
 ```
 
 For testing, you can set a Long-lived access token, which will override any OAuth flow.
-```
+```dotenv
 NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
 ```
 <Callout type="error">
@@ -54,14 +56,14 @@ NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
 </Callout>
 
 ## Step 2: HA Provider
-In layout.tsx, wrap children with HomeAssistantProvider.
+In layout.tsx, wrap children with `HomeAssistantProvider`.\
 This allows pages with the applied layout access the global websocket connection.
 ```jsx
-    return (
-        <div className="flex flex-col min-h-screen">
-            <HomeAssistantProvider>{children}</HomeAssistantProvider>
-        </div>
-    );
+return (
+    <div className="flex flex-col min-h-screen">
+        <HomeAssistantProvider>{children}</HomeAssistantProvider>
+    </div>
+);
 ```
 
 ## Step 3: Handle Auth callback
