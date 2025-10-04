@@ -146,6 +146,11 @@
           "target": "proxy/uv.lock"
         },
         {
+          "path": "proxy/requirements.txt",
+          "type": "registry:file",
+          "target": "proxy/requirements.txt"
+        },
+        {
           "path": "proxy/README.md",
           "type": "registry:file",
           "target": "proxy/README.md"
