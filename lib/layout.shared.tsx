@@ -1,4 +1,5 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import { Logo } from "@/lib/svg";
 
 /**
  * Shared layout configurations
@@ -12,7 +13,7 @@ export function baseOptions(): BaseLayoutProps {
         nav: {
             title: (
                 <>
-                    {/* TODO ADD LOGO */}
+                    <Logo className="size-10  rounded-full" />
                     HA Components
                 </>
             ),
