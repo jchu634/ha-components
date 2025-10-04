@@ -8,10 +8,6 @@ import TogglePreview from "@/components/docs/toggle-preview.tsx"
 import { Link } from "next/link"
 import { Button } from "@/components/ui/button";
 
-<Callout type="warn">
-  Requires [Auth Provider](docs/installation/installation#step-3-setup-auth-provider) to be functional
-</Callout>
-
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">    
     <TogglePreview />
@@ -36,12 +32,29 @@ Use this instead of [trigger](/docs/components/trigger-button) if you want to be
 
 ## Setup
 ### Installation
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">    
-    TODO COMPLETE ME
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/toggle.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/toggle.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/toggle.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/toggle.json
+    ```
   </Tab>
   <Tab value="Manual">
-    TODO COMPLETE ME
+      TODO COMPLETE ME
   </Tab>
 </Tabs>
 

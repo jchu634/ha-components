@@ -9,10 +9,6 @@ import { Link } from "next/link"
 import { Button } from "@/components/ui/button";
 import {ExternalLink} from "lucide-react";
 
-<Callout type="warn">
-  Requires [Auth Provider](docs/installation/installation#step-3-setup-auth-provider) to be function
-</Callout>
-
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">    
     <TriggerPreview />
@@ -39,12 +35,29 @@ If you want to be able to see the current state of an entity, use [toggle](/docs
 
 ## Setup
 ### Installation
-<Tabs items={['CLI', 'Manual']}>
-  <Tab value="CLI">    
-    TODO COMPLETE ME
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
   </Tab>
   <Tab value="Manual">
-    TODO COMPLETE ME
+      TODO COMPLETE ME
   </Tab>
 </Tabs>
 
