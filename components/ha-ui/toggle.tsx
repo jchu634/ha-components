@@ -2,8 +2,7 @@
 import type { EntityId } from "@/types/entity-types";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Card } from "@/components/ui/card";
+import { Switch } from "@/components/ha-ui/ui/switch";
 import { haWebSocket } from "@/lib/haWebsocket";
 
 type ToggleProps = React.ComponentProps<typeof Button> & {

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "@/components/ha-ui/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { RgbColorPicker } from "react-colorful";
 import { PowerIcon, SettingsIcon, ThermometerIcon, PaintbrushVerticalIcon, XIcon } from "lucide-react";
-import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "@/components/ui/popover";
+import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "@/components/ha-ui/ui/popover";
 
 export type LightVariants = "Default" | "Accordion" | "Popup" | "SeperatePopups";
 
