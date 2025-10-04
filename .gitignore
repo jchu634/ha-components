@@ -50,6 +50,9 @@ next-env.d.ts
 /app/dev/
 /app/auth/callback/
 
+# Registry Files
+/public/r/
+
 #### Python Dev ####
 __pycache__
 
