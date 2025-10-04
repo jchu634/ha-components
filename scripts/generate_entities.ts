@@ -8,13 +8,20 @@ dotenv.config();
 const HA_URL = process.env.NEXT_PUBLIC_HA_URL;
 const HA_PORT = process.env.NEXT_PUBLIC_HA_PORT;
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
+const NEXT_AUTH_TOKEN = process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
 
-if (!HA_URL || !AUTH_TOKEN) {
+if (!HA_URL || (!AUTH_TOKEN && !NEXT_AUTH_TOKEN)) {
     console.error("Missing HA_URL or AUTH_TOKEN in .env");
     process.exit(1);
 }
 
 async function fetchEntities(): Promise<any[]> {
+    const TOKEN =
+        AUTH_TOKEN != null && AUTH_TOKEN !== ""
+            ? AUTH_TOKEN
+            : NEXT_AUTH_TOKEN != null && NEXT_AUTH_TOKEN !== ""
+            ? NEXT_AUTH_TOKEN
+            : undefined;
     return new Promise((resolve, reject) => {
         const ws = new WebSocket(`ws://${HA_URL}:${HA_PORT}/api/websocket`);
 
@@ -31,7 +38,7 @@ async function fetchEntities(): Promise<any[]> {
                 ws.send(
                     JSON.stringify({
                         type: "auth",
-                        access_token: AUTH_TOKEN,
+                        access_token: TOKEN,
                     })
                 );
             } else if (msg.type === "auth_ok") {
@@ -59,12 +66,7 @@ async function generateTypes() {
         friendly_name: e.attributes?.friendly_name,
     }));
 
-    const tsLines = filtered.map(
-        (e) =>
-            `  /**\n   * ${e.friendly_name || e.entity_id}\n   */\n  | "${
-                e.entity_id
-            }"`
-    );
+    const tsLines = filtered.map((e) => `  /**\n   * ${e.friendly_name || e.entity_id}\n   */\n  | "${e.entity_id}"`);
 
     const tsContent = `// AUTO-GENERATED FILE - DO NOT EDIT
 export type EntityId =
