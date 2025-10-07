@@ -1,4 +1,5 @@
 "use client";
+
 import {
     MediaController,
     MediaControlBar,
@@ -7,23 +8,41 @@ import {
     MediaVolumeRange,
     MediaFullscreenButton,
 } from "media-chrome/react";
-export default function CameraPreview() {
+
+export interface CameraPreviewProps {
+    /**
+     * Fixed or public video source URL (default demo clip)
+     */
+    src?: string;
+
+    /**
+     * Enable autoplay (default: false)
+     */
+    autoPlay?: boolean;
+}
+
+export default function CameraPreview({
+    src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    autoPlay = false,
+}: CameraPreviewProps) {
     return (
-        <MediaController className="h-fit ">
+        <MediaController className="h-fit w-full">
             <video
                 slot="media"
                 tabIndex={-1} // This is added for hydration as this is automatically injected
-                className="aspect-video"
-                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                // autoPlay={true}
+                className="aspect-video object-cover"
+                autoPlay={autoPlay}
+                muted
+                playsInline
+                src={src}
+                controls={false}
             />
-            <MediaControlBar className="flex w-full justify-between px-4 bg-black">
+            <MediaControlBar className="flex w-full justify-between bg-black px-4">
                 <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
-
-                <div className="text-white">
-                    <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
-                    <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
-                    <MediaFullscreenButton className="bg-black px-2 h-full hover:bg-slate-800"></MediaFullscreenButton>
+                <div className="flex items-center text-white">
+                    <MediaMuteButton className="bg-black p-2 hover:bg-slate-800" />
+                    <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800" />
+                    <MediaFullscreenButton className="bg-black px-2 hover:bg-slate-800" />
                 </div>
             </MediaControlBar>
         </MediaController>
