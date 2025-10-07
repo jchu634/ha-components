@@ -7,7 +7,7 @@ import {
     MediaMuteButton,
     MediaFullscreenButton,
 } from "media-chrome/react";
-import { useWebRTCVideo } from "@/lib/video-rtc";
+import { useWebRTCVideo, WebRTCVideo } from "@/lib/video-rtc";
 import type { EntityId } from "@/types/entity-types";
 
 type AspectRatio = "1/1" | "4/3" | "16/9";
@@ -37,16 +37,33 @@ export interface CameraFeedProps {
      * (Default: 16/9)
      * */
     aspectRatio?: AspectRatio;
+    /**
+     * Optional: Camera Source override
+     * Will ignore entity, wsURL and proxyURl args.
+     */
+    externalCameraSource?: WebRTCVideo;
 }
 
-export function Camera({ entity, wsURL, proxyURL, disableControls = false, aspectRatio = "16/9" }: CameraFeedProps) {
-    const camera = useWebRTCVideo({
-        wsSrc: wsURL || `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
-        ...(proxyURL ? { proxy: proxyURL } : {}),
-        retryDelay: 5000, // retry every 5s
-        maxRetryAttempts: 10,
-        video: { autoPlay: true, muted: true, controls: false, tabIndex: -1 },
-    });
+export function Camera({
+    entity,
+    wsURL,
+    proxyURL,
+    externalCameraSource,
+    disableControls = false,
+    aspectRatio = "16/9",
+}: CameraFeedProps) {
+    if (externalCameraSource && !externalCameraSource.videoProps) {
+        console.warn("External camera provided but missing videoProps");
+    }
+    const camera =
+        externalCameraSource ||
+        useWebRTCVideo({
+            wsSrc: wsURL || `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
+            ...(proxyURL ? { proxy: proxyURL } : {}),
+            retryDelay: 5000, // retry every 5s
+            maxRetryAttempts: 10,
+            video: { autoPlay: true, muted: true, controls: false, tabIndex: -1 },
+        });
 
     const aspectRatioMap: Record<AspectRatio, string> = {
         "1/1": "aspect-square",
