@@ -27,12 +27,12 @@ export default function Sidebar() {
                     <GHLogoIcon className="hidden size-7 dark:block" />
                 </Button>
             </motion.a>
-            <motion.a href="/" whileTap={{ scale: 1.05 }} whileHover={{ scale: 1.05 }}>
+            <motion.a href="#defaultLayout" whileTap={{ scale: 1.05 }} whileHover={{ scale: 1.05 }}>
                 <Button className="h-12 w-30 cursor-pointer bg-[#11dd74] text-xl font-medium text-black hover:bg-[#11dd74] dark:bg-[#3a045e] dark:text-white">
                     <p>Layout 1</p>
                 </Button>
             </motion.a>
-            <motion.a href="/" whileTap={{ scale: 1.05 }} whileHover={{ scale: 1.05 }}>
+            <motion.a href="#cameraLayout" whileTap={{ scale: 1.05 }} whileHover={{ scale: 1.05 }}>
                 <Button className="h-12 w-30 cursor-pointer bg-[#11dd74] text-xl font-medium text-black hover:bg-[#11dd74] dark:bg-[#3a045e] dark:text-white">
                     <p>Layout 2</p>
                 </Button>
