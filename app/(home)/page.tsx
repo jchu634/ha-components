@@ -86,14 +86,14 @@ export default function Home() {
                         </h3>
                         <div className="flex w-fit flex-row space-x-4">
                             <div>
-                                <div className="h-fit w-[70rem] bg-black">
+                                <div className="h-fit w-[70rem]">
                                     <CameraPreview autoPlay={true} />
                                 </div>
                                 <h3 className="text-lg">Big Buck Bunny Camera</h3>
                             </div>
                             <div className="space-y-3">
                                 {imageURLs.map((image, i) => (
-                                    <div key={i} className="h-fit w-80 bg-black">
+                                    <div key={i} className="h-fit w-80">
                                         <CanvasVideoBridge image={image} />
                                         <h3 className="text-lg">Cat Camera {i + 1}</h3>
                                     </div>
