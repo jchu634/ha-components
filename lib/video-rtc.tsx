@@ -31,7 +31,7 @@ export interface UseWebRTCVideoOptions {
     video?: React.VideoHTMLAttributes<HTMLVideoElement>;
 }
 
-export interface UseWebRTCVideoResult {
+export interface WebRTCVideo {
     videoProps: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement> &
         React.RefAttributes<HTMLVideoElement>;
     connectionMode: WebRTCMode;
@@ -54,7 +54,7 @@ export function useWebRTCVideo({
     onModeChange,
     onError,
     video = {},
-}: UseWebRTCVideoOptions): UseWebRTCVideoResult {
+}: UseWebRTCVideoOptions): WebRTCVideo {
     const [connectionMode, setConnectionMode] = useState<WebRTCMode>("none");
     const [error, setError] = useState<Error | null>(null);
     const [retryCount, setRetryCount] = useState(0);
