@@ -123,7 +123,7 @@ export default function Home() {
                             title="Light Controls"
                             description="Intuitive brightness and color controls for your smart lights"
                         >
-                            <div className="flex items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
+                            <div className="flex h-[20rem] items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/70">
                                 <LightPreview />
                             </div>
                         </ComponentShowcase>
@@ -132,7 +132,7 @@ export default function Home() {
                             title="Toggle Switches"
                             description="Clean, accessible switches for all your devices"
                         >
-                            <div className="flex items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
+                            <div className="flex h-[12rem] items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-8 dark:border-zinc-800 dark:bg-zinc-900/70">
                                 <TogglePreview />
                             </div>
                         </ComponentShowcase>
@@ -141,7 +141,7 @@ export default function Home() {
                             title="And More"
                             description="Curtains, triggers, sensors, and custom components"
                         >
-                            <div className="flex items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-12 dark:border-zinc-800 dark:bg-zinc-900/50">
+                            <div className="flex h-[12rem] items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50/50 p-12 dark:border-zinc-800 dark:bg-zinc-900/70">
                                 <div className="text-center">
                                     <Code2 className="mx-auto mb-4 size-12 text-zinc-400" />
                                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
@@ -157,7 +157,7 @@ export default function Home() {
                     <h2 className={cn("text-4xl font-bold text-zinc-900 dark:text-white", lexend.className)}>
                         Ready to Get Started?
                     </h2>
-                    <p className={cn("mt-4 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400", funnel.className)}>
+                    <p className={cn("mt-4 max-w-5xl text-lg text-zinc-600 dark:text-zinc-400", funnel.className)}>
                         Follow our installation guide and start building your custom Home Assistant dashboard in
                         minutes.
                     </p>
