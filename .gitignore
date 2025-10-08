@@ -60,3 +60,4 @@ __pycache__
 data.json
 .venv
 
+.env
