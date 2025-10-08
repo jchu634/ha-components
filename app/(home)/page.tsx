@@ -5,7 +5,8 @@ import { lexend, funnel } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/lib/svg";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Code2, Palette, Zap, Github } from "lucide-react";
+import { ArrowRight, Code2, Palette, Zap } from "lucide-react";
+import { GHLogoDarkIcon, GHLogoIcon } from "@/lib/svg";
 import CameraPreview from "@/components/docs/camera-preview";
 import LightPreview from "@/components/docs/light-preview";
 import TogglePreview from "@/components/docs/toggle-preview";
@@ -31,7 +32,8 @@ export default function Home() {
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                         >
-                            <Github className="size-4" />
+                            <GHLogoIcon className="hidden size-4 dark:block" />
+                            <GHLogoDarkIcon className="size-4 dark:hidden" />
                             <span className="hidden sm:inline">GitHub</span>
                         </a>
                         <ThemeToggle variant="outline" size="icon" />
@@ -39,15 +41,12 @@ export default function Home() {
                 </nav>
 
                 <section className="mb-24 flex flex-col space-y-8">
-                    <div className="inline-flex w-fit items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
-                        <span className="relative flex size-2">
-                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex size-2 rounded-full bg-green-500"></span>
-                        </span>
-                        Open Source Component Library
-                    </div>
-
-                    <h1 className={cn("max-w-4xl text-6xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-7xl", lexend.className)}>
+                    <h1
+                        className={cn(
+                            "max-w-4xl text-6xl font-bold tracking-tight text-zinc-900 sm:text-7xl dark:text-white",
+                            lexend.className,
+                        )}
+                    >
                         Build Beautiful{" "}
                         <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                             Home Assistant
@@ -55,8 +54,14 @@ export default function Home() {
                         Dashboards
                     </h1>
 
-                    <p className={cn("max-w-2xl text-xl leading-relaxed text-zinc-600 dark:text-zinc-400", funnel.className)}>
-                        Free and open-source components that give you complete control. Copy, paste, and customize to create the perfect smart home interface.
+                    <p
+                        className={cn(
+                            "max-w-2xl text-xl leading-relaxed text-zinc-600 dark:text-zinc-400",
+                            funnel.className,
+                        )}
+                    >
+                        Free and open-source components that give you complete control. Copy, paste, and customize to
+                        create the perfect smart home interface.
                     </p>
 
                     <div className="flex flex-col gap-4 sm:flex-row">
@@ -67,16 +72,12 @@ export default function Home() {
                             </Link>
                         </Button>
                         <Button asChild size="lg" variant="outline" className="gap-2 text-base">
-                            <Link href="/docs/showcase">
-                                View Showcase
-                            </Link>
+                            <Link href="/docs/showcase">View Showcase</Link>
                         </Button>
                     </div>
 
                     <div className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-400">
                         <span>MIT Licensed</span>
-                        <span className="text-zinc-300 dark:text-zinc-700">•</span>
-                        <span>Built for the Home Assistant community</span>
                     </div>
                 </section>
 
@@ -157,7 +158,8 @@ export default function Home() {
                         Ready to Get Started?
                     </h2>
                     <p className={cn("mt-4 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400", funnel.className)}>
-                        Follow our installation guide and start building your custom Home Assistant dashboard in minutes.
+                        Follow our installation guide and start building your custom Home Assistant dashboard in
+                        minutes.
                     </p>
                     <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                         <Button asChild size="lg" className="group gap-2">
@@ -167,15 +169,13 @@ export default function Home() {
                             </Link>
                         </Button>
                         <Button asChild size="lg" variant="outline">
-                            <Link href="/docs/advanced/create-your-own">
-                                Create Your Own
-                            </Link>
+                            <Link href="/docs/advanced/create-your-own">Create Your Own</Link>
                         </Button>
                     </div>
                 </section>
 
                 <footer className="mt-24 border-t border-zinc-200 pt-12 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
-                    <p>Built for the Home Assistant community. MIT Licensed.</p>
+                    <p>Created by Joshua Chung (JCHU634). MIT Licensed.</p>
                 </footer>
             </div>
         </div>
@@ -191,23 +191,25 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
             <h3 className={cn("mb-2 text-xl font-semibold text-zinc-900 dark:text-white", lexend.className)}>
                 {title}
             </h3>
-            <p className={cn("text-zinc-600 dark:text-zinc-400", funnel.className)}>
-                {description}
-            </p>
+            <p className={cn("text-zinc-600 dark:text-zinc-400", funnel.className)}>{description}</p>
         </div>
     );
 }
 
-function ComponentShowcase({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+function ComponentShowcase({
+    title,
+    description,
+    children,
+}: {
+    title: string;
+    description: string;
+    children: React.ReactNode;
+}) {
     return (
         <div className="space-y-4">
             <div>
-                <h3 className={cn("text-xl font-semibold text-zinc-900 dark:text-white", lexend.className)}>
-                    {title}
-                </h3>
-                <p className={cn("mt-1 text-sm text-zinc-600 dark:text-zinc-400", funnel.className)}>
-                    {description}
-                </p>
+                <h3 className={cn("text-xl font-semibold text-zinc-900 dark:text-white", lexend.className)}>{title}</h3>
+                <p className={cn("mt-1 text-sm text-zinc-600 dark:text-zinc-400", funnel.className)}>{description}</p>
             </div>
             {children}
         </div>
