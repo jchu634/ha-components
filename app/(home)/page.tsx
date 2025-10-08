@@ -9,24 +9,42 @@ import { ArrowRight, Code2, Palette, Zap, Github } from "lucide-react";
 import CameraPreview from "@/components/docs/camera-preview";
 import LightPreview from "@/components/docs/light-preview";
 import TogglePreview from "@/components/docs/toggle-preview";
+import ThemeToggle from "@/components/theme-toggle";
 
 export default function Home() {
     return (
         <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-950 dark:to-zinc-900">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-            <div className="relative mx-auto max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
-                <section className="flex flex-col items-center space-y-8 text-center">
-                    <div className="inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
+            <div className="relative mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-12">
+                <nav className="mb-16 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <Logo className="size-10 opacity-90" />
+                        <span className={cn("text-xl font-bold text-zinc-900 dark:text-white", lexend.className)}>
+                            HA Components
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <a
+                            href="https://github.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                        >
+                            <Github className="size-4" />
+                            <span className="hidden sm:inline">GitHub</span>
+                        </a>
+                        <ThemeToggle variant="outline" size="icon" />
+                    </div>
+                </nav>
+
+                <section className="mb-24 flex flex-col space-y-8">
+                    <div className="inline-flex w-fit items-center gap-3 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
                         <span className="relative flex size-2">
                             <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex size-2 rounded-full bg-green-500"></span>
                         </span>
                         Open Source Component Library
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <Logo className="size-20 opacity-90" />
                     </div>
 
                     <h1 className={cn("max-w-4xl text-6xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-7xl", lexend.className)}>
@@ -56,17 +74,9 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-400">
-                        <a
-                            href="https://github.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
-                        >
-                            <Github className="size-4" />
-                            Star on GitHub
-                        </a>
-                        <span className="text-zinc-300 dark:text-zinc-700">•</span>
                         <span>MIT Licensed</span>
+                        <span className="text-zinc-300 dark:text-zinc-700">•</span>
+                        <span>Built for the Home Assistant community</span>
                     </div>
                 </section>
 
@@ -89,7 +99,7 @@ export default function Home() {
                 </section>
 
                 <section className="mt-32">
-                    <div className="mb-12 text-center">
+                    <div className="mb-12">
                         <h2 className={cn("text-4xl font-bold text-zinc-900 dark:text-white", lexend.className)}>
                             See It In Action
                         </h2>
@@ -142,14 +152,14 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="mt-32 rounded-2xl border border-zinc-200 bg-white/50 p-12 text-center backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                <section className="mt-32 rounded-2xl border border-zinc-200 bg-white/50 p-12 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/50">
                     <h2 className={cn("text-4xl font-bold text-zinc-900 dark:text-white", lexend.className)}>
                         Ready to Get Started?
                     </h2>
-                    <p className={cn("mx-auto mt-4 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400", funnel.className)}>
+                    <p className={cn("mt-4 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400", funnel.className)}>
                         Follow our installation guide and start building your custom Home Assistant dashboard in minutes.
                     </p>
-                    <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+                    <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                         <Button asChild size="lg" className="group gap-2">
                             <Link href="/docs/installation/installation">
                                 Read Documentation
@@ -164,7 +174,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <footer className="mt-24 border-t border-zinc-200 pt-12 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
+                <footer className="mt-24 border-t border-zinc-200 pt-12 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
                     <p>Built for the Home Assistant community. MIT Licensed.</p>
                 </footer>
             </div>
