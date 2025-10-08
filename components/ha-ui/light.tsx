@@ -19,7 +19,7 @@ export interface LightProps {
      */
     entity: EntityId;
     /**
-     * Shows the RGB Colour Picker despite what Home Assistant Claims
+     * Shows the RGB Colour Picker, overriding Home Assistant's supportedfeatures
      */
     overrideSupportColorRGB?: boolean;
     /**

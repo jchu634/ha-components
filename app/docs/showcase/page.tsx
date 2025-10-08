@@ -22,14 +22,14 @@ export default function Home() {
                     <h3 className="text-xl font-bold tracking-tight">Trigger Buttons Component</h3>
                     <span className="w-100% border-foreground my-2 mb-4 block border" />
                     <div className="flex w-fit flex-col space-y-4 2xl:flex-row 2xl:space-x-4">
-                        <TriggerPreview />
-                        <TriggerPreview variant="destructive" />
-                        <TriggerPreview variant="outline" />
+                        <TriggerPreview>Button that Triggers Stuff</TriggerPreview>
+                        <TriggerPreview variant="destructive">Button that Triggers Stuff</TriggerPreview>
+                        <TriggerPreview variant="outline">Button that Triggers Stuff</TriggerPreview>
                     </div>
                     <div className="flex w-fit flex-col space-y-4 2xl:flex-row 2xl:space-x-4">
-                        <TriggerPreview variant="secondary" />
-                        <TriggerPreview variant="ghost" />
-                        <TriggerPreview variant="link" />
+                        <TriggerPreview variant="secondary">Button that Triggers Stuff</TriggerPreview>
+                        <TriggerPreview variant="ghost">Button that Triggers Stuff</TriggerPreview>
+                        <TriggerPreview variant="link">Button that Triggers Stuff</TriggerPreview>
                     </div>
                     <h3 className="pt-8 text-xl font-bold tracking-tight">Toggle Component</h3>
                     <span className="w-100% border-foreground my-2 mb-4 block border" />
