@@ -15,17 +15,16 @@ export default function ThemeToggle({ className, ...props }: any) {
                 className={`group ${className ?? ""}`}
                 {...props}
             >
-                <p>Theme</p>
                 {/* Icon changing on hover disabled as it was too distracting */}
                 <Sun
                     className={cn(
-                        "block size-7 transition-all dark:hidden",
+                        "block size-5 transition-all dark:hidden",
                         // "group-hover:hidden dark:group-hover:block",
                     )}
                 />
                 <Moon
                     className={cn(
-                        "hidden size-7 transition-all dark:block",
+                        "hidden size-5 transition-all dark:block",
                         // "group-hover:block dark:group-hover:hidden",
                     )}
                 />
