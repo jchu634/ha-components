@@ -15,7 +15,7 @@
         {
           "path": "scripts/generate_entities.ts",
           "type": "registry:file",
-          "target": "~/scripts/generate_entities"
+          "target": "@/scripts/generate_entities.ts"
         }
       ]
     },
