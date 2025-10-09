@@ -31,8 +31,8 @@
           "target": "components/ha-ui/auth/authCallback.tsx"
         },
         {
-          "path": "app/providers/HomeAssistantProvider.tsx",
-          "target": "app/providers/HomeAssistantProvider.tsx",
+          "path": "@/providers/HomeAssistantProvider.tsx",
+          "target": "@/providers/HomeAssistantProvider.tsx",
           "type": "registry:item"
         },
         {
