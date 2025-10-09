@@ -5,12 +5,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const HA_URL = process.env.NEXT_PUBLIC_HA_URL;
-const HA_PORT = process.env.NEXT_PUBLIC_HA_PORT;
-const AUTH_TOKEN = process.env.AUTH_TOKEN;
-const NEXT_AUTH_TOKEN = process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
+function getImportMetaEnv(key: string): string | undefined {
+    try {
+        // @ts-ignore - import.meta may not exist in Next
+        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
+    } catch {
+        return undefined;
+    }
+}
 
-if (!HA_URL || (!AUTH_TOKEN && !NEXT_AUTH_TOKEN)) {
+const HA_URL = getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
+const HA_PORT = getImportMetaEnv("VITE_HA_PORT") || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT; // e.g. 8123
+const AUTH_TOKEN = process.env.AUTH_TOKEN;
+const FRAMEWORK_AUTH_TOKEN =
+    getImportMetaEnv("VITE_API_URL") || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN || process.env.LONG_LIVED_TOKEN;
+
+if (!HA_URL || (!AUTH_TOKEN && !FRAMEWORK_AUTH_TOKEN)) {
     console.error("Missing HA_URL or AUTH_TOKEN in .env");
     process.exit(1);
 }
@@ -19,8 +29,8 @@ async function fetchEntities(): Promise<any[]> {
     const TOKEN =
         AUTH_TOKEN != null && AUTH_TOKEN !== ""
             ? AUTH_TOKEN
-            : NEXT_AUTH_TOKEN != null && NEXT_AUTH_TOKEN !== ""
-              ? NEXT_AUTH_TOKEN
+            : FRAMEWORK_AUTH_TOKEN != null && FRAMEWORK_AUTH_TOKEN !== ""
+              ? FRAMEWORK_AUTH_TOKEN
               : undefined;
     return new Promise((resolve, reject) => {
         const ws = new WebSocket(`ws://${HA_URL}:${HA_PORT}/api/websocket`);
