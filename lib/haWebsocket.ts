@@ -1,4 +1,4 @@
-import { getAccessToken, refreshAccessToken, clearTokens, login, getTimeToExpiryMs } from "./haAuth";
+import { getAccessToken, refreshAccessToken, clearTokens, login, getTimeToExpiryMs } from "@/lib/haAuth";
 
 function getImportMetaEnv(key: string): string | undefined {
     try {
