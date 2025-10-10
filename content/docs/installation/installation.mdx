@@ -60,23 +60,16 @@ NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
   For a production see how to set up a proper oauth flow [here](/docs/installation/auth#step-1-environment-variables/)
 </Callout>
 
-Add an Auth callback at `\auth\callback`
+In layout.tsx, wrap children with `HomeAssistantProvider`.\
+This allows pages with the applied layout access the global websocket connection.
 ```jsx
-"use client";
-
-import { Suspense } from "react";
-import AuthCallback from "@/components/ha-ui/auth/authCallback";
-
-export default function Page() {
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <AuthCallback />
-        </Suspense>
-    );
-}
+import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
+return (    
+    <div className="flex flex-col min-h-screen">
+        <HomeAssistantProvider>{children}</HomeAssistantProvider>
+    </div>
+);
 ```
-
-
 
 ## Step 4: Setup Type Generation
 HA Components includes a script automates entity name fetching.
@@ -86,7 +79,30 @@ If you set up OAuth instead of a long-lived token in step 3:\
 Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
 e.g. `AUTH_TOKEN=VzHfnKDwMc...`
 
-- **Step 1:** Register script in `package.json`\
+- **Step 1:** Install Script\
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+</Tabs>
+- **Step 2:** Register script in `package.json`\
 Add the script into `package.json`
 ```json
 {
@@ -95,7 +111,7 @@ Add the script into `package.json`
   },
 }
 ```
-- **Step 2:** Run the script\
+- **Step 3:** Run the script\
     You can now run the script using the following command
     ```bash
     npm run generate:entities

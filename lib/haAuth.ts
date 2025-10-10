@@ -4,17 +4,25 @@
  * Supports OAuth2 token exchange, refresh, persistent storage in localStorage,
  * and an optional long-lived token override (NEXT_PUBLIC_HA_LONG_LIVED_TOKEN).
  */
+function getImportMetaEnv(key: string): string | undefined {
+    try {
+        // @ts-ignore - import.meta may not exist in Next
+        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
+    } catch {
+        return undefined;
+    }
+}
 
-const HA_HOST = process.env.NEXT_PUBLIC_HA_URL; // e.g. homeassistant.local
-const HA_PORT = process.env.NEXT_PUBLIC_HA_PORT; // e.g. 8123
+const HA_HOST = getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
+const HA_PORT = getImportMetaEnv("VITE_HA_PORT") || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT; // e.g. 8123
 const HA_HTTP_URL = `http://${HA_HOST}:${HA_PORT}`;
 
 // OAuth2 app credentials (must match Home Assistant config)
-const CLIENT_ID = process.env.NEXT_PUBLIC_HA_CLIENT_ID!;
-const REDIRECT_URI = process.env.NEXT_PUBLIC_HA_REDIRECT_URI!;
+const CLIENT_ID = getImportMetaEnv("VITE_HA_CLIENT_ID") ?? process.env.NEXT_PUBLIC_HA_CLIENT_ID!;
+const REDIRECT_URI = getImportMetaEnv("VITE_HA_REDIRECT_URI") ?? process.env.NEXT_PUBLIC_HA_REDIRECT_URI!;
 
 // Optional override: if set, skip OAuth2
-const LONG_LIVED_TOKEN = process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
+const LONG_LIVED_TOKEN = getImportMetaEnv("VITE_HA_LONG_LIVED_TOKEN") || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
 
 const STORAGE_KEY = "ha_tokens";
 

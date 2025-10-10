@@ -59,7 +59,8 @@ NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
 In layout.tsx, wrap children with `HomeAssistantProvider`.\
 This allows pages with the applied layout access the global websocket connection.
 ```jsx
-return (
+import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
+return (    
     <div className="flex flex-col min-h-screen">
         <HomeAssistantProvider>{children}</HomeAssistantProvider>
     </div>
