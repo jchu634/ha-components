@@ -9,7 +9,9 @@
       "title": "Type Generator",
       "description": "Script to generate types",
       "devDependencies": [
-        "tsx"
+        "tsx",
+        "ws",
+        "dotenv"
       ],
       "files": [
         {

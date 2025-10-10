@@ -5,20 +5,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function getImportMetaEnv(key: string): string | undefined {
-    try {
-        // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
-}
-
-const HA_URL = getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
-const HA_PORT = getImportMetaEnv("VITE_HA_PORT") || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT; // e.g. 8123
+const HA_URL = process.env.VITE_HA_URL || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
+const HA_PORT = process.env.VITE_HA_PORT || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT; // e.g. 8123
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
 const FRAMEWORK_AUTH_TOKEN =
-    getImportMetaEnv("VITE_API_URL") || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN || process.env.LONG_LIVED_TOKEN;
+    process.env.VITE_HA_LONG_LIVED_TOKEN || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN || process.env.LONG_LIVED_TOKEN;
 
 if (!HA_URL || (!AUTH_TOKEN && !FRAMEWORK_AUTH_TOKEN)) {
     console.error("Missing HA_URL or AUTH_TOKEN in .env");
