@@ -58,8 +58,7 @@
       "files": [
         {
           "path": "components/ha-ui/camera.tsx",
-          "type": "registry:component",
-          "target": "registry:component"
+          "type": "registry:component"
         },
         {
           "path": "lib/video-rtc.tsx",
@@ -142,18 +141,18 @@
         },
         {
           "path": "proxy/uv.lock",
-          "type": "registry:file",
-          "target": "proxy/uv.lock"
+          "target": "proxy/uv.lock",
+          "type": "registry:file"
         },
         {
           "path": "proxy/requirements.txt",
-          "type": "registry:file",
-          "target": "proxy/requirements.txt"
+          "target": "proxy/requirements.txt",
+          "type": "registry:file"
         },
         {
           "path": "proxy/README.md",
-          "type": "registry:file",
-          "target": "proxy/README.md"
+          "target": "proxy/README.md",
+          "type": "registry:file"
         }
       ]
     },
@@ -166,6 +165,7 @@
       "files": [
         {
           "path": "components/ha-ui/ui/popover.tsx",
+          "target": "components/ha-ui/ui/popover.tsx",
           "type": "registry:component"
         }
       ]
@@ -179,6 +179,7 @@
       "files": [
         {
           "path": "components/ha-ui/ui/slider.tsx",
+          "target": "components/ha-ui/ui/slider.tsx",
           "type": "registry:component"
         }
       ]
@@ -192,6 +193,7 @@
       "files": [
         {
           "path": "components/ha-ui/ui/switch.tsx",
+          "target": "components/ha-ui/ui/switch.tsx",
           "type": "registry:component"
         }
       ]
