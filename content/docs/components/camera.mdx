@@ -87,67 +87,69 @@ e.g. `camera.reolink_doorbell_high`
 - Sets the Video Player aspect ratio (1/1, 16/9, 4/3)
 - Defaults to 16/9
 
-<Accordions type="single">
-  <Accordion title="Advanced">
-  ### `wsURL` (Optional)
-  e.g. `"ws://192.168.100.100:9999/proxy"`
-  - An websocket URL used to override the default HA Go2RTC server url
-  - If used, set `entity` to a placeholder value
+## Advanced API (Props)
+### `wsURL` (Optional)
+e.g. `"ws://192.168.100.100:9999/proxy"`
+- An websocket URL used to override the default HA Go2RTC server url
+- If used, set `entity` to a placeholder value
 
-  ### `proxyURL` (Optional)
-  <Callout >
-    Intended for use in development
-  </Callout>
-  - e.g. `"ws://localhost:8080/proxy"`
-  - If set the component will utilise a proxy server for the websocket connection
-  
-  A simple Python proxy server for development is provided.
-  ### Installation
-  <Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
-    <Tab value="npm">    
-      ```bash
-      npx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
-      ```
-    </Tab>
-    <Tab value="pnpm">
-      ```bash
-      pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
-      ```
-    </Tab>
-    <Tab value="yarn">
-      ```bash
-      yarn shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
-      ```
-    </Tab>
-    <Tab value="bun">
-      ```bash
-      bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
-      ```
-    </Tab>
-    <Tab value="Manual">
-        TODO COMPLETE ME
-    </Tab>
-  </Tabs>
+### `proxyURL` (Optional)
+<Callout >
+  Intended for use in development
+</Callout>
+- e.g. `"ws://localhost:8080/proxy"`
+- If set the component will utilise a proxy server for the websocket connection
 
-  To run it:
-  1. Install the dependencies
-      - Either using uv given the [pyproject.toml](https://github.com/jchu634/ha-components/blob/main/pyproject.toml)
-      - or you can install the dependencies manually:
-      ```dotenv
-        fastapi>=0.116.1  
-        uvicorn>=0.35.0
-        websockets>=15.0.1
-      ```
-  2. Then run the script using
-      ``` bash
-        # Run via UV
-        uv run uvicorn proxy_server:app --host 0.0.0.0 --port 8080
+A simple Python proxy server for development is provided.
+#### Installation
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/proxy.json
+    ```
+  </Tab>
+  <Tab value="Manual">
+      TODO COMPLETE ME
+  </Tab>
+</Tabs>
+To run it:
+1. Install the dependencies
+    - Either using uv given the [pyproject.toml](https://github.com/jchu634/ha-components/blob/main/pyproject.toml)
+    - or you can install the dependencies manually:
+    ```dotenv
+      fastapi>=0.116.1  
+      uvicorn>=0.35.0
+      websockets>=15.0.1
+    ```
+2. Then run the script using
+    ``` bash
+      # Run via UV
+      uv run uvicorn proxy_server:app --host 0.0.0.0 --port 8080
 
-        # Run via python
-        python -m uvicorn proxy_server:app --host 0.0.0.0 --port 8080
-      ```
-  </Accordion>
-</Accordions>
+      # Run via python
+      python -m uvicorn proxy_server:app --host 0.0.0.0 --port 8080
+    ```
+
+### `externalCameraSource` (Optional)
+A bypass from internal `useWebRTCVideo` negotiation.\
+Expects an `WebRTCVideo` from `useWebRTCVideo`.
+
+
 
 ## Common Errors
 ### `HTTP/1.1 403 Forbidden` or `NS_ERROR_WEBSOCKET_CONNECTION_REFUSED`
