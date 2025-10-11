@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Slider } from "@/components/ha-ui/ui/slider";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ha-ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ha-ui/ui/accordion";
 import { RgbColorPicker } from "react-colorful";
 import { PowerIcon, SettingsIcon, ThermometerIcon, PaintbrushVerticalIcon, XIcon } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "@/components/ha-ui/ui/popover";
