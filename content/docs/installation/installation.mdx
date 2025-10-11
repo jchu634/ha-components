@@ -74,10 +74,10 @@ return (
 ## Step 4: Setup Type Generation
 HA Components includes a script automates entity name fetching.
 
-#### Optional: AUTH_TOKEN
-If you set up OAuth instead of a long-lived token in step 3:\
-Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
-e.g. `AUTH_TOKEN=VzHfnKDwMc...`
+<Callout>
+  If your source code uses the /src folder structure,\
+  You will need to edit the path in the script itself and in the command in step 2
+</Callout>
 
 - **Step 1:** Install Script
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
@@ -120,6 +120,11 @@ Add the script into `package.json`
 
 #### Misc
 To regenerate your entity types, rerun Step 2
+
+#### Optional: AUTH_TOKEN
+If you set up OAuth instead of a long-lived token in step 3:\
+Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
+e.g. `AUTH_TOKEN=VzHfnKDwMc...`
 
 ## Step 5: Add your components:
 You can now start adding components to your project

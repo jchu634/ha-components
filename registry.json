@@ -9,7 +9,9 @@
       "title": "Type Generator",
       "description": "Script to generate types",
       "devDependencies": [
-        "tsx"
+        "tsx",
+        "ws",
+        "dotenv"
       ],
       "files": [
         {
@@ -128,15 +130,17 @@
       "files": [
         {
           "path": "proxy/.python-version",
-          "type": "registry:file",
-          "target": "proxy/.python-version"
+          "target": "proxy/.python-version",
+          "type": "registry:file"
         },
         {
           "path": "proxy/proxy_server.py",
+          "target": "proxy/proxy_server.py",
           "type": "registry:lib"
         },
         {
           "path": "proxy/pyproject.toml",
+          "target": "proxy/pyproject.toml",
           "type": "registry:lib"
         },
         {
