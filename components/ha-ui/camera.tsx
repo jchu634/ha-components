@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import {
     MediaController,
     MediaControlBar,
@@ -76,6 +77,21 @@ export function Camera({
             video: { autoPlay: true, muted: true, controls: false, tabIndex: -1 },
         });
 
+    const localVideoRef = useRef<HTMLVideoElement | null>(null);
+
+    useEffect(() => {
+        if (externalCameraSource?.mediaStream && localVideoRef.current) {
+            localVideoRef.current.srcObject = externalCameraSource.mediaStream;
+        } else if (localVideoRef.current && !externalCameraSource?.mediaStream) {
+            localVideoRef.current.srcObject = null;
+        }
+    }, [externalCameraSource?.mediaStream, externalCameraSource]);
+
+    // Avoid using the hook-provided `ref` when an external source is used to prevent multiple
+    // video elements from sharing the same ref object.
+    const baseVideoProps = camera.videoProps || {};
+    const { ref: forwardedRef, ...restVideoProps } = baseVideoProps as any;
+
     const aspectRatioMap: Record<AspectRatio, string> = {
         "1/1": "aspect-square",
         "16/9": "aspect-video",
@@ -84,7 +100,12 @@ export function Camera({
 
     return (
         <MediaController className="h-full">
-            <video slot="media" {...camera.videoProps} className={aspectRatioMap[aspectRatio]} />
+            <video
+                slot="media"
+                {...restVideoProps}
+                ref={externalCameraSource ? localVideoRef : forwardedRef}
+                className={aspectRatioMap[aspectRatio]}
+            />
 
             {!disableControls && (
                 <MediaControlBar className="flex w-full justify-between bg-black px-4">

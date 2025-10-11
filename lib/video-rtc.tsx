@@ -37,6 +37,12 @@ export interface WebRTCVideo {
     connectionMode: WebRTCMode;
     error: Error | null;
     retryCount: number;
+    /**
+     * The MediaStream received from the remote peer (if available).
+     * Exposed so callers can directly assign it to another video element
+     * (e.g. to instantly switch displayed feed without a new WebRTC negotiation).
+     */
+    mediaStream: MediaStream | null;
 }
 
 const DEFAULT_PEERCONNECTION_CONFIG: RTCConfiguration = {
@@ -58,6 +64,7 @@ export function useWebRTCVideo({
     const [connectionMode, setConnectionMode] = useState<WebRTCMode>("none");
     const [error, setError] = useState<Error | null>(null);
     const [retryCount, setRetryCount] = useState(0);
+    const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
 
     const wsRef = useRef<WebSocket | null>(null);
     const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -76,7 +83,7 @@ export function useWebRTCVideo({
         onError?.(err);
     };
 
-    const cleanup = () => {
+    const cleanup = useCallback(() => {
         if (retryTimer.current) {
             clearTimeout(retryTimer.current);
             retryTimer.current = null;
@@ -86,16 +93,26 @@ export function useWebRTCVideo({
             timeoutTimer.current = null;
         }
         if (wsRef.current) {
-            wsRef.current.close();
+            try {
+                wsRef.current.close();
+            } catch {
+                /* ignore */
+            }
             wsRef.current = null;
         }
         if (peerConnectionRef.current) {
-            peerConnectionRef.current.close();
+            try {
+                peerConnectionRef.current.close();
+            } catch {
+                /* ignore */
+            }
             peerConnectionRef.current = null;
         }
-    };
+        // clear the exposed media stream reference so consumers know the stream is gone
+        setMediaStream(null);
+    }, []);
 
-    const scheduleRetry = () => {
+    const scheduleRetry = useCallback(() => {
         if (maxRetryAttempts !== -1 && retryCount >= maxRetryAttempts) {
             fail(new Error("[useWebRTCVideo] Max retry attempts reached, stopping."));
             return;
@@ -106,10 +123,12 @@ export function useWebRTCVideo({
                 connect();
             }, retryDelay);
         }
-    };
+    }, [maxRetryAttempts, retryCount, retryDelay]);
 
+    // declare connect separately so scheduleRetry/connect can reference each other
     const connect = useCallback(() => {
-        cleanup(); // ensure clean state
+        // ensure prior connections are cleaned
+        cleanup();
 
         let wsUrl = wsSrc;
         if (proxy) {
@@ -140,10 +159,18 @@ export function useWebRTCVideo({
             }
 
             peerConnection.ontrack = (ev) => {
+                // prefer to use the exact remote stream object so it can be shared
+                const remoteStream =
+                    ev.streams && ev.streams.length > 0 ? ev.streams[0] : new MediaStream(ev.track ? [ev.track] : []);
+                // assign to video element if present
                 if (videoElementRef.current) {
-                    videoElementRef.current.srcObject = new MediaStream(ev.streams[0].getTracks());
+                    // set srcObject to the same MediaStream instance we expose
+                    videoElementRef.current.srcObject = remoteStream;
                 }
-                // ✅ clear connection timeout once we get tracks
+                // expose the stream to the hook consumer
+                setMediaStream(remoteStream);
+
+                // clear connection timeout once we get tracks
                 if (timeoutTimer.current) {
                     clearTimeout(timeoutTimer.current);
                     timeoutTimer.current = null;
@@ -163,21 +190,25 @@ export function useWebRTCVideo({
             };
 
             ws.onmessage = (ev) => {
-                const msg = JSON.parse(ev.data);
-                if (msg.type === "webrtc/answer") {
-                    peerConnection
-                        .setRemoteDescription({
-                            type: "answer",
-                            sdp: msg.value,
-                        })
-                        .catch(fail);
-                } else if (msg.type === "webrtc/candidate") {
-                    peerConnection
-                        .addIceCandidate({
-                            candidate: msg.value,
-                            sdpMid: "0",
-                        })
-                        .catch(fail);
+                try {
+                    const msg = JSON.parse(ev.data);
+                    if (msg.type === "webrtc/answer") {
+                        peerConnection
+                            .setRemoteDescription({
+                                type: "answer",
+                                sdp: msg.value,
+                            })
+                            .catch(fail);
+                    } else if (msg.type === "webrtc/candidate") {
+                        peerConnection
+                            .addIceCandidate({
+                                candidate: msg.value,
+                                sdpMid: "0",
+                            })
+                            .catch(fail);
+                    }
+                } catch (err) {
+                    console.warn("[useWebRTCVideo] failed to parse ws message", err);
                 }
             };
 
@@ -196,7 +227,7 @@ export function useWebRTCVideo({
                 })
                 .catch(fail);
 
-            // ✅ start connection timeout if enabled
+            // start connection timeout if enabled
             if (connectionTimeout > 0) {
                 timeoutTimer.current = window.setTimeout(() => {
                     console.warn("[useWebRTCVideo] connection timeout, retrying...");
@@ -213,11 +244,11 @@ export function useWebRTCVideo({
         });
 
         ws.addEventListener("error", () => {
-            console.warn("Websocket Error");
+            console.warn("[useWebRTCVideo] WebSocket error, retrying...");
             cleanup();
             scheduleRetry();
         });
-    }, [wsSrc, proxy, media, retryDelay, connectionTimeout, maxRetryAttempts, cleanup]);
+    }, [wsSrc, proxy, media, retryDelay, connectionTimeout, maxRetryAttempts, cleanup, scheduleRetry]);
 
     useEffect(() => {
         setRetryCount(0);
@@ -231,6 +262,7 @@ export function useWebRTCVideo({
         connectionMode,
         error,
         retryCount,
+        mediaStream,
         videoProps: {
             ref: videoElementRef,
             autoPlay: true,
