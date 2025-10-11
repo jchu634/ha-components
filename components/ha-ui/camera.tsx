@@ -44,6 +44,15 @@ export interface CameraFeedProps {
     externalCameraSource?: WebRTCVideo;
 }
 
+function getImportMetaEnv(key: string): string | undefined {
+    try {
+        // @ts-ignore - import.meta may not exist in Next
+        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
 export function Camera({
     entity,
     wsURL,
@@ -58,7 +67,9 @@ export function Camera({
     const camera =
         externalCameraSource ||
         useWebRTCVideo({
-            wsSrc: wsURL || `ws://${process.env.NEXT_PUBLIC_HA_URL}:11984/api/ws?src=${entity}`,
+            wsSrc:
+                wsURL ||
+                `ws://${getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL}:11984/api/ws?src=${entity}`,
             ...(proxyURL ? { proxy: proxyURL } : {}),
             retryDelay: 5000, // retry every 5s
             maxRetryAttempts: 10,
