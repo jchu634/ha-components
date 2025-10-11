@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Slider } from "@/components/ha-ui/ui/slider";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ha-ui/accordion";
 import { RgbColorPicker } from "react-colorful";
 import { PowerIcon, SettingsIcon, ThermometerIcon, PaintbrushVerticalIcon, XIcon } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent, PopoverClose } from "@/components/ha-ui/ui/popover";
@@ -60,10 +60,10 @@ function DefaultVariant(props: LightVariantProps) {
 
                     setActiveMode("color_temp");
                 }}
-                className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                className={activeMode !== "color_temp" ? "pointer-events-none opacity-40" : ""}
             />
 
-            <div className="space-y-4 flex flex-col justify-end">
+            <div className="flex flex-col justify-end space-y-4">
                 {rgbColor && (
                     <div className="h-[calc(100%-3.25rem)]">
                         <RgbColorPicker
@@ -78,11 +78,11 @@ function DefaultVariant(props: LightVariantProps) {
                                 setActiveMode("rgb");
                             }}
                             style={{ height: "100%" }}
-                            className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                            className={activeMode !== "rgb" ? "pointer-events-none opacity-40" : ""}
                         />
                     </div>
                 )}
-                <div className="w-full flex justify-between">
+                <div className="flex w-full justify-between">
                     <Button size="icon">
                         <PowerIcon />
                     </Button>
@@ -104,7 +104,7 @@ function HiddenAccordionVariant(props: LightVariantProps) {
     return (
         <Accordion type="single" collapsible orientation="horizontal" className="h-100%">
             <AccordionItem value="item-1" orientation="horizontal" className="h-full">
-                <div className="flex flex-col h-full justify-between">
+                <div className="flex h-full flex-col justify-between">
                     <AccordionTrigger orientation="horizontal"></AccordionTrigger>
                     <Button size="icon">
                         <PowerIcon />
@@ -134,10 +134,10 @@ function HiddenAccordionVariant(props: LightVariantProps) {
 
                                 setActiveMode("color_temp");
                             }}
-                            className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                            className={activeMode !== "color_temp" ? "pointer-events-none opacity-40" : ""}
                         />
 
-                        <div className="space-y-4 flex flex-col justify-end">
+                        <div className="flex flex-col justify-end space-y-4">
                             {rgbColor && (
                                 <div className="h-[calc(100%-3.25rem)]">
                                     <RgbColorPicker
@@ -152,11 +152,11 @@ function HiddenAccordionVariant(props: LightVariantProps) {
                                             setActiveMode("rgb");
                                         }}
                                         style={{ height: "100%" }}
-                                        className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                                        className={activeMode !== "rgb" ? "pointer-events-none opacity-40" : ""}
                                     />
                                 </div>
                             )}
-                            <div className="w-full flex justify-between">
+                            <div className="flex w-full justify-between">
                                 <Button
                                     onClick={() => setActiveMode(activeMode === "color_temp" ? "rgb" : "color_temp")}
                                     className="w-full"
@@ -179,7 +179,7 @@ function PopupVariant(props: LightVariantProps) {
     const maxRGB = [255, 254, 250];
 
     return (
-        <div className="h-100% flex-col flex justify-between">
+        <div className="h-100% flex flex-col justify-between">
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button size="icon" variant="secondary">
@@ -193,7 +193,7 @@ function PopupVariant(props: LightVariantProps) {
                     side="bottom"
                     sideOffset={0}
                 >
-                    <div className="flex justify-between items-center py-2 pr-1">
+                    <div className="flex items-center justify-between py-2 pr-1">
                         <h3>Light Controls</h3>
                         <PopoverClose asChild>
                             <Button size="icon" variant="ghost" className="group">
@@ -224,7 +224,7 @@ function PopupVariant(props: LightVariantProps) {
 
                                     setActiveMode("color_temp");
                                 }}
-                                className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                                className={activeMode !== "color_temp" ? "pointer-events-none opacity-40" : ""}
                             />
                         </div>
 
@@ -243,11 +243,11 @@ function PopupVariant(props: LightVariantProps) {
                                             setActiveMode("rgb");
                                         }}
                                         style={{ height: "100%" }}
-                                        className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                                        className={activeMode !== "rgb" ? "pointer-events-none opacity-40" : ""}
                                     />
                                 </div>
                             )}
-                            <div className="w-full flex justify-end">
+                            <div className="flex w-full justify-end">
                                 <Button
                                     onClick={() => setActiveMode(activeMode === "color_temp" ? "rgb" : "color_temp")}
                                 >
@@ -273,7 +273,7 @@ function SeperatePopupVariant(props: LightVariantProps) {
     const maxRGB = [255, 254, 250];
 
     return (
-        <div className="h-100% flex-col flex justify-between">
+        <div className="h-100% flex flex-col justify-between">
             <Popover
                 open={openColourTemp}
                 onOpenChange={(open) => {
@@ -288,12 +288,12 @@ function SeperatePopupVariant(props: LightVariantProps) {
                 </PopoverTrigger>
 
                 <PopoverContent
-                    className="w-fit translate-y-[-40%] pt-1 px-1"
+                    className="w-fit translate-y-[-40%] px-1 pt-1"
                     align="center"
                     side="bottom"
                     sideOffset={0}
                 >
-                    <div className="flex justify-end w-full">
+                    <div className="flex w-full justify-end">
                         <PopoverClose asChild>
                             <Button size="icon" variant="ghost" className="group">
                                 <XIcon className="size-4 transition-transform duration-200 group-hover:scale-125" />
@@ -323,7 +323,7 @@ function SeperatePopupVariant(props: LightVariantProps) {
 
                                 setActiveMode("color_temp");
                             }}
-                            className={activeMode !== "color_temp" ? "opacity-40 pointer-events-none" : ""}
+                            className={activeMode !== "color_temp" ? "pointer-events-none opacity-40" : ""}
                         />
                     </div>
                 </PopoverContent>
@@ -344,12 +344,12 @@ function SeperatePopupVariant(props: LightVariantProps) {
                 </PopoverTrigger>
 
                 <PopoverContent
-                    className="w-fit translate-y-[-50%] pt-1 px-1"
+                    className="w-fit translate-y-[-50%] px-1 pt-1"
                     align="center"
                     side="bottom"
                     sideOffset={0}
                 >
-                    <div className="flex justify-end w-full">
+                    <div className="flex w-full justify-end">
                         <PopoverClose asChild>
                             <Button size="icon" variant="ghost" className="group">
                                 <XIcon className="size-4 transition-transform duration-200 group-hover:scale-125" />
@@ -370,7 +370,7 @@ function SeperatePopupVariant(props: LightVariantProps) {
                                     setRgbColor(rgb);
                                 }}
                                 style={{ height: "100%" }}
-                                className={activeMode !== "rgb" ? "opacity-40 pointer-events-none" : ""}
+                                className={activeMode !== "rgb" ? "pointer-events-none opacity-40" : ""}
                             />
                         </div>
                     )}
