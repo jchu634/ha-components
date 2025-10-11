@@ -16,8 +16,8 @@
       "files": [
         {
           "path": "scripts/generate_entities.ts",
-          "type": "registry:file",
-          "target": "scripts/generate_entities.ts"
+          "target": "scripts/generate_entities.ts",
+          "type": "registry:file"
         }
       ]
     },
@@ -29,8 +29,8 @@
       "files": [
         {
           "path": "components/ha-ui/auth/authCallback.tsx",
-          "type": "registry:page",
-          "target": "components/ha-ui/auth/authCallback.tsx"
+          "target": "components/ha-ui/auth/authCallback.tsx",
+          "type": "registry:page"
         },
         {
           "path": "providers/HomeAssistantProvider.tsx",
@@ -60,6 +60,7 @@
       "files": [
         {
           "path": "components/ha-ui/camera.tsx",
+          "target": "components/ha-ui/camera.tsx",
           "type": "registry:component"
         },
         {
@@ -80,6 +81,7 @@
       "files": [
         {
           "path": "components/ha-ui/trigger.tsx",
+          "target": "components/ha-ui/trigger.tsx",
           "type": "registry:component"
         }
       ]
@@ -96,6 +98,7 @@
       "files": [
         {
           "path": "components/ha-ui/toggle.tsx",
+          "target": "components/ha-ui/toggle.tsx",
           "type": "registry:component"
         }
       ]
@@ -119,6 +122,7 @@
       "files": [
         {
           "path": "components/ha-ui/light.tsx",
+          "target": "components/ha-ui/light.tsx",
           "type": "registry:component"
         }
       ]
