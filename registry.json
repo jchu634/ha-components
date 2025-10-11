@@ -111,6 +111,7 @@
       ],
       "registryDependencies": [
         "button",
+        "@ha-components/accordion",
         "@ha-components/slider",
         "@ha-components/popover",
         "@ha-components/auth"
@@ -157,6 +158,21 @@
           "path": "proxy/README.md",
           "target": "proxy/README.md",
           "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "dependencies": [
+        "@radix-ui/react-accordion",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/ui/accordion.tsx",
+          "target": "components/ha-ui/ui/accordion.tsx",
+          "type": "registry:component"
         }
       ]
     },
