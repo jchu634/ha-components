@@ -137,100 +137,93 @@ export function Weather({
         };
     }, [entity, forecastType, refreshIntervalMinutes]);
     return (
-        <div className="flex space-x-4">
-            <div className="flex space-x-4">
-                <div className="flex flex-col space-y-4">
-                    <div className="flex w-full justify-between">
-                        {forecasts && (
-                            <div className="flex-col">
-                                <div className="flex w-full space-x-2">
-                                    <p>
-                                        {Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
-                                            new Date(forecasts[0].datetime),
-                                        )}
-                                    </p>
-                                    <div className="flex">
-                                        <WeatherIcon
-                                            condition={forecasts[0].condition}
-                                            className="size-6"
-                                        ></WeatherIcon>
-                                        <p> ({forecasts[0].condition})</p>
-                                    </div>
-                                </div>
-                                {OptionalFeatures?.includes("humidity") && (
-                                    <div className="flex">
-                                        <p>Humidity: {forecasts[0].humidity}</p>
-                                    </div>
+        <div className="flex w-fit flex-col space-y-4 space-x-4 p-4">
+            <div className="flex w-full justify-between">
+                {forecasts && (
+                    <div className="flex-col">
+                        <div className="flex w-full space-x-2">
+                            <p>
+                                {Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+                                    new Date(forecasts[0].datetime),
                                 )}
-                                {OptionalFeatures?.includes("rain_chance") && (
-                                    <div className="flex">
-                                        <p>Chance of rain: {forecasts[0].precipitation_probability}%</p>
-                                    </div>
-                                )}
-                                {OptionalFeatures?.includes("temperature") && (
-                                    <div className="flex">
-                                        <p>
-                                            Temperature: {forecasts[0].temperature}
-                                            {forecasts[0].templow && <> ({forecasts[0].templow})</>}
-                                        </p>
-                                    </div>
-                                )}
-                                {OptionalFeatures?.includes("wind_speed") && (
-                                    // TODO Automatically grab wind units (Current assumes it is hm/h)
-                                    <div className="flex">
-                                        <p>Wind Speed: {forecasts[0].wind_speed}m/s</p>
-                                    </div>
-                                )}
+                            </p>
+                            <div className="flex items-center">
+                                <WeatherIcon condition={forecasts[0].condition} className="size-6"></WeatherIcon>
+                                <p> ({forecasts[0].condition})</p>
+                            </div>
+                        </div>
+                        {OptionalFeatures?.includes("humidity") && (
+                            <div className="flex">
+                                <p>Humidity: {forecasts[0].humidity}</p>
                             </div>
                         )}
-                        <Button
-                            size="icon"
-                            onClick={() => {
-                                fetchForecast(setForecasts, entity, forecastType);
-                            }}
-                        >
-                            <RefreshCcwIcon />
-                        </Button>
+                        {OptionalFeatures?.includes("rain_chance") && (
+                            <div className="flex">
+                                <p>Chance of rain: {forecasts[0].precipitation_probability}%</p>
+                            </div>
+                        )}
+                        {OptionalFeatures?.includes("temperature") && (
+                            <div className="flex">
+                                <p>
+                                    Temperature: {forecasts[0].temperature}
+                                    {forecasts[0].templow && <> ({forecasts[0].templow})</>}
+                                </p>
+                            </div>
+                        )}
+                        {OptionalFeatures?.includes("wind_speed") && (
+                            // TODO Automatically grab wind units (Current assumes it is hm/h)
+                            <div className="flex">
+                                <p>Wind Speed: {forecasts[0].wind_speed}m/s</p>
+                            </div>
+                        )}
                     </div>
-
-                    {forecasts && (
-                        <div className="bg-accent flex rounded-lg p-2">
-                            {forecasts.map((forecast: any, index: number) => {
-                                if (index === 0 || index > maximumForecastShown) return null;
-                                return (
-                                    <div
-                                        key={index}
-                                        className={cn(
-                                            "flex flex-col items-center",
-                                            forecastType === "daily" && "w-10", // e.g. slightly wider for daily
-                                            forecastType === "hourly" && "w-20", // narrower for hourly
-                                        )}
-                                    >
-                                        {forecastType == "daily" && (
-                                            <p>
-                                                {Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
-                                                    new Date(forecast.datetime),
-                                                )}
-                                            </p>
-                                        )}
-                                        {forecastType == "hourly" && (
-                                            <p>
-                                                {new Intl.DateTimeFormat("en-US", {
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                    hour12: true,
-                                                }).format(new Date(forecast.datetime))}
-                                            </p>
-                                        )}
-
-                                        <WeatherIcon condition={forecast.condition} className="size-8"></WeatherIcon>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
+                )}
+                <Button
+                    size="icon"
+                    onClick={() => {
+                        fetchForecast(setForecasts, entity, forecastType);
+                    }}
+                >
+                    <RefreshCcwIcon />
+                </Button>
             </div>
+
+            {forecasts && (
+                <div className="bg-accent flex rounded-lg p-2">
+                    {forecasts.map((forecast: any, index: number) => {
+                        if (index === 0 || index > maximumForecastShown) return null;
+                        return (
+                            <div
+                                key={index}
+                                className={cn(
+                                    "flex flex-col items-center",
+                                    forecastType === "daily" && "w-10", // e.g. slightly wider for daily
+                                    forecastType === "hourly" && "w-20", // narrower for hourly
+                                )}
+                            >
+                                {forecastType == "daily" && (
+                                    <p>
+                                        {Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
+                                            new Date(forecast.datetime),
+                                        )}
+                                    </p>
+                                )}
+                                {forecastType == "hourly" && (
+                                    <p>
+                                        {new Intl.DateTimeFormat("en-US", {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                        }).format(new Date(forecast.datetime))}
+                                    </p>
+                                )}
+
+                                <WeatherIcon condition={forecast.condition} className="size-8"></WeatherIcon>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
