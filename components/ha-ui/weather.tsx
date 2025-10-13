@@ -25,6 +25,8 @@ import { RefreshCcwIcon } from "lucide-react";
 import type { EntityId } from "@/types/entity-types";
 import { haWebSocket } from "@/lib/haWebsocket";
 import { cn } from "@/lib/utils";
+
+export type OptionalWeatherFeatures = "rain_chance" | "temperature" | "wind_speed" | "humidity";
 export interface WeatherProps {
     /**
      * HomeAssistant Entity Name
@@ -48,6 +50,11 @@ export interface WeatherProps {
      * Default: 7
      */
     maximumForecastShown?: number;
+    /**
+     * Optional Stats to show
+     * e.g. ["wind_speed", "temperature"]
+     */
+    OptionalFeatures?: OptionalWeatherFeatures[];
 }
 
 // ---------- Utility Functions ----------
@@ -107,6 +114,7 @@ export function Weather({
     forecastType = "daily",
     refreshIntervalMinutes = 60,
     maximumForecastShown = 7,
+    OptionalFeatures,
 }: WeatherProps) {
     const [forecasts, setForecasts] = useState<any[] | null>(null);
 
@@ -149,13 +157,30 @@ export function Weather({
                                         <p> ({forecasts[0].condition})</p>
                                     </div>
                                 </div>
-
-                                <div className="flex">
-                                    <p>Humidity: {forecasts[0].humidity}</p>
-                                </div>
-                                <div className="flex">
-                                    <p>Chance of rain: {forecasts[0].precipitation_probability}%</p>
-                                </div>
+                                {OptionalFeatures?.includes("humidity") && (
+                                    <div className="flex">
+                                        <p>Humidity: {forecasts[0].humidity}</p>
+                                    </div>
+                                )}
+                                {OptionalFeatures?.includes("rain_chance") && (
+                                    <div className="flex">
+                                        <p>Chance of rain: {forecasts[0].precipitation_probability}%</p>
+                                    </div>
+                                )}
+                                {OptionalFeatures?.includes("temperature") && (
+                                    <div className="flex">
+                                        <p>
+                                            Temperature: {forecasts[0].temperature}
+                                            {forecasts[0].templow && <> ({forecasts[0].templow})</>}
+                                        </p>
+                                    </div>
+                                )}
+                                {OptionalFeatures?.includes("wind_speed") && (
+                                    // TODO Automatically grab wind units (Current assumes it is hm/h)
+                                    <div className="flex">
+                                        <p>Wind Speed: {forecasts[0].wind_speed}m/s</p>
+                                    </div>
+                                )}
                             </div>
                         )}
                         <Button
