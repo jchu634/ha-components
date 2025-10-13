@@ -178,6 +178,66 @@ class HAWebSocket {
             }),
         );
     }
+    callServiceWithResponse(domain: string, service: string, serviceData: Record<string, any> = {}): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const id = ++this.msgId;
+
+            const handleMessage = (event: MessageEvent) => {
+                const msg = JSON.parse(event.data);
+                if (msg.id === id && msg.type === "result") {
+                    this.ws?.removeEventListener("message", handleMessage);
+                    if (msg.success) {
+                        // The response will be in msg.result
+                        resolve(msg.result);
+                    } else {
+                        reject(msg.error || new Error("Service call failed"));
+                    }
+                }
+            };
+
+            this.ws?.addEventListener("message", handleMessage);
+
+            // According to HA API, set `return_response: true` to get a payload back.
+            this.ws?.send(
+                JSON.stringify({
+                    id,
+                    type: "call_service",
+                    domain,
+                    service,
+                    service_data: serviceData,
+                    return_response: true,
+                }),
+            );
+        });
+    }
+    fireEvent(eventType: string, eventData: Record<string, any> = {}): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const id = ++this.msgId;
+
+            const handleMessage = (event: MessageEvent) => {
+                const msg = JSON.parse(event.data);
+                if (msg.id === id && msg.type === "result") {
+                    this.ws?.removeEventListener("message", handleMessage);
+                    if (msg.success) {
+                        resolve();
+                    } else {
+                        reject(msg.error);
+                    }
+                }
+            };
+
+            this.ws?.addEventListener("message", handleMessage);
+
+            this.ws?.send(
+                JSON.stringify({
+                    id,
+                    type: "fire_event",
+                    event_type: eventType,
+                    event_data: eventData,
+                }),
+            );
+        });
+    }
 }
 
 export const haWebSocket = new HAWebSocket();
