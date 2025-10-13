@@ -1,0 +1,79 @@
+---
+title: Weather
+description: A Weather component
+---
+
+import WeatherPreview from "@/components/docs/weather-preview.tsx"
+import { Link } from "next/link"
+import { Button } from "@/components/ui/button";
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">    
+    <WeatherPreview OptionalFeatures={["humidity", "temperature"]}/>
+    
+  </Tab>
+  <Tab value="Code">
+    ```tsx lineNumbers
+    import { Weather } from "@/components/ha-ui/Weather";
+    <WeatherPreview entity="weather.forecast_home" OptionalFeatures={["humidity", "temperature"]}/>
+    ```
+  </Tab>
+</Tabs>
+
+## About
+This is a Weather forecast component.
+
+
+## Setup
+### Installation
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun', 'Manual']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/weather.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/weather.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/weather.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/weather.json
+    ```
+  </Tab>
+  <Tab value="Manual">
+      TODO COMPLETE ME
+  </Tab>
+</Tabs>
+
+## API (Props)
+### `entity`
+e.g. `weather.forecast_home`
+- A HA entity name
+
+### `forecastType` (Optional)
+- Which time period of forecast to show
+- Options: `daily`, `hourly`
+- Default: `daily`
+
+<Callout>
+Some weather entities in HA do not support some types of forecast
+</Callout>
+
+### `refreshIntervalMinutes` (Optional)
+- How often to recheck the forecast in minutes.
+- Defaults to 1 hour
+
+## `maximumForecastShown` (Optional)
+- How many future forecasts to visibly show. (Not inclusive of the current time's weather)
+- Defaults to `7`
+
+## `OptionalFeatures` (Optional)
+- Which optional statistics to show/hide.
+- Options: `rain_chance, temperature, wind_speed, humidity"`
