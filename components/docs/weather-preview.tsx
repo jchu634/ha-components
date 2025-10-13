@@ -164,7 +164,7 @@ export default function WeatherPreview({
     const now = new Date();
     return (
         <div className="not-prose flex w-fit flex-col space-y-4 space-x-4 p-4">
-            <div className="flex w-full">
+            <div className="flex w-full justify-between">
                 {forecasts && (
                     <div className="flex-col">
                         <div className="flex w-full items-center space-x-2">
