@@ -128,6 +128,26 @@
       ]
     },
     {
+      "name": "weather",
+      "type": "registry:block",
+      "title": "Simple Weather Component",
+      "dependencies": [
+        "@mdi/react",
+        "@mdi/js"
+      ],
+      "registryDependencies": [
+        "button",
+        "@ha-components/auth"
+      ],
+      "files": [
+        {
+          "path": "components/ha-ui/weather.tsx",
+          "target": "components/ha-ui/weather.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "proxy",
       "type": "registry:block",
       "title": "Python Websocket Proxy Server",
