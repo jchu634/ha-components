@@ -3,6 +3,7 @@ import CameraPreview from "@/components/docs/camera-preview";
 import TriggerPreview from "@/components/docs/trigger-preview";
 import LightPreview from "@/components/docs/light-preview";
 import TogglePreview from "@/components/docs/toggle-preview";
+import WeatherPreview from "@/components/docs/weather-preview";
 
 export default function Home() {
     return (
@@ -38,18 +39,35 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className="w-fit space-y-4">
-                <h3 className="text-xl font-bold tracking-tight">Light Control Component</h3>
-                <span className="w-100% border-foreground my-2 mb-4 block border" />
+            <div className="flex space-x-4">
+                <div className="w-fit space-y-4">
+                    <h3 className="text-xl font-bold tracking-tight">Light Control Component</h3>
+                    <span className="w-100% border-foreground my-2 mb-4 block border" />
 
-                <div className="space-x-8 lg:flex">
-                    <LightPreview />
-                    <span className="h-100% border-foreground mx-2 lg:border" />
-                    <LightPreview variant="Accordion" />
-                    <span className="h-100% border-foreground mx-2 lg:border" />
-                    <LightPreview variant="Popup" />
-                    <span className="h-100% border-foreground mx-2 lg:border" />
-                    <LightPreview variant="SeperatePopups" />
+                    <div className="space-x-8 lg:flex">
+                        <LightPreview />
+                        <span className="h-100% border-foreground mx-2 lg:border" />
+                        <LightPreview variant="Accordion" />
+                        <span className="h-100% border-foreground mx-2 lg:border" />
+                        <LightPreview variant="Popup" />
+                        <span className="h-100% border-foreground mx-2 lg:border" />
+                        <LightPreview variant="SeperatePopups" />
+                    </div>
+                </div>
+                <span className="h-100% border-foreground mx-2 lg:border" />
+                <div className="w-fit space-y-4">
+                    <h3 className="text-xl font-bold tracking-tight">Weather Component</h3>
+                    <span className="w-100% border-foreground my-2 mb-4 block border" />
+
+                    <div className="space-x-8 lg:flex">
+                        <WeatherPreview OptionalFeatures={["humidity", "wind_speed"]} />
+                        <span className="h-100% border-foreground mx-2 lg:border" />
+                        <WeatherPreview
+                            forecastType="hourly"
+                            maximumForecastShown={4}
+                            OptionalFeatures={["rain_chance", "temperature"]}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

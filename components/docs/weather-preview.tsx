@@ -34,7 +34,7 @@ interface WeatherProps {
     forecastType?: "daily" | "hourly"; // | "twice_daily";
 
     maximumForecastShown?: number;
-    OptionalFeatures?: OptionalWeatherFeatures;
+    OptionalFeatures?: OptionalWeatherFeatures[];
 }
 
 // ---------- Utility Functions ----------
@@ -73,7 +73,11 @@ function WeatherIcon({ condition, ...props }: any) {
             return <Icon path={mdiAlertCircleCheckOutline} {...props} />;
     }
 }
-export function Weather({ forecastType = "daily", maximumForecastShown = 7, OptionalFeatures }: WeatherProps) {
+export default function WeatherPreview({
+    forecastType = "daily",
+    maximumForecastShown = 7,
+    OptionalFeatures,
+}: WeatherProps) {
     const forecasts = [
         {
             condition: "windy",
@@ -92,7 +96,7 @@ export function Weather({ forecastType = "daily", maximumForecastShown = 7, Opti
             humidity: 42,
         },
         {
-            condition: "partly cloudy",
+            condition: "partlycloudy",
             precipitation_probability: 18,
             temperature: 20.1,
             templow: 14.9,
@@ -116,7 +120,7 @@ export function Weather({ forecastType = "daily", maximumForecastShown = 7, Opti
             humidity: 70,
         },
         {
-            condition: "foggy",
+            condition: "hail",
             precipitation_probability: 20,
             temperature: 14.5,
             templow: 11.8,
@@ -124,7 +128,7 @@ export function Weather({ forecastType = "daily", maximumForecastShown = 7, Opti
             humidity: 94,
         },
         {
-            condition: "sunny",
+            condition: "snowy",
             precipitation_probability: 3,
             temperature: 18.2,
             templow: 13.9,
@@ -132,7 +136,7 @@ export function Weather({ forecastType = "daily", maximumForecastShown = 7, Opti
             humidity: 45,
         },
         {
-            condition: "partly cloudy",
+            condition: "partlycloudy",
             precipitation_probability: 15,
             temperature: 20.0,
             templow: 15.2,
@@ -140,7 +144,7 @@ export function Weather({ forecastType = "daily", maximumForecastShown = 7, Opti
             humidity: 55,
         },
         {
-            condition: "rainy",
+            condition: "snowy",
             precipitation_probability: 63,
             temperature: 17.9,
             templow: 14.0,
