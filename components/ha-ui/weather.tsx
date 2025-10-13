@@ -19,40 +19,44 @@ import {
     mdiWeatherWindy,
     mdiWeatherWindyVariant,
     mdiAlertCircleCheckOutline,
-    mdiWaterOpacity,
 } from "@mdi/js";
 import { RefreshCcwIcon } from "lucide-react";
 
 import type { EntityId } from "@/types/entity-types";
 import { haWebSocket } from "@/lib/haWebsocket";
-
+import { cn } from "@/lib/utils";
 export interface WeatherProps {
     /**
      * HomeAssistant Entity Name
      */
     entity: EntityId;
     /**
-     * Forecast Type
+     * Forecast Type (Optional)
+     * Default: daily
+     *
      */
-    forecastType?: "daily" | "hourly" | "twice_daily";
+    forecastType?: "daily" | "hourly"; // | "twice_daily";
     /**
+     * Time (minutes) between refreshes (OPTIONAL)
      * How often to refresh data
+     * Default: 60mins
      */
-    refreshIntervalMinutes?: number; // default: 1 Hour
+    refreshIntervalMinutes?: number;
     /**
-     * Max amount of days/hours of the forecast to show.
+     * Max amount of days/hours of the forecast to show. (OPTIONAL)
      * NOT inclusive of the current day/hour
+     * Default: 7
      */
-    maximumDaysShown?: number;
+    maximumForecastShown?: number;
 }
 
 // ---------- Utility Functions ----------
 
-function fetchForecast(setForecasts: React.Dispatch<React.SetStateAction<any>>, entity: string) {
+function fetchForecast(setForecasts: React.Dispatch<React.SetStateAction<any>>, entity: string, forecastType: string) {
     haWebSocket
         .callServiceWithResponse("weather", "get_forecasts", {
             entity_id: entity,
-            type: "daily",
+            type: forecastType,
         })
         .then((response) => {
             setForecasts(response?.response?.[entity]?.forecast);
@@ -102,19 +106,19 @@ export function Weather({
     entity,
     forecastType = "daily",
     refreshIntervalMinutes = 60,
-    maximumDaysShown = 7,
+    maximumForecastShown = 7,
 }: WeatherProps) {
     const [forecasts, setForecasts] = useState<any[] | null>(null);
 
     useEffect(() => {
         // Fetch on mount
-        fetchForecast(setForecasts, entity);
+        fetchForecast(setForecasts, entity, forecastType);
 
         let timer: number | null = null;
         if (refreshIntervalMinutes > 0) {
             timer = window.setInterval(
                 () => {
-                    fetchForecast(setForecasts, entity);
+                    fetchForecast(setForecasts, entity, forecastType);
                 },
                 refreshIntervalMinutes * 1000 * 60,
             );
@@ -157,7 +161,7 @@ export function Weather({
                         <Button
                             size="icon"
                             onClick={() => {
-                                fetchForecast(setForecasts, entity);
+                                fetchForecast(setForecasts, entity, forecastType);
                             }}
                         >
                             <RefreshCcwIcon />
@@ -167,14 +171,32 @@ export function Weather({
                     {forecasts && (
                         <div className="bg-accent flex rounded-lg p-2">
                             {forecasts.map((forecast: any, index: number) => {
-                                if (index === 0 || index > maximumDaysShown) return null;
+                                if (index === 0 || index > maximumForecastShown) return null;
                                 return (
-                                    <div key={index} className="flex w-10 flex-col items-center">
-                                        <p>
-                                            {Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
-                                                new Date(forecast.datetime),
-                                            )}
-                                        </p>
+                                    <div
+                                        key={index}
+                                        className={cn(
+                                            "flex flex-col items-center",
+                                            forecastType === "daily" && "w-10", // e.g. slightly wider for daily
+                                            forecastType === "hourly" && "w-20", // narrower for hourly
+                                        )}
+                                    >
+                                        {forecastType == "daily" && (
+                                            <p>
+                                                {Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
+                                                    new Date(forecast.datetime),
+                                                )}
+                                            </p>
+                                        )}
+                                        {forecastType == "hourly" && (
+                                            <p>
+                                                {new Intl.DateTimeFormat("en-US", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true,
+                                                }).format(new Date(forecast.datetime))}
+                                            </p>
+                                        )}
 
                                         <WeatherIcon condition={forecast.condition} className="size-8"></WeatherIcon>
                                     </div>
