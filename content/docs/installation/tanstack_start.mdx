@@ -1,0 +1,191 @@
+---
+title: Tanstack Start Installation
+description: How to install HA-Components in your Tanstack Start app.
+---
+
+### Hosting Compatibility Note
+This cannot be hosted on HomeAssistant as that requires completely static builds with no SSR.
+
+## Step 1: Setup ShadCN
+HA-Components utilises many modified ShadCN components, hence this dependency.\
+Follow the instructions here: [https://ui.shadcn.com/docs/installation](https://ui.shadcn.com/docs/installation)
+
+## Step 2: Add HA-Components to your registry providers
+Add HA-Components as the `@ha-components` registry namespace so that components can find their component dependencies\
+Add the following entry to your `components.json` config
+```json
+{
+    "registries": { 
+        "@ha-components": {"url": "https://hacomponents.keshuac.com/r/{name}.json"}
+    }
+}
+```
+
+## Step 3: Setup Auth Provider
+For more detailed installation/production instructions see [here](/docs/installation/auth)
+
+Add the Auth components: 
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    ```
+  </Tab>
+</Tabs>
+
+Create an `.env` file in your root folder.
+Set a long-lived access token in your `env` for development
+You can find how to get a valid long-lived token [here](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)
+```
+VITE_HA_LONG_LIVED_TOKEN="your_token_here"
+```
+<Callout type="error">
+  Using a long-lived token in production is not recommended.\
+  For a production see how to set up a proper oauth flow [here](/docs/installation/auth#step-1-environment-variables/)
+</Callout>
+
+In `src/routes/index.tsx`, wrap `Outlet` with `HomeAssistantProvider`.\
+This allows pages with the applied layout access the global websocket connection.
+```jsx
+import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
+return (
+    ...
+    <HomeAssistantProvider>
+        <Outlet />
+    </HomeAssistantProvider>
+    ...
+);
+```
+
+Add an Auth Callback route.\
+Add this following code at `app\auth\callback.tsx` or `app\auth\callback\page.tsx`\
+```tsx
+import * as React from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { exchangeCodeForToken } from "@/lib/haAuth";
+
+export const Route = createFileRoute("/auth/callback")({
+  validateSearch: (search) => ({
+    code: typeof search.code === "string" ? search.code : undefined,
+  }),
+  component: AuthCallback,
+});
+
+function AuthCallback() {
+  const navigate = useNavigate();
+  const search = Route.useSearch();
+
+  React.useEffect(() => {
+    const code = search.code;
+    if (!code) {
+      console.error("[AuthCallback] No ?code provided in URL");
+      return;
+    }
+
+    const run = async () => {
+      try {
+        await exchangeCodeForToken(code);
+        navigate({ to: "/" }); // redirect home
+      } catch (err) {
+        console.error("[AuthCallback] token exchange failed:", err);
+      }
+    };
+
+    run();
+  }, [search.code, navigate]);
+
+  return <p>Completing login...</p>;
+}
+```
+
+
+## Step 4: Setup Type Generation
+HA Components includes a script automates entity name fetching.
+
+- **Step 1:** Install Script
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    ```
+  </Tab>
+</Tabs>
+- **Step 2:** Register script in `package.json`\
+Add the script into `package.json`
+```json
+{
+  "scripts": {
+    "generate:entities": "tsx src/scripts/generate_entities.ts",
+  },
+}
+```
+- **Step 3:** Run the script\
+    You can now run the script using the following command
+    ```bash
+    npm run generate:entities
+    ```
+    This will create a `src/types/entity-types.ts` file which contains the generated types
+
+#### Misc
+To regenerate your entity types, rerun Step 2
+
+#### Optional: AUTH_TOKEN
+If you set up OAuth instead of a long-lived token in step 3:\
+Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
+e.g. `AUTH_TOKEN=VzHfnKDwMc...`\
+This shouldn't be imported by Vite on build.
+
+## Step 5: Add your components:
+You can now start adding components to your project
+<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+  <Tab value="npm">    
+    ```bash
+    npx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="yarn">
+    ```bash
+    yarn shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+  <Tab value="bun">
+    ```bash
+    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    ```
+  </Tab>
+</Tabs>
