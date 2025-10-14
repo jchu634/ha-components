@@ -71,6 +71,16 @@ go2rtc:
 Soft Restart HA to load its new config.\
 If it worked, the Go2RTC UI should now be accessible at port 11984 [(Quick Link)](http://homeassistant.local:11984/)
 
+To then stop your requests from being blocked, navigate to the [config](http://homeassistant.local:11984/editor.html).\
+and add this to under api:
+```yaml
+api:
+  origin: "*"
+```
+<Callout>
+  Go2RTC only supports a wildcard, so you cannot just add a specific host to your origin.\
+  If you want to have a selective origin, you must set up a proxy instead.
+</Callout>
 
 
 ## API (Props)
