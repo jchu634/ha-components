@@ -1,22 +1,22 @@
 ---
-title: NEXT.js Installation
-description: How to install HA-Components in your NEXT.js app.
+title: React Installation
+description: How to install HA-Components in an React app.
 ---
 
 ## Step 1: Setup ShadCN
 HA-Components utilises many modified ShadCN components, hence this dependency.\
-Follow the instructions here: [https://ui.shadcn.com/docs/installation](https://ui.shadcn.com/docs/installation)
+Follow the instructions here for your framework of choice: [https://ui.shadcn.com/docs/installation](https://ui.shadcn.com/docs/installation)
 
 ## Step 2: Add HA-Components to your registry providers
 Add HA-Components as the `@ha-components` registry namespace so that components can find their component dependencies\
 Add the following entry to your `components.json` config
-```json
-{
-    "registries": { 
-        "@ha-components": {"url": "https://hacomponents.keshuac.com/r/{name}.json"}
+    ```json
+    {
+        "registries": { 
+            "@ha-components": {"url": "https://hacomponents.keshuac.com/r/{name}.json"}
+        }
     }
-}
-```
+    ```
 
 ## Step 3: Setup Auth Provider
 For more detailed installation/production instructions see [here](/docs/installation/auth)
@@ -45,48 +45,34 @@ Add the Auth components:
   </Tab>
 </Tabs>
 
-Create a file named `.env` in your NextJS root.\
-Set a long-lived access token in your `env` for development.\
-You can find how to get a valid long-lived token [here](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)
+Create a `.env` file in your root folder and set a long-lived access token in your `env` for development\
+You can find how to get a valid long-lived token [here](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)\
+If you use a framework using Vite, set your env as such
 ```
-NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
+VITE_HA_LONG_LIVED_TOKEN="your_token_here"
 ```
 <Callout type="error">
   Using a long-lived token in production is not recommended.\
   For a production see how to set up a proper oauth flow [here](/docs/installation/auth#step-1-environment-variables/)
 </Callout>
+If you are not using a Vite-based framework,\
+ you will need to edit `lib\haAuth.ts` to import your env variables properly.
 
-In layout.tsx, wrap children with `HomeAssistantProvider`.\
+In your root layout file, wrap children with `HomeAssistantProvider`.\
 This allows pages with the applied layout access the global websocket connection.
 ```jsx
 import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
 return (    
-    <div className="flex flex-col min-h-screen">
-        <HomeAssistantProvider>{children}</HomeAssistantProvider>
-    </div>
-);
+  ...
+  <HomeAssistantProvider>
+    {children}
+  </HomeAssistantProvider>
+  ...
+)
 ```
-
-Add an Auth Callback route.\
-Add this following code at `app\auth\callback\page.tsx`\
-```tsx
-"use client";
-
-import { Suspense } from "react";
-import AuthCallback from "@/components/ha-ui/auth/authCallback";
-
-export default function Page() {
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <AuthCallback />
-        </Suspense>
-    );
-}
-```
-
 
 ## Step 4: Setup Type Generation
-HA Components includes a script automates entity name fetching.
+HA Components includes a script to automate entity name fetching.
 
 <Callout>
   If your source code uses the /src folder structure,\
