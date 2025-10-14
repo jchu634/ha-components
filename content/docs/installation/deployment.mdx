@@ -1,0 +1,70 @@
+---
+title: Deployment
+description: How to deploy your app.
+---
+
+## Standard hosting (Recommended)
+If you deploy using a node server or via a some other static hosting service, there are no changes needed by HA-Components.
+
+
+## Home Assistant Hosting
+
+## Step 1: Set up your framework to build statically
+<Callout>
+  Note: remember to set your `NEXT_HA_REDIRECT_URI || VITE_HA_REDIRECT_URL` env variable path to be `/local/auth/callback/index.html` instead of `/auth/callback/`
+</Callout>
+<Tabs items={['NEXT.js', 'Vite+Tanstack', 'Tanstack Start']}>
+  <Tab value="NEXT.js">    
+    To enable static Next.js build, you will need to modify `next.config.js`
+    ``` tsx
+    /**
+    * @type {import('next').NextConfig}
+    */
+    const nextConfig = {
+      output: 'export',
+      trailingSlash: true,
+      basePath:'/local/'
+    }
+    
+    module.exports = nextConfig
+    ```
+  </Tab>
+  <Tab value="Vite+Tanstack">
+    To enable static Vite builds to path properly, you need to modify `vite.config.ts`
+    ```ts
+    defineConfig({
+      base: "/local"
+    })
+    ```
+    You will also need to modify your Tanstack Router setup to work properly with Home Assistant.
+    
+    Modify `src\main.tsx` by adding 
+    ```tsx
+    if (window.location.pathname.endsWith("/index.html")) {
+      const newUrl =
+        window.location.pathname.replace(/index\.html$/, "") +
+        window.location.search +
+        window.location.hash;
+      window.history.replaceState({}, "", newUrl);
+    }
+    ```
+    before `createRouter` is called, additionally, modify `createRouter` to include `basepath:'/local'`
+    ```tsx
+    const router = createRouter({
+      basepath:'/local'
+    });
+    ```
+
+    
+  </Tab>
+  <Tab value="Tanstack Start">
+    Currently it is not possible to get a static build that works with Home Assistant with Tanstack Start as it cannot handle SSR.
+  </Tab>
+</Tabs>
+
+## Step 2: Hosting
+To make HA host your build, move your build to the the `/homeassistant/www/` path.\
+This can be done several ways e.g. ssh, code server. How it is done is left to your descretion.\
+
+## Step 3: Access your Dashboard
+You can then access your dashboard by navigating to [http://homeassistant.local:8123/local/index.html](http://homeassistant.local:8123/local/index.html)

@@ -50,6 +50,42 @@ For controlling entities use `haWebSocket.callService`
   </Tab>
 </Tabs>
 
+### Controlling Entities with Returned Data
+Some services return data, for those services use `haWebSocket.callServiceWithResponse`
+
+<Tabs items={['Generic', 'Example']}>
+  <Tab value="Generic">    
+    ``` jsx
+    haWebSocket
+        .callServiceWithResponse("domain", "service", {
+            entity_id: entity,
+        })
+        .then((response) => {
+            console.log("Response: ", response);
+        })
+        .catch((error) => {
+            console.error("Service call failed:", error);
+        });
+    ```
+  </Tab>
+  <Tab value="Example">
+    Example from [`Weather`](https://github.com/jchu634/ha-components/blob/main/components/ha-ui/Weather.tsx) Component
+    ``` jsx
+    haWebSocket
+            .callServiceWithResponse("weather", "get_forecasts", {
+                entity_id: entity,
+                type: forecastType,
+            })
+            .then((response) => {
+                setForecasts(response?.response?.[entity]?.forecast);
+            })
+            .catch((error) => {
+                console.error("Service call failed:", error);
+            });
+    ```
+  </Tab>
+</Tabs>
+
 
 ### Fetching Entity State
 For getting the current state of an entity, 
