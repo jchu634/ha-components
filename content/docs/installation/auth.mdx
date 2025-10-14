@@ -31,33 +31,67 @@ This Auth setup is written around the default Home Assistant OAuth flow.
 
 ## Step 1: Environment Variables
 Set the Environment variables to match your home assistant config
-```dotenv
-# Example Home Assistant host + port
-NEXT_PUBLIC_HA_URL=homeassistant.local
-NEXT_PUBLIC_HA_PORT=8123
-```
+<Tabs items={['NEXT.js', 'Vite']}>
+  <Tab value="NEXT.js">    
+    ```dotenv
+    # Example Home Assistant host + port
+    NEXT_PUBLIC_HA_URL=homeassistant.local
+    NEXT_PUBLIC_HA_PORT=8123
+    ```
+    
+    Then set your local testing environmental paths
 
-Then set your local testing environmental paths
-- Point `NEXT_PUBLIC_HA_CLIENT_ID` to your host 
-- Point `NEXT_PUBLIC_HA_REDIRECT_URI` to your callback path (This will be setup in a later step)
+    - Point `NEXT_PUBLIC_HA_CLIENT_ID` to your host 
+    - Point `NEXT_PUBLIC_HA_REDIRECT_URI` to your callback path (This will be setup in a later step)
 
-```dotenv
-# Example OAuth2 client info
-NEXT_PUBLIC_HA_CLIENT_ID=http://localhost:3000
-NEXT_PUBLIC_HA_REDIRECT_URI=http://localhost:3000/auth/callback
-```
+    ```dotenv
+    # Example OAuth2 client info
+    NEXT_PUBLIC_HA_CLIENT_ID=http://localhost:3000
+    NEXT_PUBLIC_HA_REDIRECT_URI=http://localhost:3000/auth/callback
+    ```
 
-For testing, you can set a Long-lived access token, which will override any OAuth flow.
-```dotenv
-NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
-```
-<Callout type="error">
-  Using a long-lived token in production is not recommended.
-</Callout>
+    For testing, you can set a Long-lived access token, which will override any OAuth flow.
+    ```dotenv
+    NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
+    ```
+    <Callout type="error">
+      Using a long-lived token in production is not recommended.
+    </Callout>
+  </Tab>
+  <Tab value="Vite">
+    ```dotenv
+    # Example Home Assistant host + port
+    VITE_HA_URL=homeassistant.local
+    VITE_PUBLIC_HA_PORT=8123
+    ```
+
+    Then set your local testing environmental paths
+
+    - Point `VITE_HA_CLIENT_ID` to your host 
+    - Point `VITE_HA_REDIRECT_URI` to your callback path (This will be setup in a later step)
+
+    ```dotenv
+    # Example OAuth2 client info
+    VITE_HA_CLIENT_ID=http://localhost:3000
+    VITE_HA_REDIRECT_URI=http://localhost:3000/auth/callback
+    ```
+
+    For testing, you can set a Long-lived access token, which will override any OAuth flow.
+    ```dotenv
+    VITE_HA_LONG_LIVED_TOKEN="your_token_here"
+    ```
+    <Callout type="error">
+      Using a long-lived token in production is not recommended.
+    </Callout>
+  </Tab>
+</Tabs>
+
+
 
 ## Step 2: HA Provider
-In layout.tsx, wrap children with `HomeAssistantProvider`.\
-This allows pages with the applied layout access the global websocket connection.
+Wrap children with `HomeAssistantProvider`.\
+In NEXT.js this would be in `layout.tsx`.\
+This allows child pages with the applied layout access the global websocket connection.
 ```jsx
 import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
 return (    
@@ -70,23 +104,70 @@ return (
 ## Step 3: Handle Auth callback
 Create a page to create the route to handle the callback from Home Assistant:\
 This is the final step in the OAuth flow and will redirected to a path if specified.\
-Additionally, if you have not set your `NEXT_PUBLIC_HA_REDIRECT_URI` env variable, set it with the newly created route.
+Additionally, if you have not set your `NEXT_PUBLIC_HA_REDIRECT_URI` or `VITE_HA_REDIRECT_URI` env variable, set it with the newly created route.
 
-#### e.g. `app/auth/callback/page.tsx`
-```jsx
-"use client";
 
-import { Suspense } from "react";
-import AuthCallback from "@/components/ha-ui/auth/authCallback";
+<Tabs items={['NEXT.js', 'Vite+Tanstack']}>
+  <Tab value="NEXT.js">    
+    #### e.g. `app/auth/callback/page.tsx`
+    ```jsx
+    "use client";
 
-export default function Page() {
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <AuthCallback />
-        </Suspense>
-    );
-}
-```
+    import { Suspense } from "react";
+    import AuthCallback from "@/components/ha-ui/auth/authCallback";
+
+    export default function Page() {
+        return (
+            <Suspense fallback={<p>Loading...</p>}>
+                <AuthCallback />
+            </Suspense>
+        );
+    }
+    ```
+  </Tab>
+  <Tab value="Vite+Tanstack">
+    #### e.g. `src/routes/auth/callback/page.tsx`
+    ```jsx
+    import * as React from "react";
+    import { createFileRoute, useNavigate } from "@tanstack/react-router";
+    import { exchangeCodeForToken } from "@/lib/haAuth";
+
+    export const Route = createFileRoute("/auth/callback")({
+      validateSearch: (search) => ({
+        code: typeof search.code === "string" ? search.code : undefined,
+      }),
+      component: AuthCallback,
+    });
+
+    function AuthCallback() {
+      const navigate = useNavigate();
+      const search = Route.useSearch();
+
+      React.useEffect(() => {
+        const code = search.code;
+        if (!code) {
+          console.error("[AuthCallback] No ?code provided in URL");
+          return;
+        }
+
+        const run = async () => {
+          try {
+            await exchangeCodeForToken(code);
+            navigate({ to: "/" }); // redirect home
+          } catch (err) {
+            console.error("[AuthCallback] token exchange failed:", err);
+          }
+        };
+
+        run();
+      }, [search.code, navigate]);
+
+      return <p>Completing login...</p>;
+    }
+
+    ```
+  </Tab>
+</Tabs>
 
 ## Conclusion
 If this is set up properly, then all components which require Auth will connect automatically to the global websocket.
