@@ -10,40 +10,29 @@ This cannot be hosted on HomeAssistant as that requires completely static builds
 HA-Components utilises many modified ShadCN components, hence this dependency.\
 Follow the instructions here: [https://ui.shadcn.com/docs/installation](https://ui.shadcn.com/docs/installation)
 
-## Step 2: Add HA-Components to your registry providers
-Add HA-Components as the `@ha-components` registry namespace so that components can find their component dependencies\
-Add the following entry to your `components.json` config
-```json
-{
-    "registries": { 
-        "@ha-components": {"url": "https://hacomponents.keshuac.com/r/{name}.json"}
-    }
-}
-```
-
-## Step 3: Setup Auth Provider
+## Step 2: Setup Auth Provider
 For more detailed installation/production instructions see [here](/docs/installation/auth)
 
 Add the Auth components: 
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">    
     ```bash
-    npx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    npx shadcn@latest add @ha-components/auth
     ```
   </Tab>
   <Tab value="pnpm">
     ```bash
-    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    pnpm dlx shadcn@latest add @ha-components/auth
     ```
   </Tab>
   <Tab value="yarn">
     ```bash
-    yarn shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    yarn shadcn@latest add @ha-components/auth
     ```
   </Tab>
   <Tab value="bun">
     ```bash
-    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/auth.json
+    bunx --bun shadcn@latest add @ha-components/auth
     ```
   </Tab>
 </Tabs>
@@ -114,29 +103,29 @@ function AuthCallback() {
 ```
 
 
-## Step 4: Setup Type Generation
+## Step 3: Setup Type Generation
 HA Components includes a script automates entity name fetching.
 
 - **Step 1:** Install Script
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">    
     ```bash
-    npx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    npx shadcn@latest add @ha-components/type-generator
     ```
   </Tab>
   <Tab value="pnpm">
     ```bash
-    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    pnpm dlx shadcn@latest add @ha-components/type-generator
     ```
   </Tab>
   <Tab value="yarn">
     ```bash
-    yarn shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    yarn shadcn@latest add @ha-components/type-generator
     ```
   </Tab>
   <Tab value="bun">
     ```bash
-    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/type-generator.json
+    bunx --bun shadcn@latest add @ha-components/type-generator
     ```
   </Tab>
 </Tabs>
@@ -165,27 +154,27 @@ Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (
 e.g. `AUTH_TOKEN=VzHfnKDwMc...`\
 This shouldn't be imported by Vite on build.
 
-## Step 5: Add your components:
+## Step 4: Add your components:
 You can now start adding components to your project
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">    
     ```bash
-    npx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    npx shadcn@latest add @ha-components/trigger
     ```
   </Tab>
   <Tab value="pnpm">
     ```bash
-    pnpm dlx shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    pnpm dlx shadcn@latest add @ha-components/trigger
     ```
   </Tab>
   <Tab value="yarn">
     ```bash
-    yarn shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    yarn shadcn@latest add @ha-components/trigger
     ```
   </Tab>
   <Tab value="bun">
     ```bash
-    bunx --bun shadcn@latest add https://hacomponents.keshuac.com/r/trigger.json
+    bunx --bun shadcn@latest add @ha-components/trigger
     ```
   </Tab>
 </Tabs>
