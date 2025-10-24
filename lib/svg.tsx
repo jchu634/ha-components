@@ -65,6 +65,134 @@ export const Logo = (props: SVGProps<SVGSVGElement>) => (
         </g>
     </svg>
 );
+
+export const LogoBordered = (props: SVGProps<SVGSVGElement>) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlSpace="preserve"
+        viewBox="0 0 512 512"
+        width="100%"
+        height="100%"
+        {...props}
+    >
+        <defs id="defs1" />
+        <g id="layer1">
+            <g
+                id="g3"
+                transform="matrix(13.223077,0,0,13.223077,14.32714,94.133339)"
+                style={{
+                    fill: "none",
+                    stroke: "#000000",
+                    strokeWidth: 1.5,
+                }}
+            >
+                <rect
+                    style={{
+                        fill: "#ffffff",
+                        stroke: "#ffffff",
+                        strokeWidth: 1.76553,
+                    }}
+                    id="rect1"
+                    width={35.343403}
+                    height={35.278088}
+                    x={0.60489637}
+                    y={-5.3978186}
+                    ry={7.7867947}
+                />
+                <circle
+                    style={{
+                        display: "none",
+                        fill: "#ffffff",
+                        stroke: "#ffffff",
+                        strokeWidth: 1.99555,
+                        strokeDasharray: "none",
+                    }}
+                    id="path5"
+                    cx={18.276598}
+                    cy={12.241225}
+                    r={18.359188}
+                />
+                <g
+                    id="g11"
+                    transform="matrix(0.92896987,0,0,0.92896987,0.6847985,0.8688877)"
+                    style={{
+                        strokeWidth: 1.9175,
+                        strokeDasharray: "none",
+                    }}
+                >
+                    <path
+                        style={{
+                            fill: "#000080",
+                            stroke: "#000080",
+                            strokeWidth: 25.3553,
+                            strokeDasharray: "none",
+                        }}
+                        d="m 86.77307,366.11263 c -3.077289,-1.33995 -2.880589,3.35439 -2.880589,-68.74662 v -64.98569 l 43.179949,-43.15474 c 24.34466,-24.33043 43.73169,-43.36036 44.4448,-43.62614 0.69567,-0.25927 1.80601,-0.34672 2.46743,-0.19433 0.81214,0.18711 15.29439,14.35096 44.60684,43.62615 l 43.40427,43.34909 v 65.18791 c 0,71.61632 0.1795,67.02324 -2.67706,68.50042 -1.16306,0.60145 -11.18529,0.67849 -86.24015,0.66297 -69.98827,-0.0145 -85.167101,-0.12334 -86.30549,-0.61902 z"
+                        id="path9"
+                        transform="matrix(0.07562536,0,0,0.07562536,-1.0834952,-7.1188679)"
+                    />
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m 2.25,12.380998 8.954,-8.9549998 c 0.44,-0.439 1.152,-0.439 1.591,0 L 21.321363,11.952361 21.75,12.380998 m -17.25,-2.25 v 10.125 c 0,0.621 0.504,1.125 1.125,1.125 h 12.75 c 0.621,0 1.125,-0.504 1.125,-1.125 v -10.125 m -11.25,11.25 h 8.25"
+                        id="path1"
+                        style={{
+                            stroke: "#000080",
+                            strokeWidth: 1.9175,
+                            strokeDasharray: "none",
+                        }}
+                    />
+                </g>
+                <g
+                    style={{
+                        fill: "none",
+                        stroke: "#000000",
+                        strokeWidth: 2.1539,
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        strokeDasharray: "none",
+                    }}
+                    id="g2"
+                    transform="matrix(0.82701375,0,0,0.82701375,18.891965,2.31706)"
+                >
+                    <path
+                        d="M 12,22 V 17"
+                        id="path1-8"
+                        style={{
+                            strokeWidth: 2.1539,
+                            strokeDasharray: "none",
+                        }}
+                    />
+                    <path
+                        d="M 9,8 V 2"
+                        id="path2"
+                        style={{
+                            strokeWidth: 2.1539,
+                            strokeDasharray: "none",
+                        }}
+                    />
+                    <path
+                        d="M 15,8 V 2"
+                        id="path3"
+                        style={{
+                            strokeWidth: 2.1539,
+                            strokeDasharray: "none",
+                        }}
+                    />
+                    <path
+                        d="m 18,8 v 5 a 4,4 0 0 1 -4,4 H 10 A 4,4 0 0 1 6,13 V 8 Z"
+                        id="path4"
+                        style={{
+                            strokeWidth: 2.1539,
+                            strokeDasharray: "none",
+                        }}
+                    />
+                </g>
+            </g>
+        </g>
+    </svg>
+);
+
 export const GHLogoIcon = (props: SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
