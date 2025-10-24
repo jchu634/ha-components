@@ -1,9 +1,6 @@
 import { lexend, funnel } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { LogoBordered, Logo } from "@/lib/svg";
-
-export const alt = "About HAComponents";
-export const size = { width: 1200, height: 630 };
+import { LogoBordered } from "@/lib/svg";
 
 export default function OGPage() {
     return (
