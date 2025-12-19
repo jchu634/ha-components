@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "shadcn build && next build",
+    "build": "npm install && shadcn build && next build",
     "dev": "next dev --turbo",
     "start": "next start",
     "generate:entities": "tsx scripts/generate_entities.ts",
