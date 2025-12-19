@@ -1,5 +1,5 @@
 import "@/app/global.css";
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { lexend } from "@/lib/fonts";
 
 export default function Layout({ children }: LayoutProps<"/">) {
