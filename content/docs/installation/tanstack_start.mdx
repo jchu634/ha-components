@@ -66,8 +66,8 @@ return (
 ```
 
 ### Optional Step: Long-lived Tokens
-If you want to use an long-lived access token for development.
-You can set it in `.env`as follows
+If you want to use a long-lived access token for development.
+You can set it in `.env` as follows
 ```
 VITE_HA_LONG_LIVED_TOKEN="your_token_here"
 ```
@@ -109,7 +109,7 @@ Add the script into `package.json`
 ```json
 {
   "scripts": {
-    "generate:entities": "tsx src/scripts/generate_entities.ts",
+    "generate:entities": "tsx src/scripts/generate_entities.ts"
   },
 }
 ```
@@ -121,10 +121,10 @@ Add the script into `package.json`
     This will create a `src/types/entity-types.ts` file which contains the generated types
 
 #### Misc
-To regenerate your entity types, rerun Step 2
+To regenerate your entity types, rerun Step 3
 
 #### Optional: AUTH_TOKEN
-If you set up OAuth instead of a long-lived token in step 3:\
+If you set up OAuth instead of a long-lived token in step 2:\
 Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
 e.g. `AUTH_TOKEN=VzHfnKDwMc...`\
 This shouldn't be imported by Vite on build.
