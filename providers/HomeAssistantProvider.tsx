@@ -44,6 +44,10 @@ export function HomeAssistantProvider({ children, useProxy = false }: { children
 
     useEffect(() => {
         if (!token) return;
+        if (useProxy && !PROXY_URL) {
+            console.error("PROXY_URL is required when useProxy is enabled");
+            return;
+        }
 
         async function connect() {
             try {
