@@ -29,14 +29,13 @@ export function HomeAssistantProvider({ children, useProxy = false }: { children
 
         if (code) {
             exchangeCodeForToken(code)
-                .catch((err) => {
-                    console.error("Failed to exchange code for token:", err);
-                })
                 .then(() => {
                     setToken(getAccessToken());
-
                     // Clean Code from URL
                     window.history.replaceState({}, "", window.location.pathname);
+                })
+                .catch((err) => {
+                    console.error("Failed to exchange code for token:", err);
                 });
         } else {
             login(); // redirect to HA OAuth2
