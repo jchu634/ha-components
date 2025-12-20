@@ -85,8 +85,10 @@ export function login() {
     const authUrl =
         `${HA_HTTP_URL}/auth/authorize?response_type=code` +
         `&client_id=${encodeURIComponent(CLIENT_ID)}` +
-        `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+        `&redirect_uri=${encodeURIComponent(window.location.href)}`;
+
     log("Redirecting to HA login:", authUrl);
+
     window.location.href = authUrl;
 }
 
