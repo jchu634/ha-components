@@ -8,8 +8,7 @@ HA-Components utilises many modified ShadCN components, hence this dependency.\
 Follow the instructions here: [https://ui.shadcn.com/docs/installation](https://ui.shadcn.com/docs/installation)
 
 ## Step 2: Setup Auth Provider
-For more detailed installation/production instructions see [here](/docs/installation/auth)
-
+### Step 2.1: Add Components
 Add the Auth components: 
 <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
   <Tab value="npm">    
@@ -34,17 +33,23 @@ Add the Auth components:
   </Tab>
 </Tabs>
 
-Create a file named `.env` in your NextJS root.\
-Set a long-lived access token in your `env` for development.\
-You can find how to get a valid long-lived token [here](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)
-```
-NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
-```
-<Callout type="error">
-  Using a long-lived token in production is not recommended.\
-  For a production see how to set up a proper oauth flow [here](/docs/installation/auth#step-1-environment-variables/)
-</Callout>
+### Step 2.2: Set `.env` variables
 
+Set these variables to match your home assistant config
+```dotenv
+# Example Home Assistant host + port
+NEXT_PUBLIC_HA_URL=homeassistant.local
+NEXT_PUBLIC_HA_PORT=8123
+```
+
+Then set `NEXT_PUBLIC_HA_CLIENT_ID` to your dashboard host 
+
+```dotenv
+# Example OAuth2 client info
+NEXT_PUBLIC_HA_CLIENT_ID=http://localhost:3000
+```
+
+### Step 2.3: HomeAssistantProvider
 In layout.tsx, wrap children with `HomeAssistantProvider`.\
 This allows pages with the applied layout access the global websocket connection.
 ```jsx
@@ -56,22 +61,17 @@ return (
 );
 ```
 
-Add an Auth Callback route.\
-Add this following code at `app\auth\callback\page.tsx`\
-```tsx
-"use client";
-
-import { Suspense } from "react";
-import AuthCallback from "@/components/ha-ui/auth/authCallback";
-
-export default function Page() {
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <AuthCallback />
-        </Suspense>
-    );
-}
+### Optional Step: Long-lived Tokens
+If you want to use an long-lived access token for development.
+You can set it in `.env`as follows
 ```
+NEXT_PUBLIC_HA_LONG_LIVED_TOKEN="your_token_here"
+```
+<Callout type="error">
+  **Using a long-lived token in production is not recommended.**
+</Callout>
+
+You can find how to get a valid long-lived token [here](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)
 
 
 ## Step 3: Setup Type Generation
