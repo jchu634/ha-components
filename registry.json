@@ -28,11 +28,6 @@
       "description": "A complex component used to setup Auth.",
       "files": [
         {
-          "path": "components/ha-ui/auth/authCallback.tsx",
-          "target": "components/ha-ui/auth/authCallback.tsx",
-          "type": "registry:page"
-        },
-        {
           "path": "providers/HomeAssistantProvider.tsx",
           "target": "providers/HomeAssistantProvider.tsx",
           "type": "registry:item"

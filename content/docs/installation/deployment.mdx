@@ -13,7 +13,7 @@ If you deploy using a node server or via a some other static hosting service, th
 <Callout>
   Note: remember to set your `NEXT_HA_REDIRECT_URI || VITE_HA_REDIRECT_URL` env variable path to be `/local/auth/callback/index.html` instead of `/auth/callback/`
 </Callout>
-<Tabs items={['NEXT.js', 'Vite+Tanstack', 'Tanstack Start']}>
+<Tabs items={['NEXT.js', 'Vite', 'Tanstack Start']}>
   <Tab value="NEXT.js">    
     To enable static Next.js build, you will need to modify `next.config.js`
     ``` tsx
@@ -29,7 +29,7 @@ If you deploy using a node server or via a some other static hosting service, th
     module.exports = nextConfig
     ```
   </Tab>
-  <Tab value="Vite+Tanstack">
+  <Tab value="Vite">
     To enable static Vite builds to path properly, you need to modify `vite.config.ts`
     ```ts
     defineConfig({

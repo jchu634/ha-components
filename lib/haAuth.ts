@@ -19,7 +19,6 @@ const HA_HTTP_URL = `http://${HA_HOST}:${HA_PORT}`;
 
 // OAuth2 app credentials (must match Home Assistant config)
 const CLIENT_ID = getImportMetaEnv("VITE_HA_CLIENT_ID") ?? process.env.NEXT_PUBLIC_HA_CLIENT_ID!;
-const REDIRECT_URI = getImportMetaEnv("VITE_HA_REDIRECT_URI") ?? process.env.NEXT_PUBLIC_HA_REDIRECT_URI!;
 
 // Optional override: if set, skip OAuth2
 const LONG_LIVED_TOKEN = getImportMetaEnv("VITE_HA_LONG_LIVED_TOKEN") || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
@@ -85,8 +84,10 @@ export function login() {
     const authUrl =
         `${HA_HTTP_URL}/auth/authorize?response_type=code` +
         `&client_id=${encodeURIComponent(CLIENT_ID)}` +
-        `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+        `&redirect_uri=${encodeURIComponent(window.location.href)}`;
+
     log("Redirecting to HA login:", authUrl);
+
     window.location.href = authUrl;
 }
 
@@ -102,7 +103,7 @@ export async function exchangeCodeForToken(code: string) {
             grant_type: "authorization_code",
             code,
             client_id: CLIENT_ID,
-            redirect_uri: REDIRECT_URI,
+            redirect_uri: window.location.href,
         }),
     });
 
