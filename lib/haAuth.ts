@@ -49,16 +49,6 @@ if (missingVars.length > 0) {
 
 const HA_HTTP_URL = `http://${ENV.HA_HOST}:${ENV.HA_PORT}`;
 
-// Only log in development
-if (process.env.NODE_ENV === "development") {
-    console.log("[HA AUTH] Configuration:", {
-        HA_HOST: ENV.HA_HOST,
-        HA_PORT: ENV.HA_PORT,
-        CLIENT_ID: ENV.CLIENT_ID,
-        hasLongLivedToken: !!ENV.LONG_LIVED_TOKEN, // Don't log the actual token
-    });
-}
-
 const STORAGE_KEY = "ha_tokens";
 
 export type Tokens = {
