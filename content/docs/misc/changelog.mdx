@@ -1,0 +1,38 @@
+---
+title: Changelog
+description: HA Components Updates
+---
+## Overview
+HA-Components updates using a rolling release cadence.\
+Despite this, it does utilise a fixed versioning system.
+
+Certain major milestones will be marked by a new version number,\
+Feature and point changes however will not be marked by a new version number.\
+Instead there will be a daily release number created daily, if there were changes made that day.
+
+Versions will be tagged as such:
+- `{Version number}-{date}`
+
+## Changelog Notes
+
+#### 0.1.0-24.12.2025
+- Improved Vite Compatibility
+    - Fixed env variable import issues when using vite.
+    - Fixed ReactNode import to match Vite lint rules
+    - Updated documentation to match actual Vite template
+- Added env variable validation
+- Overhauled type-generation documentation
+- Various Documentation Fixes
+
+
+#### 0.1.0-21.12.2025
+- Overhauled Authentication
+    - Removed need for dedicated Oauth Callback endpoint by directly integrating authCallback functionality into `HomeAssistantProvider`
+    - Updated Auth documentation to reflect changes
+- Changed Vite documentation to no longer rely on TanStack Router 
+- Added PROXY_URL validation when useProxy is enabled
+- Upgraded website to NextJS 16 and Fumadocs 16
+
+
+#### 0.1.0-alpha
+- Initial public release

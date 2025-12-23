@@ -4,24 +4,50 @@
  * Supports OAuth2 token exchange, refresh, persistent storage in localStorage,
  * and an optional long-lived token override (NEXT_PUBLIC_HA_LONG_LIVED_TOKEN).
  */
-function getImportMetaEnv(key: string): string | undefined {
-    try {
+
+export const ENV = {
+    // @ts-ignore - import.meta may not exist in Next
+    HA_HOST: typeof process !== "undefined" ? process.env.NEXT_PUBLIC_HA_URL : import.meta.env.VITE_HA_URL, // e.g. homeassistant.local
+
+    // @ts-ignore - import.meta may not exist in Next
+    HA_PORT: typeof process !== "undefined" ? process.env.NEXT_PUBLIC_HA_PORT : import.meta.env.VITE_HA_PORT, // e.g. 8123
+
+    // OAuth2 app credentials (must match Home Assistant config)
+    CLIENT_ID:
         // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
+        typeof process !== "undefined" ? process.env.NEXT_PUBLIC_HA_CLIENT_ID : import.meta.env.VITE_HA_CLIENT_ID,
+
+    // Optional override: if set, skip OAuth2
+    LONG_LIVED_TOKEN:
+        typeof process !== "undefined"
+            ? process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN
+            : // @ts-ignore - import.meta may not exist in Next
+              import.meta.env.VITE_HA_LONG_LIVED_TOKEN,
+
+    PROXY_URL:
+        typeof process !== "undefined"
+            ? process.env.NEXT_PUBLIC_PROXY_URL
+            : // @ts-ignore - import.meta may not exist in Next
+              import.meta.env.VITE_PROXY_URL,
+};
+
+// Validate required environment variables at module load
+const requiredEnvVars = [
+    { key: "HA_HOST", value: ENV.HA_HOST },
+    { key: "HA_PORT", value: ENV.HA_PORT },
+    { key: "CLIENT_ID", value: ENV.CLIENT_ID },
+];
+
+const missingVars = requiredEnvVars.filter(({ value }) => !value);
+if (missingVars.length > 0) {
+    const missing = missingVars.map(({ key }) => key).join(", ");
+    throw new Error(
+        `Missing required environment variables: ${missing}. ` +
+            `Please set NEXT_PUBLIC_* or VITE_* prefixed versions.`,
+    );
 }
 
-const HA_HOST = getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
-const HA_PORT = getImportMetaEnv("VITE_HA_PORT") || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT; // e.g. 8123
-const HA_HTTP_URL = `http://${HA_HOST}:${HA_PORT}`;
-
-// OAuth2 app credentials (must match Home Assistant config)
-const CLIENT_ID = getImportMetaEnv("VITE_HA_CLIENT_ID") ?? process.env.NEXT_PUBLIC_HA_CLIENT_ID!;
-
-// Optional override: if set, skip OAuth2
-const LONG_LIVED_TOKEN = getImportMetaEnv("VITE_HA_LONG_LIVED_TOKEN") || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN;
+const HA_HTTP_URL = `http://${ENV.HA_HOST}:${ENV.HA_PORT}`;
 
 const STORAGE_KEY = "ha_tokens";
 
@@ -77,13 +103,13 @@ export function clearTokens() {
  * Redirect to Home Assistant OAuth2 login.
  */
 export function login() {
-    if (LONG_LIVED_TOKEN) {
+    if (ENV.LONG_LIVED_TOKEN) {
         log("Using long-lived token; skipping OAuth login");
         return;
     }
     const authUrl =
         `${HA_HTTP_URL}/auth/authorize?response_type=code` +
-        `&client_id=${encodeURIComponent(CLIENT_ID)}` +
+        `&client_id=${encodeURIComponent(ENV.CLIENT_ID)}` +
         `&redirect_uri=${encodeURIComponent(window.location.href)}`;
 
     log("Redirecting to HA login:", authUrl);
@@ -102,7 +128,7 @@ export async function exchangeCodeForToken(code: string) {
         body: new URLSearchParams({
             grant_type: "authorization_code",
             code,
-            client_id: CLIENT_ID,
+            client_id: ENV.CLIENT_ID,
             redirect_uri: window.location.href,
         }),
     });
@@ -131,7 +157,7 @@ export async function refreshAccessToken() {
         body: new URLSearchParams({
             grant_type: "refresh_token",
             refresh_token: tokens.refresh_token,
-            client_id: CLIENT_ID,
+            client_id: ENV.CLIENT_ID,
         }),
     });
 
@@ -150,7 +176,7 @@ export async function refreshAccessToken() {
  * Get current access token (returns null if expired or missing).
  */
 export function getAccessToken(): string | null {
-    if (LONG_LIVED_TOKEN) return LONG_LIVED_TOKEN;
+    if (ENV.LONG_LIVED_TOKEN) return ENV.LONG_LIVED_TOKEN;
 
     const t = loadTokens();
     if (!t) return null;
