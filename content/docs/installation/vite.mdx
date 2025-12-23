@@ -4,7 +4,7 @@ description: How to install HA-Components in your Vite app.
 ---
 
 ## Router Compatibility Note
-These instructions are built with the VITE template in mind.\
+These instructions are built with the default create-vite templates in mind.\
 You may need to adjust the instructions if you use an different router.
 
 ## Step 1: Setup ShadCN
@@ -53,16 +53,18 @@ VITE_HA_CLIENT_ID=http://localhost:3000
 ```
 
 ### Step 2.3: HomeAssistantProvider
-In `src/routes/index.tsx`, wrap `Outlet` with `HomeAssistantProvider`.\
+In `src/main.tsx`, wrap `App` with `HomeAssistantProvider`.\
 This allows pages with the applied layout access the global websocket connection.
 ```jsx
-import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider";
-return (
-    ...
-    <HomeAssistantProvider>
-        <Outlet />
-    </HomeAssistantProvider>
-    ...
+...
+import { HomeAssistantProvider } from "@/providers/HomeAssistantProvider.tsx";
+
+createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+        <HomeAssistantProvider>
+            <App />
+        </HomeAssistantProvider>
+    </StrictMode>
 );
 ```
 
