@@ -59,7 +59,7 @@ export function HomeAssistantProvider({ children, useProxy = false }: { children
         }
 
         connect();
-    }, [token, useProxy, ENV.HA_HOST, ENV.HA_PORT, ENV.PROXY_URL]);
+    }, [token, useProxy]);
 
     if (!ready) {
         return <div>Connecting to Home Assistant...</div>;
