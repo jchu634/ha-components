@@ -115,9 +115,28 @@ Add the script into `package.json`
 ```
 - **Step 3:** Run the script\
     You can now run the script using the following command
-    ```bash
-    npm run generate:entities
-    ```
+    <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+      <Tab value="npm">    
+        ```bash
+        npm run generate:entities
+        ```
+      </Tab>
+      <Tab value="pnpm">
+        ```bash
+        pnpm run generate:entities
+        ```
+      </Tab>
+      <Tab value="yarn">
+        ```bash
+        yarn run generate:entities
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bun run generate:entities
+        ```
+      </Tab>
+    </Tabs>
     This will create a `src/types/entity-types.ts` file which contains the generated types
 
 #### Misc
