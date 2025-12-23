@@ -11,9 +11,24 @@ const AUTH_TOKEN = process.env.AUTH_TOKEN;
 const FRAMEWORK_AUTH_TOKEN =
     process.env.VITE_HA_LONG_LIVED_TOKEN || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN || process.env.LONG_LIVED_TOKEN;
 
-if (!HA_URL || (!AUTH_TOKEN && !FRAMEWORK_AUTH_TOKEN)) {
-    console.error("Missing HA_URL or AUTH_TOKEN in .env");
+HA_PORT;
+
+function exitWithError(message: string): never {
+    console.error(`Environment validation error: ${message}`);
     process.exit(1);
+}
+
+if (!HA_URL) {
+    exitWithError("HA_URL is missing");
+}
+if (!HA_PORT) {
+    exitWithError("HA_PORT is missing");
+}
+
+// (Any Auth token is acceptable)
+const authToken = AUTH_TOKEN || FRAMEWORK_AUTH_TOKEN;
+if (!authToken) {
+    exitWithError("Either an AUTH_TOKEN or a Long‑Lived Token must be provided.");
 }
 
 async function fetchEntities(): Promise<any[]> {
