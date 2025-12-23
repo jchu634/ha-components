@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { haWebSocket } from "@/lib/haWebsocket";
 import { getAccessToken, login, exchangeCodeForToken, ENV } from "@/lib/haAuth";
 
