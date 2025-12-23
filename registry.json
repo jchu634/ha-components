@@ -18,6 +18,11 @@
           "path": "scripts/generate_entities.ts",
           "target": "scripts/generate_entities.ts",
           "type": "registry:file"
+        },
+        {
+          "path": "types/entity-types.ts",
+          "target": "types/entity-types.ts",
+          "type": "registry:file"
         }
       ]
     },
