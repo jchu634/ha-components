@@ -81,72 +81,85 @@ You can find how to get a valid long-lived token [here](https://developers.home-
 ## Step 3: Setup Type Generation
 HA Components includes a script automates entity name fetching.
 
-- **Step 1:** Install Script
-<Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
-  <Tab value="npm">    
-    ```bash
-    npx shadcn@latest add @ha-components/type-generator
-    ```
-  </Tab>
-  <Tab value="pnpm">
-    ```bash
-    pnpm dlx shadcn@latest add @ha-components/type-generator
-    ```
-  </Tab>
-  <Tab value="yarn">
-    ```bash
-    yarn shadcn@latest add @ha-components/type-generator
-    ```
-  </Tab>
-  <Tab value="bun">
-    ```bash
-    bunx --bun shadcn@latest add @ha-components/type-generator
-    ```
-  </Tab>
-</Tabs>
-- **Step 2:** Register script in `package.json`\
-Add the script into `package.json`
-```json
-{
-  "scripts": {
-    "generate:entities": "tsx src/scripts/generate_entities.ts"
-  },
-}
-```
-- **Step 3:** Run the script\
-    You can now run the script using the following command
-    <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
-      <Tab value="npm">    
-        ```bash
-        npm run generate:entities
-        ```
-      </Tab>
-      <Tab value="pnpm">
-        ```bash
-        pnpm run generate:entities
-        ```
-      </Tab>
-      <Tab value="yarn">
-        ```bash
-        yarn run generate:entities
-        ```
-      </Tab>
-      <Tab value="bun">
-        ```bash
-        bun run generate:entities
-        ```
-      </Tab>
-    </Tabs>
-    This will create a `src/types/entity-types.ts` file which contains the generated types
+- #### Step 3.1: Install the Script
+  <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+    <Tab value="npm">    
+      ```bash
+      npx shadcn@latest add @ha-components/type-generator
+      ```
+    </Tab>
+    <Tab value="pnpm">
+      ```bash
+      pnpm dlx shadcn@latest add @ha-components/type-generator
+      ```
+    </Tab>
+    <Tab value="yarn">
+      ```bash
+      yarn shadcn@latest add @ha-components/type-generator
+      ```
+    </Tab>
+    <Tab value="bun">
+      ```bash
+      bunx --bun shadcn@latest add @ha-components/type-generator
+      ```
+    </Tab>
+  </Tabs>
+- #### Step 3.2: Register script in `package.json`
+  Add the script into `package.json`
+  ```json
+  {
+    "scripts": {
+      "generate:entities": "tsx src/scripts/generate_entities.ts",
+    },
+  }
+  ```
+- #### Step 3.3: Run the script
+  <Callout>
+  AUTH_TOKEN
+  
+  If you are not using a long-lived token for development\
+  Create an `.env` variable `AUTH_TOKEN` with an valid auth token e.g. `AUTH_TOKEN=VzHfnKDwMc...`\
+  This will not be imported by Tanstack Start on build.
+  </Callout>
+    You can now run the script using the following commands
 
-#### Misc
-To regenerate your entity types, rerun Step 3
+  <Tabs items={['npm', 'pnpm', 'yarn', 'bun']}>
+    <Tab value="npm">    
+      ```bash
+      npm run generate:entities
+      ```
+    </Tab>
+    <Tab value="pnpm">
+      ```bash
+      pnpm run generate:entities
+      ```
+    </Tab>
+    <Tab value="yarn">
+      ```bash
+      yarn run generate:entities
+      ```
+    </Tab>
+    <Tab value="bun">
+      ```bash
+      bun run generate:entities
+      ```
+    </Tab>
+  </Tabs>
+    This will update the `types/entity-types.ts` with newly generated types that reflect your HA setup.
 
-#### Optional: AUTH_TOKEN
-If you set up OAuth instead of a long-lived token in step 2:\
-Create an `.env` variable named `AUTH_TOKEN` and set it to a valid auth token. (e.g. long-lived token)\
-e.g. `AUTH_TOKEN=VzHfnKDwMc...`\
-This shouldn't be imported by Vite on build.
+- #### Step 3.4: Register the types
+  Register the `entity-types.ts` file in `tsconfig.json`
+
+    ```json
+    ...
+      "include": [
+        "types/entity-types.ts",
+      ],
+    ...
+    ```
+
+- #### Misc
+  To regenerate your entity types, rerun Step 3.3
 
 ## Step 4: Add your components:
 You can now start adding components to your project
