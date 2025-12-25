@@ -33,7 +33,7 @@ function Slider({
             min={min}
             max={max}
             className={cn(
-                "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
+                "relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
                 className,
             )}
             style={{ ["--slider-width" as any]: typeof size === "number" ? `${size}px` : size }}
@@ -42,7 +42,7 @@ function Slider({
             <SliderPrimitive.Track
                 data-slot="slider-track"
                 className={cn(
-                    "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-[var(--slider-width)] data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[var(--slider-width)]",
+                    "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-[--slider-width] data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-[--slider-width]",
                     // allow caller to override / extend range styling (eg. gradient for color temp)
                     rangeClassName,
                 )}
@@ -53,7 +53,7 @@ function Slider({
                         "bg-primary absolute",
                         // horizontally
 
-                        "data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
+                        "top-0 left-0 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
                         // allow caller to override / extend range styling (eg. gradient for color temp)
                         rangeClassName,
                     )}
