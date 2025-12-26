@@ -11,8 +11,6 @@ const AUTH_TOKEN = process.env.AUTH_TOKEN;
 const FRAMEWORK_AUTH_TOKEN =
     process.env.VITE_HA_LONG_LIVED_TOKEN || process.env.NEXT_PUBLIC_HA_LONG_LIVED_TOKEN || process.env.LONG_LIVED_TOKEN;
 
-HA_PORT;
-
 function exitWithError(message: string): never {
     console.error(`Environment validation error: ${message}`);
     process.exit(1);
