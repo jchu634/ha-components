@@ -3,6 +3,7 @@ import * as fs from "fs";
 import dotenv from "dotenv";
 import { createRequire } from "module";
 
+// ---------- Env Variable Fetch + Validation ----------
 dotenv.config();
 
 const HA_URL = process.env.VITE_HA_URL || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL; // e.g. homeassistant.local
@@ -29,7 +30,17 @@ if (!authToken) {
     exitWithError("Either an AUTH_TOKEN or a Long‑Lived Token must be provided.");
 }
 
-async function fetchEntities(): Promise<any[]> {
+// ---------- Fetching Types from API ----------
+
+type entity = {
+    entity_id: string;
+    state?: string | number | null;
+    attributes: {
+        friendly_name?: string;
+    };
+};
+
+async function fetchEntities(): Promise<entity[]> {
     const TOKEN =
         AUTH_TOKEN != null && AUTH_TOKEN !== ""
             ? AUTH_TOKEN
@@ -75,7 +86,7 @@ async function fetchEntities(): Promise<any[]> {
 async function generateTypes() {
     const entities = await fetchEntities();
 
-    const filtered = entities.map((e: any) => ({
+    const filtered = entities.map((e: entity) => ({
         entity_id: e.entity_id,
         friendly_name: e.attributes?.friendly_name,
     }));
