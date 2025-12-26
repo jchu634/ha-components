@@ -243,7 +243,8 @@ export function useWebRTCVideo({
             scheduleRetry();
         });
 
-        ws.addEventListener("error", () => {
+        ws.addEventListener("error", (event) => {
+            console.log("[useWebRTCVideo] WebSocket error:", event);
             console.warn("[useWebRTCVideo] WebSocket error, retrying...");
             cleanup();
             scheduleRetry();
