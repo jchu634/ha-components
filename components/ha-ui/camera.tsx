@@ -8,7 +8,8 @@ import {
     MediaMuteButton,
     MediaFullscreenButton,
 } from "media-chrome/react";
-import { useWebRTCVideo, WebRTCVideo } from "@/lib/video-rtc";
+import { ENV } from "@/lib/haAuth";
+import { useWebRTCVideo, type WebRTCVideo } from "@/lib/video-rtc";
 import type { EntityId } from "@/types/entity-types";
 
 type AspectRatio = "1/1" | "4/3" | "16/9";
@@ -45,15 +46,6 @@ export interface CameraFeedProps {
     externalCameraSource?: WebRTCVideo;
 }
 
-function getImportMetaEnv(key: string): string | undefined {
-    try {
-        // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
-}
-
 export function Camera({
     entity,
     wsURL,
@@ -68,9 +60,7 @@ export function Camera({
     const camera =
         externalCameraSource ||
         useWebRTCVideo({
-            wsSrc:
-                wsURL ||
-                `ws://${getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL}:11984/api/ws?src=${entity}`,
+            wsSrc: wsURL || `ws://${ENV.HA_HOST}:11984/api/ws?src=${entity}`,
             ...(proxyURL ? { proxy: proxyURL } : {}),
             retryDelay: 5000, // retry every 5s
             maxRetryAttempts: 10,

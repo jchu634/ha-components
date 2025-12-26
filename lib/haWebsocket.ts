@@ -1,13 +1,4 @@
-import { getAccessToken, refreshAccessToken, clearTokens, login, getTimeToExpiryMs } from "@/lib/haAuth";
-
-function getImportMetaEnv(key: string): string | undefined {
-    try {
-        // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
-}
+import { refreshAccessToken, clearTokens, login, getTimeToExpiryMs, ENV } from "@/lib/haAuth";
 
 class HAWebSocket {
     private ws: WebSocket | null = null;
@@ -18,8 +9,8 @@ class HAWebSocket {
 
     async connect(baseUrl: string, token: string, useProxy: boolean = false): Promise<void> {
         return new Promise((resolve, reject) => {
-            const HA_HOST = getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL;
-            const HA_PORT = getImportMetaEnv("VITE_HA_PORT") || process.env.NEXT_PUBLIC_HA_PORT || process.env.HA_PORT;
+            const HA_HOST = ENV.HA_HOST;
+            const HA_PORT = ENV.HA_PORT;
             const haWsUrl = `ws://${HA_HOST}:${HA_PORT}/api/websocket`;
             const fullUrl = useProxy ? `${baseUrl}/ha` : haWsUrl;
 
