@@ -2,6 +2,7 @@ import WebSocket from "ws";
 import * as fs from "fs";
 import * as path from "path";
 import dotenv from "dotenv";
+import { createRequire } from "module";
 
 dotenv.config();
 
@@ -95,10 +96,11 @@ export interface HAEntity {
 `;
 
     // TODO FETCH DOMAINS AND SERVICES
+    const require = createRequire(import.meta.url);
+    const entityTypeFilePath = require.resolve("@/types/entity-types.ts");
 
-    const outPath = path.join(process.cwd(), "types/entity-types.ts");
-    fs.writeFileSync(outPath, tsContent, "utf-8");
-    console.log(`✅ Generated ${outPath}`);
+    fs.writeFileSync(entityTypeFilePath, tsContent, "utf-8");
+    console.log(`✅ Generated ${entityTypeFilePath}`);
 }
 
 generateTypes().catch((err) => {
