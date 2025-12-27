@@ -57,10 +57,24 @@
       "dependencies": [
         "media-chrome"
       ],
+      "registryDependencies": [
+        "tooltip",
+        "button"
+      ],
       "files": [
         {
           "path": "components/ha-ui/camera.tsx",
           "target": "components/ha-ui/camera.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/ha-ui/ui/retry-button.tsx",
+          "target": "components/ha-ui/ui/retry-button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/ha-ui/ui/status-indicator.tsx",
+          "target": "components/ha-ui/ui/status-indicator.tsx",
           "type": "registry:component"
         },
         {
