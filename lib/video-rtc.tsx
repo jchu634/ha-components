@@ -27,7 +27,7 @@ export interface UseWebRTCOptions {
     /**
      * Delay before retrying connection in ms (default: 5000)
      */
-    reconnectDelay?: number;
+    retryDelay?: number;
     /**
      * Maximum number of reconnect attempts (default: 5)
      */
@@ -69,7 +69,7 @@ export function useWebRTC({
     media = "video,audio",
     enabled = true,
     autoReconnect = false,
-    reconnectDelay = 5000,
+    retryDelay = 5000,
     maxReconnectAttempts = 5,
 }: UseWebRTCOptions): WebRTCConnection {
     const [status, setStatus] = useState<ConnectionStatus>(enabled ? "connecting" : "connecting");
@@ -82,12 +82,12 @@ export function useWebRTC({
     const pcRef = useRef<RTCPeerConnection | null>(null);
     const reconnectTimerRef = useRef<number | null>(null);
     const isConnectingRef = useRef(false);
-    const optionsRef = useRef({ enabled, autoReconnect, maxReconnectAttempts, reconnectDelay });
+    const optionsRef = useRef({ enabled, autoReconnect, maxReconnectAttempts, retryDelay });
 
     // Update options ref when they change
     useEffect(() => {
-        optionsRef.current = { enabled, autoReconnect, maxReconnectAttempts, reconnectDelay };
-    }, [enabled, autoReconnect, maxReconnectAttempts, reconnectDelay]);
+        optionsRef.current = { enabled, autoReconnect, maxReconnectAttempts, retryDelay };
+    }, [enabled, autoReconnect, maxReconnectAttempts, retryDelay]);
 
     const connect = async () => {
         const opts = optionsRef.current;
@@ -190,7 +190,7 @@ export function useWebRTC({
             reconnectTimerRef.current = window.setTimeout(() => {
                 setReconnectAttempts((prev) => prev + 1);
                 connect();
-            }, opts.reconnectDelay);
+            }, opts.retryDelay);
         } else {
             setStatus("error");
             setError(new Error(reason));
