@@ -72,7 +72,7 @@ export function useWebRTC({
     retryDelay = 5000,
     maxReconnectAttempts = 5,
 }: UseWebRTCOptions): WebRTCConnection {
-    const [status, setStatus] = useState<ConnectionStatus>(enabled ? "connecting" : "connecting");
+    const [status, setStatus] = useState<ConnectionStatus>(enabled ? "connecting" : "disconnected");
     const [error, setError] = useState<Error | null>(null);
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
     const [reconnectAttempts, setReconnectAttempts] = useState(0);
