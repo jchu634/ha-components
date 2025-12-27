@@ -83,11 +83,21 @@ export function useWebRTC({
     const reconnectTimerRef = useRef<number | null>(null);
     const isConnectingRef = useRef(false);
     const optionsRef = useRef({ enabled, autoReconnect, maxReconnectAttempts, retryDelay });
+    const mediaStreamRef = useRef<MediaStream | null>(null);
+    const reconnectAttemptsRef = useRef(0);
 
     // Update options ref when they change
     useEffect(() => {
         optionsRef.current = { enabled, autoReconnect, maxReconnectAttempts, retryDelay };
     }, [enabled, autoReconnect, maxReconnectAttempts, retryDelay]);
+
+    useEffect(() => {
+        mediaStreamRef.current = mediaStream;
+    }, [mediaStream]);
+
+    useEffect(() => {
+        reconnectAttemptsRef.current = reconnectAttempts;
+    }, [reconnectAttempts]);
 
     const connect = async () => {
         const opts = optionsRef.current;
@@ -183,7 +193,7 @@ export function useWebRTC({
         const opts = optionsRef.current;
         cleanup();
 
-        if (opts.autoReconnect && reconnectAttempts < opts.maxReconnectAttempts) {
+        if (opts.autoReconnect && reconnectAttemptsRef.current < opts.maxReconnectAttempts) {
             setStatus("disconnected");
             setError(new Error(reason));
 
@@ -224,8 +234,8 @@ export function useWebRTC({
             clearTimeout(reconnectTimerRef.current);
             reconnectTimerRef.current = null;
         }
-        if (mediaStream) {
-            mediaStream.getTracks().forEach((track) => track.stop());
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop());
             setMediaStream(null);
         }
     };
