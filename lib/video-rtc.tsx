@@ -209,6 +209,7 @@ export function useWebRTC({
 
     const handleError = (err: Error) => {
         console.error("[useWebRTC] Error:", err);
+        cleanup();
         setStatus("error");
         setError(err);
     };
