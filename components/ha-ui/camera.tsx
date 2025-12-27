@@ -91,35 +91,28 @@ export function Camera({
 
     return (
         <MediaController className={cn("group w-full", aspectRatioMap[aspectRatio])}>
-            <div className="relative h-full bg-black">
-                {/* Video Element */}
-                <video
-                    slot="media"
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    controls={false}
-                    className={aspectRatioMap[aspectRatio]}
-                />
+            {/* Video Element */}
+            <video
+                slot="media"
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                controls={false}
+                className={aspectRatioMap[aspectRatio]}
+            />
 
-                {/* Status Indicator (top right) */}
-                <StatusIndicator status={status} error={error} />
+            {/* Status Indicator (top right) */}
+            <StatusIndicator status={status} error={error} />
 
-                {/* Retry Button (centered overlay) */}
-                {externalCameraSource ? (
-                    <RetryButton
-                        onRetry={externalCameraSource.retry}
-                        status={status}
-                        error={error}
-                        autoReconnect={true}
-                    />
-                ) : (
-                    <RetryButton onRetry={webRTC.retry} status={status} error={error} autoReconnect={true} />
-                )}
+            {/* Retry Button (centered overlay) */}
+            {externalCameraSource ? (
+                <RetryButton onRetry={externalCameraSource.retry} status={status} error={error} autoReconnect={true} />
+            ) : (
+                <RetryButton onRetry={webRTC.retry} status={status} error={error} autoReconnect={true} />
+            )}
 
-                {/* Video Controls Overlay */}
-            </div>
+            {/* Video Controls Overlay */}
 
             {!disableControls && (
                 <MediaControlBar className="relative flex w-full justify-between bg-black px-4 transition-opacity duration-200 md:absolute md:right-0 md:bottom-0 md:left-0 md:z-10 md:opacity-0 md:group-hover:opacity-100">
