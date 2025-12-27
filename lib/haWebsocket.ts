@@ -85,7 +85,7 @@ class HAWebSocket {
                 console.log("[HA WS] Proactive refresh OK; reconnecting WS");
                 await this.reconnect(baseUrl, newToken, useProxy);
             } catch (e) {
-                console.error("[HA WS] Proactive refresh failed; restarting auth");
+                console.warn("[HA WS] Proactive refresh failed; restarting auth");
                 clearTokens();
                 login();
             }
