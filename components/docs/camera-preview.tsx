@@ -24,7 +24,7 @@ export interface CameraPreviewProps {
 
 export default function CameraPreview({
     src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    autoPlay = true,
+    autoPlay = false,
 }: CameraPreviewProps) {
     return (
         <MediaController className="group aspect-video w-full">
