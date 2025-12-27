@@ -60,10 +60,11 @@ It handles negotiation from a [Go2RTC](https://github.com/AlexxIT/go2rtc) backen
 <Callout type="warn">
   Go2RTC does not have authentication by default\
   This will expose port 11984 without any authentication\
-  Use for internal networks only, use with a proxy is strongly recommended for any remote access.
+  Use for internal networks only.
 </Callout>
 
-To enable HA's Go2RTC API, add this to `configuration.yaml` as detailed [here](https://www.home-assistant.io/integrations/go2rtc/#debug_ui)
+For development purposes, it can be easier to directly use HA's Go2RTC API.\
+To enable it, add this to `configuration.yaml` as detailed [here](https://www.home-assistant.io/integrations/go2rtc/#debug_ui)
 ```yaml
 go2rtc:
   debug_ui: true
@@ -78,9 +79,14 @@ api:
   origin: "*"
 ```
 <Callout>
-  Go2RTC only supports a wildcard, so you cannot just add a specific host to your origin.\
-  If you want to have a selective origin, you must set up a proxy instead.
+  Go2RTC only supports a wildcard, so you cannot just add a specific host to your origin.
 </Callout>
+
+<Callout type="error">
+  Note: Do NOT USE HA's inbuilt go2rtc server IN PRODUCTION\
+  HA will reset its internal go2rtc config after every restart.\
+  It is strongly recommended to have a seperate go2rtc instance for production (e.g. via HACS)
+ </Callout>
 
 
 ## API (Props)
@@ -93,15 +99,21 @@ e.g. `camera.reolink_doorbell_high`
 - Disables media controls, use if you want the video to play headlessly.
 - Set to false by default
 
+### `wsURL` (Optional)
+e.g. `"ws://192.168.0.114:1984/api/ws?src=camera.example"`
+- An websocket URL used to override the default HA Go2RTC server url
+- If used, you can set `entity` to any entity as a placeholder, it will not be accessed
+
 ### `aspectRatio` (Optional)
 - Sets the Video Player aspect ratio (1/1, 16/9, 4/3)
 - Defaults to 16/9
 
 ## Advanced API (Props)
-### `wsURL` (Optional)
-e.g. `"ws://192.168.100.100:9999/proxy"`
-- An websocket URL used to override the default HA Go2RTC server url
-- If used, set `entity` to a placeholder value
+
+### `externalCameraSource` (Optional)
+- For sharing the same WebRTC camera feed between different camera components
+- This will bypass internal `useWebRTC` negotiations.
+- Expects an `WebRTCConnection` from `useWebRTC`, which can be found in `@\scripts\video-rtc.tsx`.
 
 ### `proxyURL` (Optional)
 <Callout >
@@ -155,16 +167,16 @@ To run it:
       python -m uvicorn proxy_server:app --host 0.0.0.0 --port 8080
     ```
 
-### `externalCameraSource` (Optional)
-A bypass from internal `useWebRTCVideo` negotiation.\
-Expects an `WebRTCVideo` from `useWebRTCVideo`.
-
-
 
 ## Common Errors
 ### `HTTP/1.1 403 Forbidden` or `NS_ERROR_WEBSOCKET_CONNECTION_REFUSED`
 Home Assistant's Go2RTC instance may reject the connection outright if the origin-header is wrong.\
-To bypass this, utilise a proxy server via `proxyURL` to strip the origin-headers.\
+To stop your requests from being blocked, navigate to the [config](http://homeassistant.local:11984/editor.html) and add this to under api:
+```yaml
+api:
+  origin: "*"
+```
+Alternatively, utilise a proxy server via `proxyURL` to strip the origin-headers.\
 Instructions for a simple python proxy-server are available in the Advanced API documentation under `proxyURL`
 
 
