@@ -259,7 +259,7 @@ export function useWebRTC({
         return () => {
             cleanup();
         };
-    }, [enabled]);
+    }, [enabled, wsSrc, proxy, media]);
 
     return {
         status,
