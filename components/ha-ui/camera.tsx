@@ -90,7 +90,7 @@ export function Camera({
     };
 
     return (
-        <MediaController className={cn("w-full", aspectRatioMap[aspectRatio])}>
+        <MediaController className={cn("group w-full", aspectRatioMap[aspectRatio])}>
             <div className="relative h-full bg-black">
                 {/* Video Element */}
                 <video
@@ -119,18 +119,19 @@ export function Camera({
                 )}
 
                 {/* Video Controls Overlay */}
-                {!disableControls && (
-                    <MediaControlBar className="absolute right-0 bottom-0 left-0 z-10 flex w-full justify-between bg-black px-4">
-                        <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
-
-                        <div className="text-white">
-                            <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
-                            <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
-                            <MediaFullscreenButton className="h-full bg-black px-2 hover:bg-slate-800"></MediaFullscreenButton>
-                        </div>
-                    </MediaControlBar>
-                )}
             </div>
+
+            {!disableControls && (
+                <MediaControlBar className="relative flex w-full justify-between bg-black px-4 transition-opacity duration-200 md:absolute md:right-0 md:bottom-0 md:left-0 md:z-10 md:opacity-0 md:group-hover:opacity-100">
+                    <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
+
+                    <div className="text-white">
+                        <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
+                        <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
+                        <MediaFullscreenButton className="h-full bg-black px-2 hover:bg-slate-800"></MediaFullscreenButton>
+                    </div>
+                </MediaControlBar>
+            )}
         </MediaController>
     );
 }
