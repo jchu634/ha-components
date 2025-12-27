@@ -71,7 +71,7 @@ function throttle<F extends (...args: any[]) => void>(fn: F, limit: number) {
 // Approximate conversion Kelvin → RGB
 // Valid for ~1000K - 40000K
 function kelvinToRGB(kelvin: number): [number, number, number] {
-    let temperature = kelvin / 100;
+    const temperature = kelvin / 100;
     let red, green, blue;
 
     if (temperature <= 66) {

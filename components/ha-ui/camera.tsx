@@ -8,8 +8,12 @@ import {
     MediaMuteButton,
     MediaFullscreenButton,
 } from "media-chrome/react";
-import { useWebRTCVideo, WebRTCVideo } from "@/lib/video-rtc";
+import { ENV } from "@/lib/haAuth";
+import { useWebRTC, type WebRTCConnection } from "@/lib/video-rtc";
+import { StatusIndicator } from "@/components/ha-ui/ui/status-indicator";
+import { RetryButton } from "@/components/ha-ui/ui/retry-button";
 import type { EntityId } from "@/types/entity-types";
+import { cn } from "@/lib/utils";
 
 type AspectRatio = "1/1" | "4/3" | "16/9";
 
@@ -42,16 +46,7 @@ export interface CameraFeedProps {
      * Optional: Camera Source override
      * Will ignore entity, wsURL and proxyURl args.
      */
-    externalCameraSource?: WebRTCVideo;
-}
-
-function getImportMetaEnv(key: string): string | undefined {
-    try {
-        // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
+    externalCameraSource?: WebRTCConnection;
 }
 
 export function Camera({
@@ -62,35 +57,31 @@ export function Camera({
     disableControls = false,
     aspectRatio = "16/9",
 }: CameraFeedProps) {
-    if (externalCameraSource && !externalCameraSource.videoProps) {
-        console.warn("External camera provided but missing videoProps");
-    }
-    const camera =
-        externalCameraSource ||
-        useWebRTCVideo({
-            wsSrc:
-                wsURL ||
-                `ws://${getImportMetaEnv("VITE_HA_URL") || process.env.NEXT_PUBLIC_HA_URL || process.env.HA_URL}:11984/api/ws?src=${entity}`,
-            ...(proxyURL ? { proxy: proxyURL } : {}),
-            retryDelay: 5000, // retry every 5s
-            maxRetryAttempts: 10,
-            video: { autoPlay: true, muted: true, controls: false, tabIndex: -1 },
-        });
+    const webRTC = useWebRTC({
+        wsSrc: wsURL || `ws://${ENV.HA_HOST}:11984/api/ws?src=${entity}`,
+        proxy: proxyURL,
+        media: "video,audio",
+        enabled: !externalCameraSource,
+        autoReconnect: true,
+        retryDelay: 5000,
+        maxReconnectAttempts: 5,
+    });
 
-    const localVideoRef = useRef<HTMLVideoElement | null>(null);
+    // Use external source if provided, otherwise use hook's stream
+    const mediaStream = externalCameraSource?.mediaStream || webRTC.mediaStream;
+    const status = externalCameraSource ? externalCameraSource.status : webRTC.status;
+    const error = externalCameraSource ? externalCameraSource.error : webRTC.error;
 
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Attach stream to video element
     useEffect(() => {
-        if (externalCameraSource?.mediaStream && localVideoRef.current) {
-            localVideoRef.current.srcObject = externalCameraSource.mediaStream;
-        } else if (localVideoRef.current && !externalCameraSource?.mediaStream) {
-            localVideoRef.current.srcObject = null;
+        if (mediaStream && videoRef.current) {
+            videoRef.current.srcObject = mediaStream;
+        } else if (!mediaStream && videoRef.current) {
+            videoRef.current.srcObject = null;
         }
-    }, [externalCameraSource?.mediaStream, externalCameraSource]);
-
-    // Avoid using the hook-provided `ref` when an external source is used to prevent multiple
-    // video elements from sharing the same ref object.
-    const baseVideoProps = camera.videoProps || {};
-    const { ref: forwardedRef, ...restVideoProps } = baseVideoProps as any;
+    }, [mediaStream]);
 
     const aspectRatioMap: Record<AspectRatio, string> = {
         "1/1": "aspect-square",
@@ -99,16 +90,32 @@ export function Camera({
     };
 
     return (
-        <MediaController className="h-full">
+        <MediaController className={cn("group w-full", aspectRatioMap[aspectRatio])}>
+            {/* Video Element */}
             <video
                 slot="media"
-                {...restVideoProps}
-                ref={externalCameraSource ? localVideoRef : forwardedRef}
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                controls={false}
                 className={aspectRatioMap[aspectRatio]}
             />
 
+            {/* Status Indicator (top right) */}
+            <StatusIndicator status={status} error={error} />
+
+            {/* Retry Button (centered overlay) */}
+            {externalCameraSource ? (
+                <RetryButton onRetry={externalCameraSource.retry} status={status} error={error} autoReconnect={true} />
+            ) : (
+                <RetryButton onRetry={webRTC.retry} status={status} error={error} autoReconnect={true} />
+            )}
+
+            {/* Video Controls Overlay */}
+
             {!disableControls && (
-                <MediaControlBar className="flex w-full justify-between bg-black px-4">
+                <MediaControlBar className="relative flex w-full justify-between bg-black px-4 transition-opacity duration-200 md:absolute md:right-0 md:bottom-0 md:left-0 md:z-10 md:opacity-0 md:group-hover:opacity-100">
                     <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
 
                     <div className="text-white">

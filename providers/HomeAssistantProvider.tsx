@@ -4,15 +4,6 @@ import { type ReactNode, useEffect, useState } from "react";
 import { haWebSocket } from "@/lib/haWebsocket";
 import { getAccessToken, login, exchangeCodeForToken, ENV } from "@/lib/haAuth";
 
-function getImportMetaEnv(key: string): string | undefined {
-    try {
-        // @ts-ignore - import.meta may not exist in Next
-        return typeof import.meta !== "undefined" ? import.meta.env?.[key] : undefined;
-    } catch {
-        return undefined;
-    }
-}
-
 export function HomeAssistantProvider({ children, useProxy = false }: { children: ReactNode; useProxy?: boolean }) {
     const [ready, setReady] = useState(false);
     const [token, setToken] = useState<string | null>(() => getAccessToken());

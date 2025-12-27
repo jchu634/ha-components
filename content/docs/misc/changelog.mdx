@@ -13,9 +13,25 @@ Instead there will be a daily release number created daily, if there were change
 Versions will be tagged as such:
 - `{Version number}-{date}`
 
-## Changelog Notes
+## Changelog
 
-#### 0.1.0-24.12.2025
+### 0.2.0 (Alpha)
+- Adjusted generate_entities script
+    - Type file is now written to an "@/" alias resolved path
+    - Entities are now typed
+    - Various tweaks
+- Video-rtc and camera rewrite
+    - video-rtc has been rewritten from scratch
+    - A retry-button and a status indicator has been added to the camera component
+- Documentation fixes
+
+### 0.1.0-26.12.2025 (Alpha)
+- Improved Vite Compatibility
+    - Weather component now imports properly.
+    - Light sliders no longer have a broken track on Vite
+- Documentation fixes
+
+### 0.1.0-24.12.2025 (Alpha)
 - Improved Vite Compatibility
     - Fixed env variable import issues when using vite.
     - Fixed ReactNode import to match Vite lint rules
@@ -25,7 +41,7 @@ Versions will be tagged as such:
 - Various Documentation Fixes
 
 
-#### 0.1.0-21.12.2025
+### 0.1.0-21.12.2025 (Alpha)
 - Overhauled Authentication
     - Removed need for dedicated Oauth Callback endpoint by directly integrating authCallback functionality into `HomeAssistantProvider`
     - Updated Auth documentation to reflect changes
@@ -34,5 +50,5 @@ Versions will be tagged as such:
 - Upgraded website to NextJS 16 and Fumadocs 16
 
 
-#### 0.1.0-alpha
+### 0.1.0-alpha
 - Initial public release
