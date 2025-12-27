@@ -86,7 +86,7 @@ api:
   Note: Do NOT USE HA's inbuilt go2rtc server IN PRODUCTION\
   HA will reset its internal go2rtc config after every restart.\
   It is strongly recommended to have a seperate go2rtc instance for production (e.g. via HACS)
- </Callout>
+</Callout>
 
 
 ## API (Props)
@@ -101,7 +101,7 @@ e.g. `camera.reolink_doorbell_high`
 
 ### `wsURL` (Optional)
 e.g. `"ws://192.168.0.114:1984/api/ws?src=camera.example"`
-- An websocket URL used to override the default HA Go2RTC server url
+- A websocket URL used to override the default HA Go2RTC server url
 - If used, you can set `entity` to any entity as a placeholder, it will not be accessed
 
 ### `aspectRatio` (Optional)
@@ -113,7 +113,7 @@ e.g. `"ws://192.168.0.114:1984/api/ws?src=camera.example"`
 ### `externalCameraSource` (Optional)
 - For sharing the same WebRTC camera feed between different camera components
 - This will bypass internal `useWebRTC` negotiations.
-- Expects an `WebRTCConnection` from `useWebRTC`, which can be found in `@\scripts\video-rtc.tsx`.
+- Expects a `WebRTCConnection` from `useWebRTC`, which can be found in `@/scripts/video-rtc.tsx`.
 
 ### `proxyURL` (Optional)
 <Callout >
