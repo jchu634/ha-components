@@ -69,8 +69,8 @@ export function Camera({
 
     // Use external source if provided, otherwise use hook's stream
     const mediaStream = externalCameraSource?.mediaStream || webRTC.mediaStream;
-    const status = externalCameraSource ? "connected" : webRTC.status;
-    const error = externalCameraSource ? null : webRTC.error;
+    const status = externalCameraSource ? externalCameraSource.status : webRTC.status;
+    const error = externalCameraSource ? externalCameraSource.error : webRTC.error;
 
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -104,25 +104,33 @@ export function Camera({
                 />
 
                 {/* Status Indicator (top right) */}
-                {!externalCameraSource && <StatusIndicator status={status} error={error} />}
+                <StatusIndicator status={status} error={error} />
 
                 {/* Retry Button (centered overlay) */}
-                {!externalCameraSource && (
+                {externalCameraSource ? (
+                    <RetryButton
+                        onRetry={externalCameraSource.retry}
+                        status={status}
+                        error={error}
+                        autoReconnect={true}
+                    />
+                ) : (
                     <RetryButton onRetry={webRTC.retry} status={status} error={error} autoReconnect={true} />
                 )}
+
+                {/* Video Controls Overlay */}
+                {!disableControls && (
+                    <MediaControlBar className="absolute right-0 bottom-0 left-0 z-10 flex w-full justify-between bg-black px-4">
+                        <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
+
+                        <div className="text-white">
+                            <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
+                            <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
+                            <MediaFullscreenButton className="h-full bg-black px-2 hover:bg-slate-800"></MediaFullscreenButton>
+                        </div>
+                    </MediaControlBar>
+                )}
             </div>
-
-            {!disableControls && (
-                <MediaControlBar className="flex w-full justify-between bg-black px-4">
-                    <MediaPlayButton className="bg-black px-2 hover:bg-slate-800" />
-
-                    <div className="text-white">
-                        <MediaMuteButton className="bg-black p-2 hover:bg-slate-800"></MediaMuteButton>
-                        <MediaVolumeRange className="bg-black px-2 hover:bg-slate-800"></MediaVolumeRange>
-                        <MediaFullscreenButton className="h-full bg-black px-2 hover:bg-slate-800"></MediaFullscreenButton>
-                    </div>
-                </MediaControlBar>
-            )}
         </MediaController>
     );
 }
