@@ -21,7 +21,7 @@ export function StatusIndicator({ status, error }: StatusIndicatorProps) {
 
     return (
         <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger>
                 <div className={`absolute top-2 right-2 h-3 w-3 rounded-full ${config.color} cursor-help`} />
             </TooltipTrigger>
             <TooltipContent>

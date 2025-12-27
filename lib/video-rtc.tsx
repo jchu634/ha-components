@@ -99,7 +99,7 @@ export function useWebRTC({
             const pc = new RTCPeerConnection(DEFAULT_PEERCONNECTION_CONFIG);
             pcRef.current = pc;
 
-            // 2. Add transceivers BEFORE offer (follows original pattern)
+            // 2. Add transceivers BEFORE offer
             if (media.includes("video")) pc.addTransceiver("video", { direction: "recvonly" });
             if (media.includes("audio")) pc.addTransceiver("audio", { direction: "recvonly" });
 
@@ -134,7 +134,7 @@ export function useWebRTC({
                 }
             };
 
-            // 5. Create WebSocket AFTER PC is fully configured
+            // 5. Create WebSocket AFTER PeerConnection is fully configured
             let wsUrl = wsSrc;
             if (proxy) wsUrl = `${proxy}?target=${encodeURIComponent(wsUrl)}`;
             const ws = new WebSocket(wsUrl);
