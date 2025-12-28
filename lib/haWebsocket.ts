@@ -113,12 +113,26 @@ class HAWebSocket {
     }
 
     getState(entityId: string): Promise<any> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const id = ++this.msgId;
+            const TIMEOUT_MS = 10000;
+
+            // Reject immediately if WebSocket is not connected
+            if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+                reject(new Error("WebSocket is not connected"));
+                return;
+            }
+
+            // Set timeout to prevent hanging
+            const timeoutId = setTimeout(() => {
+                this.ws?.removeEventListener("message", handleMessage);
+                reject(new Error(`getState timeout for entity: ${entityId}`));
+            }, TIMEOUT_MS);
 
             const handleMessage = (event: MessageEvent) => {
                 const msg = JSON.parse(event.data);
                 if (msg.id === id && msg.type === "result") {
+                    clearTimeout(timeoutId);
                     this.ws?.removeEventListener("message", handleMessage);
                     if (msg.success && Array.isArray(msg.result)) {
                         const entity = msg.result.find((e: any) => e.entity_id === entityId);
