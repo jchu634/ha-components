@@ -1,11 +1,10 @@
 "use client";
 import type { EntityId } from "@/types/entity-types";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ha-ui/ui/switch";
 import { haWebSocket } from "@/lib/haWebsocket";
 
-type ToggleProps = React.ComponentProps<typeof Button> & {
+type ToggleProps = React.ComponentProps<typeof Switch> & {
     /**
      * HomeAssistant Entity Name
      */
@@ -18,7 +17,7 @@ export function Toggle({
     entity,
     domain,
     service = "toggle",
-    ...props // Button Props
+    ...props // Switch Props
 }: ToggleProps) {
     const [monitoredState, setMonitoredState] = useState(false);
 
@@ -46,7 +45,7 @@ export function Toggle({
                     entity_id: entity,
                 })
             }
-            style={{ ["--switch-width" as any]: "6rem", ["--switch-height" as any]: "2rem" }}
+            style={{ ["--switch-width" as string]: "6rem", ["--switch-height" as string]: "2rem" }}
             {...props}
         ></Switch>
     );
