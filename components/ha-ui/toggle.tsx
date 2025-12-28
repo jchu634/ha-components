@@ -17,7 +17,7 @@ export function Toggle({
     entity,
     domain,
     service = "toggle",
-    ...props // Button Props
+    ...props // Switch Props
 }: ToggleProps) {
     const [monitoredState, setMonitoredState] = useState(false);
 
