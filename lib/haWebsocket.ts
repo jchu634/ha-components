@@ -113,7 +113,7 @@ class HAWebSocket {
     }
 
     getState(entityId: string): Promise<any> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const id = ++this.msgId;
 
             const handleMessage = (event: MessageEvent) => {
