@@ -23,7 +23,7 @@ export interface CameraPreviewProps {
 }
 
 export default function CameraPreview({
-    src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    src = "https://cdn.jsdelivr.net/npm/big-buck-bunny-1080p@0.0.6/video.mp4",
     autoPlay = false,
 }: CameraPreviewProps) {
     return (
